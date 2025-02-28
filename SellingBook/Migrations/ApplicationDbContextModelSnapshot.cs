@@ -36,7 +36,14 @@ namespace SellingBook.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int>("Quantity");
+                    b.Property<decimal>("CartItemPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("CartItemQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
@@ -64,6 +71,16 @@ namespace SellingBook.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
                 });
@@ -79,6 +96,11 @@ namespace SellingBook.Migrations
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -91,7 +113,20 @@ namespace SellingBook.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Status")
+                    b.Property<string>("Status");
+                    b.Property<string>("OrderAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderPhone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -99,6 +134,7 @@ namespace SellingBook.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+                    b.HasKey("OrderId");
 
                     b.HasIndex("UserId");
 
@@ -112,6 +148,11 @@ namespace SellingBook.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<int>("OrderItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderItemId"));
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
@@ -126,6 +167,16 @@ namespace SellingBook.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+                    b.Property<decimal>("OrderItemPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("OrderItemQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderItemId");
 
                     b.HasIndex("OrderId");
 
@@ -141,6 +192,11 @@ namespace SellingBook.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<int>("ProductId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -168,6 +224,19 @@ namespace SellingBook.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+                    b.Property<string>("ProductName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("ProductPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<float?>("Rate")
+                        .HasColumnType("real");
+
+                    b.Property<int?>("RateAmount")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId");
 
                     b.HasIndex("CategoryId");
 
@@ -181,156 +250,218 @@ namespace SellingBook.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    modelBuilder.Entity("SellingBook.Models.ProductImage", b =>
+                        {
+                            b.Property<int>("ProductImageId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductImageId"));
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                            b.Property<int>("ProductId")
+                                .HasColumnType("int");
 
-                    b.Property<int>("RateAmount")
-                        .HasColumnType("int");
+                            b.Property<string>("ProductImageUrl")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                            b.HasKey("ProductImageId");
 
-                    b.HasKey("Id");
+                            b.HasIndex("ProductId");
 
-                    b.HasIndex("ProductId");
+                            b.ToTable("ProductImages");
+                        });
 
-                    b.HasIndex("UserId");
+                    modelBuilder.Entity("SellingBook.Models.Rate", b =>
+                        {
+                            b.Property<int>("RateId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    b.ToTable("Rates");
-                });
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RateId"));
 
-            modelBuilder.Entity("SellingBook.Models.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                            b.Property<string>("Comment")
+                                .HasColumnType("nvarchar(max)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                            b.Property<int>("ProductId")
+                                .HasColumnType("int");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                            b.Property<int>("RateAmount")
+                                .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                            b.Property<int>("UserId")
+                                .HasColumnType("int");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                            b.HasKey("Id");
+                            b.HasKey("RateId");
 
-                    b.HasKey("Id");
+                            b.HasIndex("ProductId");
 
-                    b.ToTable("Users");
-                });
+                            b.HasIndex("UserId");
 
-            modelBuilder.Entity("SellingBook.Models.CartItem", b =>
-                {
-                    b.HasOne("SellingBook.Models.Product", "Product")
-                        .WithMany("CartItems")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.ToTable("Rates");
+                            b.ToTable("Ratings");
+                        });
 
-                    b.HasOne("SellingBook.Models.User", "User")
-                        .WithMany("CartItems")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    modelBuilder.Entity("SellingBook.Models.User", b =>
+                        {
+                            b.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    b.Navigation("Product");
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Navigation("User");
-                });
+                            b.Property<string>("Email")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity("SellingBook.Models.Order", b =>
-                {
-                    b.HasOne("SellingBook.Models.User", "User")
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-                    b.Navigation("User");
-                });
+                            b.Property<string>("Password")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity("SellingBook.Models.OrderItem", b =>
-                {
-                    b.HasOne("SellingBook.Models.Order", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.HasKey("Id");
+                            b.Property<int>("UserId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
 
-                    b.HasOne("SellingBook.Models.Product", "Product")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
 
-                    b.Navigation("Order");
+                            b.Property<string>("UserEmail")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-                    b.Navigation("Product");
-                });
+                            b.Property<string>("UserName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity("SellingBook.Models.Product", b =>
-                {
-                    b.HasOne("SellingBook.Models.Category", "Category")
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.Property<string>("UserPassword")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
 
-                    b.Navigation("Category");
-                });
+                            b.HasKey("UserId");
 
-            modelBuilder.Entity("SellingBook.Models.Rate", b =>
-                {
-                    b.HasOne("SellingBook.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                            b.ToTable("Users");
+                        });
 
-                    b.HasOne("SellingBook.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    modelBuilder.Entity("SellingBook.Models.CartItem", b =>
+                        {
+                            b.HasOne("SellingBook.Models.Product", "Product")
+                                .WithMany("CartItems")
+                                .HasForeignKey("ProductId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Product");
+                            b.HasOne("SellingBook.Models.User", "User")
+                                .WithMany("CartItems")
+                                .HasForeignKey("UserId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("User");
-                });
+                            b.Navigation("Product");
 
-            modelBuilder.Entity("SellingBook.Models.Category", b =>
-                {
-                    b.Navigation("Products");
-                });
+                            b.Navigation("User");
+                        });
 
-            modelBuilder.Entity("SellingBook.Models.Order", b =>
-                {
-                    b.Navigation("OrderItems");
-                });
+                    modelBuilder.Entity("SellingBook.Models.Order", b =>
+                        {
+                            b.HasOne("SellingBook.Models.User", "User")
+                                .WithMany("Orders")
+                                .HasForeignKey("UserId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-            modelBuilder.Entity("SellingBook.Models.Product", b =>
-                {
-                    b.Navigation("CartItems");
+                            b.Navigation("User");
+                        });
 
-                    b.Navigation("OrderItems");
-                });
+                    modelBuilder.Entity("SellingBook.Models.OrderItem", b =>
+                        {
+                            b.HasOne("SellingBook.Models.Order", "Order")
+                                .WithMany("OrderItems")
+                                .HasForeignKey("OrderId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-            modelBuilder.Entity("SellingBook.Models.User", b =>
-                {
-                    b.Navigation("CartItems");
+                            b.HasOne("SellingBook.Models.Product", "Product")
+                                .WithMany("OrderItems")
+                                .HasForeignKey("ProductId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
 
-                    b.Navigation("Orders");
-                });
+                            b.Navigation("Order");
+
+                            b.Navigation("Product");
+                        });
+
+                    modelBuilder.Entity("SellingBook.Models.Product", b =>
+                        {
+                            b.HasOne("SellingBook.Models.Category", "Category")
+                                .WithMany("Products")
+                                .HasForeignKey("CategoryId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+
+                            b.Navigation("Category");
+                        });
+
+                    modelBuilder.Entity("SellingBook.Models.ProductImage", b =>
+                        {
+                            b.HasOne("SellingBook.Models.Product", "Product")
+                                .WithMany()
+                                .HasForeignKey("ProductId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+
+                            b.Navigation("Product");
+                        });
+
+                    modelBuilder.Entity("SellingBook.Models.Rate", b =>
+                        {
+                            b.HasOne("SellingBook.Models.Product", "Product")
+                                .WithMany()
+                                .HasForeignKey("ProductId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+
+                            b.HasOne("SellingBook.Models.User", "User")
+                                .WithMany()
+                                .HasForeignKey("UserId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+
+                            b.Navigation("Product");
+
+                            b.Navigation("User");
+                        });
+
+                    modelBuilder.Entity("SellingBook.Models.Category", b =>
+                        {
+                            b.Navigation("Products");
+                        });
+
+                    modelBuilder.Entity("SellingBook.Models.Order", b =>
+                        {
+                            b.Navigation("OrderItems");
+                        });
+
+                    modelBuilder.Entity("SellingBook.Models.Product", b =>
+                        {
+                            b.Navigation("CartItems");
+
+                            b.Navigation("OrderItems");
+                        });
+
+                    modelBuilder.Entity("SellingBook.Models.User", b =>
+                        {
+                            b.Navigation("CartItems");
+
+                            b.Navigation("Orders");
+                        });
 #pragma warning restore 612, 618
+                });
         }
     }
 }
