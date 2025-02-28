@@ -93,7 +93,7 @@ namespace SellingBook.Migrations
                 name: "CartItems",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    CartItemId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
@@ -102,7 +102,7 @@ namespace SellingBook.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CartItems", x => x.Id);
+                    table.PrimaryKey("PK_CartItems", x => x.CartItemId);
                     table.ForeignKey(
                         name: "FK_CartItems_Products_ProductId",
                         column: x => x.ProductId,
@@ -118,27 +118,7 @@ namespace SellingBook.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductImages",
-                columns: table => new
-                {
-                    ProductImageId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductImages", x => x.ProductImageId);
-                    table.ForeignKey(
-                        name: "FK_ProductImages_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Ratings",
+                name: "Rates",
                 columns: table => new
                 {
                     RateId = table.Column<int>(type: "int", nullable: false)
@@ -150,15 +130,15 @@ namespace SellingBook.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Ratings", x => x.RateId);
+                    table.PrimaryKey("PK_Rates", x => x.RateId);
                     table.ForeignKey(
-                        name: "FK_Ratings_Products_ProductId",
+                        name: "FK_Rates_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "ProductId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Ratings_Users_UserId",
+                        name: "FK_Rates_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
@@ -219,23 +199,18 @@ namespace SellingBook.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductImages_ProductId",
-                table: "ProductImages",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ratings_ProductId",
-                table: "Ratings",
+                name: "IX_Rates_ProductId",
+                table: "Rates",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ratings_UserId",
-                table: "Ratings",
+                name: "IX_Rates_UserId",
+                table: "Rates",
                 column: "UserId");
         }
 
@@ -249,10 +224,7 @@ namespace SellingBook.Migrations
                 name: "OrderItems");
 
             migrationBuilder.DropTable(
-                name: "ProductImages");
-
-            migrationBuilder.DropTable(
-                name: "Ratings");
+                name: "Rates");
 
             migrationBuilder.DropTable(
                 name: "Orders");
