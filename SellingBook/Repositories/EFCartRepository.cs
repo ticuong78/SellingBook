@@ -1,33 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SellingBook.Models;
+﻿using SellingBook.Models;
 
-namespace SellingBook.Services
+namespace SellingBook.Repositories
 {
-    public class UserService: IUserService
+    public class EFCartRepository : ICartRepository
     {
+        private ILogger<EFCartRepository> _logger;
         private ApplicationDbContext _applicationDbContext;
-        private ILogger<UserService> _logger;
-
-        public UserService(ApplicationDbContext applicationDbContext, ILogger<UserService> logger) 
+        public EFCartRepository(ApplicationDbContext applicationDbContext, ILogger<EFCartRepository> logger)
         {
             _applicationDbContext = applicationDbContext;
             _logger = logger;
         }
 
-        public User GetUser()
-        {
-            return _applicationDbContext.Users.FirstOrDefault(user => user.UserId == 1);
-        }
-
         public void AddCartItem(CartItem cartItem)
         {
-            // Update cart items
             _logger.LogInformation(cartItem.UserId.ToString());
 
             CartItem existingCartItem = _applicationDbContext.CartItems.FirstOrDefault(item => item.ProductId == cartItem.ProductId);
-            
-            if(existingCartItem != null)
+
+            if (existingCartItem != null)
             {
                 existingCartItem.CartItemQuantity += cartItem.CartItemQuantity;
                 existingCartItem.CartItemPrice += cartItem.CartItemPrice;
@@ -41,14 +32,18 @@ namespace SellingBook.Services
 
         public void DeleteCartItem(CartItem cartItem)
         {
-            // Update cart items
             _applicationDbContext.CartItems.Remove(cartItem);
             _applicationDbContext.SaveChanges();
         }
 
-        public int GetCartItemsCount()
+        public int GetCartItemsCountBasedOnIds()
         {
             return _applicationDbContext.CartItems.Where(cartItem => cartItem.UserId == 1).Count();
+        }
+
+        public int GetCartItemsCountBasedOnRealTotal()
+        {
+            return _applicationDbContext.CartItems.Where(cartItem => cartItem.UserId == 1).Sum(cart => cart.CartItemQuantity);
         }
     }
 }

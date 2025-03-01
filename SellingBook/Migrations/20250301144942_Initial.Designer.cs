@@ -12,7 +12,7 @@ using SellingBook.Models;
 namespace SellingBook.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250228040742_Initial")]
+    [Migration("20250301144942_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -27,11 +27,12 @@ namespace SellingBook.Migrations
 
             modelBuilder.Entity("SellingBook.Models.CartItem", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CartItemId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartItemId"));
 
                     b.Property<decimal>("CartItemPrice")
                         .HasColumnType("decimal(18,2)");
@@ -45,7 +46,7 @@ namespace SellingBook.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("CartItemId");
 
                     b.HasIndex("ProductId");
 
@@ -175,28 +176,6 @@ namespace SellingBook.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("SellingBook.Models.ProductImage", b =>
-                {
-                    b.Property<int>("ProductImageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductImageId"));
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProductImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ProductImageId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductImages");
-                });
-
             modelBuilder.Entity("SellingBook.Models.Rate", b =>
                 {
                     b.Property<int>("RateId")
@@ -223,7 +202,7 @@ namespace SellingBook.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Ratings");
+                    b.ToTable("Rates");
                 });
 
             modelBuilder.Entity("SellingBook.Models.User", b =>
@@ -309,17 +288,6 @@ namespace SellingBook.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("SellingBook.Models.ProductImage", b =>
-                {
-                    b.HasOne("SellingBook.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("SellingBook.Models.Rate", b =>

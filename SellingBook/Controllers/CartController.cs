@@ -1,14 +1,14 @@
-﻿using SellingBook.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SellingBook.Models;
+using SellingBook.Repositories;
 
 namespace SellingBook.Controllers
 {
-    public class UserController : Controller
+    public class CartController : Controller
     {
-        private ILogger<UserController> _logger;
-        private readonly IUserService _userService;
-        public UserController(IUserService userService, ILogger<UserController> logger)
+        private ILogger<CartController> _logger;
+        private readonly ICartRepository _userService;
+        public CartController(ICartRepository userService, ILogger<CartController> logger)
         {
             _userService = userService;
             _logger = logger;
@@ -21,7 +21,7 @@ namespace SellingBook.Controllers
             _userService.AddCartItem(cartItem);
             return Ok(new
             {
-                cartQuantity = _userService.GetCartItemsCount()
+                cartQuantity = _userService.GetCartItemsCountBasedOnRealTotal()
             });
         }
     }

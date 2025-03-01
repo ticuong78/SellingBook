@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using SellingBook.Models;
 using SellingBook.Repositories;
-using SellingBook.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +19,7 @@ builder.Services.AddSession(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICartRepository, EFCartRepository>();
 builder.Services.AddScoped<IProductRepository, EFProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
 

@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using SellingBook.Models;
 using Microsoft.Extensions.Logging;
 using SellingBook.Repositories;
-using SellingBook.Services;
 
 namespace SellingBook.Controllers;
 
@@ -12,9 +11,9 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly IProductRepository _productRepository;
-    private readonly IUserService _userService;
+    private readonly ICartRepository _userService;
 
-    public HomeController(ILogger<HomeController> logger, IProductRepository productRepository, IUserService userService)
+    public HomeController(ILogger<HomeController> logger, IProductRepository productRepository, ICartRepository userService)
     {
         _logger = logger;
         _productRepository = productRepository;
@@ -24,7 +23,7 @@ public class HomeController : Controller
     public async Task<IActionResult> Index()
     {
         var products = await _productRepository.GetAllProductsAsync();
-        ViewBag.CartQuantity = _userService.GetCartItemsCount();
+        ViewBag.CartQuantity = _userService.GetCartItemsCountBasedOnRealTotal();
         return View(products);
     }
 

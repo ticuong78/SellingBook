@@ -54,12 +54,7 @@
                 </div>
             </div>
             <button class="btn btn-outline-dark" type="submit" style="position: relative">
-                @{
-                    if(ViewBag.CartQuantity != null && ViewBag.CartQuantity != 0)
-                    {
-                        <div class="cart-quantity">@ViewBag.CartQuantity</div>
-                    }
-                }
+                <div class="cart-quantity" style="display: @(ViewBag.CartQuantity != null && ViewBag.CartQuantity != 0 ? "block": "none")">@ViewBag.CartQuantity</div>
                 <i class="bi-cart-fill me-1"></i>
                 Giỏ Hàng
             </button>
