@@ -53,11 +53,21 @@
                     </ul>
                 </div>
             </div>
+<<<<<<< HEAD
             <button class="btn btn-outline-dark" type="submit" style="position: relative">
                 <div class="cart-quantity" style="display: @(ViewBag.CartQuantity != null && ViewBag.CartQuantity != 0 ? "block": "none")">@ViewBag.CartQuantity</div>
                 <i class="bi-cart-fill me-1"></i>
                 Giỏ Hàng
             </button>
+=======
+            <form asp-controller="Cart" asp-action="Index" method="get">
+                <button class="btn btn-outline-dark" style="position: relative" asp-controller="Cart" asp-action="Index">
+                    <div class="cart-quantity" style="display: @(ViewBag.CartQuantity != null && ViewBag.CartQuantity != 0 ? "block": "none")">@ViewBag.CartQuantity</div>
+                    <i class="bi-cart-fill me-1"></i>
+                    Giỏ Hàng
+                </button>
+            </form>
+>>>>>>> feature/payment-methods-momo
         </nav>
     </header>
     <div class="container">

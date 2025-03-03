@@ -16,6 +16,11 @@ namespace SellingBook.Repositories
         {
             _logger.LogInformation(cartItem.UserId.ToString());
 
+<<<<<<< HEAD
+=======
+            User user = _applicationDbContext.Users.FirstOrDefault(user => user.UserId == cartItem.UserId);
+            Product product = _applicationDbContext.Products.FirstOrDefault(product => product.ProductId == cartItem.ProductId);
+>>>>>>> feature/payment-methods-momo
             CartItem existingCartItem = _applicationDbContext.CartItems.FirstOrDefault(item => item.ProductId == cartItem.ProductId);
 
             if (existingCartItem != null)
@@ -26,6 +31,21 @@ namespace SellingBook.Repositories
                 return;
             }
 
+<<<<<<< HEAD
+=======
+            if(cartItem.Product == null)
+            {
+                _logger.LogInformation("Product is null");
+                cartItem.Product = product;
+            }
+
+            if (cartItem.User == null)
+            {
+                _logger.LogInformation("User is null");
+                cartItem.User = user;
+            }
+
+>>>>>>> feature/payment-methods-momo
             _applicationDbContext.CartItems.Add(cartItem);
             _applicationDbContext.SaveChanges();
         }
@@ -36,6 +56,14 @@ namespace SellingBook.Repositories
             _applicationDbContext.SaveChanges();
         }
 
+<<<<<<< HEAD
+=======
+        public IEnumerable<CartItem> GetCartItems()
+        {
+            return _applicationDbContext.CartItems.Where(cartItem => cartItem.UserId == 1);
+        }
+
+>>>>>>> feature/payment-methods-momo
         public int GetCartItemsCountBasedOnIds()
         {
             return _applicationDbContext.CartItems.Where(cartItem => cartItem.UserId == 1).Count();

@@ -14,6 +14,5 @@ namespace SellingBook.Models
         public Product Product { get; set; }
         public int CartItemQuantity { get; set; }
         public decimal CartItemPrice { get; set; }
-
     }
 }
