@@ -6,11 +6,11 @@
     <div class="container px-4 px-lg-5 mt-5">
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 
-            @foreach (var product in Model)
+            @foreach (Product product in Model)
             {
-                <div class="col mb-5">
+                <div class="col mb-5 a-product-@product.ProductId" data-price="@product.ProductPrice" data-cartQuantity="1">
                     <div class="card gap-3" style="width: 18rem">
-                        <img src="@product.ImageUrl" class="card-img-top" alt="..." style="height: 300px">
+                        <img src="~/images/@product.ImageUrl" class="card-img-top" alt="@product.ImageUrl" style="height: 300px">
                         <div class="card-body">
                             <h5 class="card-title">
                                 @product.ProductName
@@ -19,11 +19,9 @@
                                 <span>Price: </span>
                                 <p class="mx-3">@product.ProductPrice.ToString("#,##0") Vnđ</p>
                             </div>
-                            <a>
-                                <button class="btn btn-outline-dark">
+                            <button class="btn btn-outline-dark" onclick="addProduct(@product.ProductId)">
                                     <i class="bi-cart-fill me-1"></i> Add to Cart
-                                </button>
-                            </a>
+                             </button>
                         </div>
                     </div>
                 </div>
@@ -31,3 +29,39 @@
         </div>
     </div>
 </section>
+
+<script>
+    function addProduct(productId){
+        const productElement = document.querySelector('.a-product-' + productId);
+        const cartItemObj = {
+            UserId: 1,
+            ProductId: productId,
+            CartItemQuantity: parseInt(productElement.dataset.cartquantity),
+            CartItemPrice: parseFloat(productElement.dataset.price)
+        }
+
+        const cartQuantitySelector = document.querySelector(".cart-quantity");
+
+        const payload = fetch("/Cart/AddCartItem", {
+            "method": "Post",
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": JSON.stringify(cartItemObj)
+        })
+        .then(async (response) => {
+            parsed_data = await response.json();
+
+            if(parsed_data != null){
+                cartQuantitySelector.style.display = "block";
+                cartQuantitySelector.innerText = parsed_data.cartQuantity;
+            }
+
+            console.log(parsed_data);
+        })
+        .catch(error => {
+            console.log(error);
+            cartQuantitySelector.style.display = "none";
+        })
+    }
+</script>

@@ -11,16 +11,19 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly IProductRepository _productRepository;
+    private readonly ICartRepository _userService;
 
-    public HomeController(IProductRepository productRepository)
+    public HomeController(ILogger<HomeController> logger, IProductRepository productRepository, ICartRepository userService)
     {
+        _logger = logger;
         _productRepository = productRepository;
-
+        _userService = userService;
     }
 
     public async Task<IActionResult> Index()
     {
         var products = await _productRepository.GetAllProductsAsync();
+        ViewBag.CartQuantity = _userService.GetCartItemsCountBasedOnRealTotal();
         return View(products);
     }
 
