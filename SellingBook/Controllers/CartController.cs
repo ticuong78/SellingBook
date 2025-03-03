@@ -7,7 +7,6 @@ namespace SellingBook.Controllers
     public class CartController : Controller
     {
         private ILogger<CartController> _logger;
-
         private readonly ICartRepository _cartRepository;
         private readonly IProductRepository _productRepository;
 
