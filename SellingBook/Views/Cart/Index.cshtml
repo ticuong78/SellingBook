@@ -148,12 +148,16 @@
         let paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').id;
         alert(`Thanh toán với ${paymentMethod} cho các sản phẩm: ${selectedItems.join(", ")}`);
 
-        // 🚀 Here, you can send selectedItems to the backend for processing
-        // Example:
-        // fetch('/Payment/Process', {
-        //     method: 'POST',
-        //     body: JSON.stringify({ selectedItems, paymentMethod }),
-        //     headers: { 'Content-Type': 'application/json' }
-        // }).then(response => response.json()).then(data => console.log(data));
+        const paymentPayload = {
+            selectedItems: selectedItems,
+            paymentMethod: paymentMethod,
+            amount: @TotalPrice
+        }
+
+        fetch('/Payment/ReceivePaymentProcess', {
+            method: 'POST',
+            body: JSON.stringify(paymentPayload),
+            headers: { 'Content-Type': 'application/json' }
+        }).then(response => response.json()).then(data => console.log(data));
     }
 </script>
