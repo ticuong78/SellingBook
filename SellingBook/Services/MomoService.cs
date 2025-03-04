@@ -69,6 +69,7 @@ namespace SellingBook.Services
             return JsonConvert.DeserializeObject<MomoCreatePaymentResponseModel>(contents);
         }
 
+        // Hàm xử lý callback từ momo trả về
         public MomoExecuteResponseModel PaymentExecuteAsync(IQueryCollection collection)
         {
             var amount = collection.First(s => s.Key == "amount").Value;
@@ -83,6 +84,8 @@ namespace SellingBook.Services
             };
         }
 
+
+        // hàm băm để tạo chữ ký cho momo
         private string ComputeHmacSha256(string message, string secretKey)
         {
             var keyBytes = Encoding.UTF8.GetBytes(secretKey);
