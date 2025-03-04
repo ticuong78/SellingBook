@@ -25,7 +25,7 @@ namespace SellingBook.Controllers
             return Redirect(response.PayUrl);
         }
         [HttpGet]
-        public IActionResult PaymentExecute()
+        public IActionResult PaymentCallBack()
         {
             var response = _momoService.PaymentExecuteAsync(HttpContext.Request.Query);
             return View(response);
