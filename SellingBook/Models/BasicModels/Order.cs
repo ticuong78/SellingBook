@@ -1,4 +1,4 @@
-﻿namespace SellingBook.Models
+﻿namespace SellingBook.Models.BasicModels
 {
     public class Order
     {

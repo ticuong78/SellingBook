@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SellingBook.Models.BasicModels;
 
 namespace SellingBook.Models
 {
