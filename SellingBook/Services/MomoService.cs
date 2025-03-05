@@ -21,32 +21,30 @@ namespace SellingBook.Services
 
         public async Task<MomoCreatePaymentResponseModel> CreatePaymentAsync(int amount)
         {
-            var OrderId = DateTime.UtcNow.Ticks.ToString(); // Unique long ID
-            var RequestId = Guid.NewGuid().ToString("N").Substring(0, 15); // Shorter unique ID
+            string RequestId = Guid.NewGuid().ToString("N").Substring(0, 16);
+            string OrderId = Guid.NewGuid().ToString(); 
 
             var OrderInfo = $"Khách hàng: Lê Phạm Hùng Cường. Nội dung: {OrderId}";
             var Amount = amount.ToString(); // Ensure it's a string
 
-            //var rawSignature = "accessKey=" + _options.Value.AccessKey + "&amount=" + Amount + "&extraData=&orderId=" + OrderId + "&partnerCode=" + _options.Value.PartnerCode + "&paymentCode=" + _options.Value.PartnerCode + "&requestId=" + RequestId;
-            // Construct rawData correctly
             var rawData = string.Join("&",
-                $"partnerCode={_options.Value.PartnerCode}",
-                $"accessKey={_options.Value.AccessKey}",
-                $"requestId={RequestId}",
-                $"amount={Amount}",
-                $"orderId={OrderId}",
-                $"orderInfo={OrderInfo}", // Fix encoding issue
-                $"returnUrl={_options.Value.ReturnUrl}",
-                $"notifyUrl={_options.Value.NotifyUrl}",
-                $"extraData="
-            );
+                 $"accessKey={_options.Value.AccessKey}",
+                 $"amount={Amount}",
+                 $"extraData=",
+                 $"notifyUrl={_options.Value.NotifyUrl}",
+                 $"orderId={OrderId}",
+                 $"orderInfo={OrderInfo}",
+                 $"partnerCode={_options.Value.PartnerCode}",
+                 $"returnUrl={_options.Value.ReturnUrl}",
+                 $"requestId={RequestId}",
+                 $"lang={_options.Value.Lang}",
+                 $"requestType={_options.Value.RequestType}"
+             );
 
             Console.WriteLine("RawData Before Hashing: " + rawData); // Debugging log
 
-            // Compute correct HMAC SHA256 signature
             var signature = ComputeHmacSha256(rawData, _options.Value.SecretKey);
 
-            // Create JSON payload
             var requestData = new
             {
                 accessKey = _options.Value.AccessKey,
@@ -65,7 +63,7 @@ namespace SellingBook.Services
             StringContent httpContent = new StringContent(JsonSerializer.Serialize(requestData), Encoding.UTF8, "application/json");
             var quickPayResponse = await client.PostAsync(_options.Value.MomoApiUrl, httpContent);
             var contents = quickPayResponse.Content.ReadAsStringAsync().Result;
-            System.Console.WriteLine(contents + "");
+            System.Console.WriteLine(contents.ToString());
             return JsonConvert.DeserializeObject<MomoCreatePaymentResponseModel>(contents);
         }
 
@@ -83,7 +81,6 @@ namespace SellingBook.Services
                 OrderInfo = orderInfo
             };
         }
-
 
         // hàm băm để tạo chữ ký cho momo
         private string ComputeHmacSha256(string message, string secretKey)
