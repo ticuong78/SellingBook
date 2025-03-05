@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SellingBook.Models;
+using SellingBook.Models.BasicModels;
+using SellingBook.Models.Checkout;
 using SellingBook.Repositories;
 
 namespace SellingBook.Controllers

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SellingBook.Models;
 using SellingBook.Repositories;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using SellingBook.Models.BasicModels;
 
 namespace SellingBook.Controllers
 {

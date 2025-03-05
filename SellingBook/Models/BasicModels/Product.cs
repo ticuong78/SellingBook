@@ -1,6 +1,4 @@
-
-
-namespace SellingBook.Models
+namespace SellingBook.Models.BasicModels
 {
     public class Product
     {
@@ -10,7 +8,7 @@ namespace SellingBook.Models
         public float? Rate { get; set; } = 0;
         public int? RateAmount { get; set; } = 0;
         public string? ImageUrl { get; set; }
-        public List<String>? Images { get; set; }
+        public List<string>? Images { get; set; }
         public string? Description { get; set; }
         public int CategoryId { get; set; }
         public virtual Category? Category { get; set; }

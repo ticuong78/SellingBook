@@ -1,4 +1,4 @@
-﻿using SellingBook.Models;
+﻿using SellingBook.Models.BasicModels;
 using System.Collections.Generic;
 
 namespace SellingBook.Repositories

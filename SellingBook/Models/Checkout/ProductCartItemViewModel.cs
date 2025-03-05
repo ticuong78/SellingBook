@@ -1,4 +1,6 @@
-﻿namespace SellingBook.Models
+﻿using SellingBook.Models.BasicModels;
+
+namespace SellingBook.Models.Checkout
 {
     public class ProductCartItemViewModel
     {

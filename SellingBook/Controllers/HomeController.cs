@@ -1,8 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SellingBook.Models;
-using Microsoft.Extensions.Logging;
+using SellingBook.Models.Error;
 using SellingBook.Repositories;
 
 namespace SellingBook.Controllers;
