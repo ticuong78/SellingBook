@@ -9,11 +9,13 @@ namespace SellingBook.Controllers
     {
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ICartRepository _cartRepository;
 
-        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository)
+        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository, ICartRepository cartRepository)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
+            _cartRepository = cartRepository;
         }
         public async Task<IActionResult> Index()
         {
@@ -57,13 +59,15 @@ namespace SellingBook.Controllers
             return "/images/" + image.FileName; // Trả về đường dẫn tương đối 
         }
 
-        public async Task<IActionResult> Display(int id)
+        public async Task<IActionResult> Display(int productId)
         {
-            var product = await _productRepository.GetProductByIdAsync(id);
+            var product = await _productRepository.GetProductByIdAsync(productId);
             if (product == null)
             {
                 return NotFound();
             }
+
+            ViewBag.CartQuantity = _cartRepository.GetCartItemsCountBasedOnRealTotal();
             return View(product);
         }
 
