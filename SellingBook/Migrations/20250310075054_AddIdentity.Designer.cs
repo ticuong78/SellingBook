@@ -12,8 +12,8 @@ using SellingBook.Models;
 namespace SellingBook.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250304150745_Initial")]
-    partial class Initial
+    [Migration("20250310075054_AddIdentity")]
+    partial class AddIdentity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
