@@ -10,7 +10,6 @@ namespace SellingBook.Controllers
     {
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
-<<<<<<< HEAD
         private readonly ICartRepository _cartRepository;
 
         public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository, ICartRepository cartRepository)
@@ -18,15 +17,6 @@ namespace SellingBook.Controllers
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
             _cartRepository = cartRepository;
-=======
-        private readonly ApplicationDbContext _context;
-
-        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository, ApplicationDbContext context)
-        {
-            _productRepository = productRepository;
-            _categoryRepository = categoryRepository;
-            _context = context;
->>>>>>> f6604d8d2dad685e2ef187e4eb2dc4e6779aa3e9
         }
 
         public async Task<IActionResult> Index()
@@ -147,8 +137,8 @@ namespace SellingBook.Controllers
         public IActionResult Search(string keyword)
         {
             var products = string.IsNullOrEmpty(keyword)
-                ? _context.Products.ToList()
-                : _context.Products.Where(p => p.ProductName.Contains(keyword)).ToList();
+                ? _productRepository.GetAllProductsAsync().Result.ToList()
+                : _productRepository.GetAllProductsAsync().Result.Where(p => p.ProductName.Contains(keyword)).ToList();
 
             ViewBag.Keyword = keyword;
             return View(products);
