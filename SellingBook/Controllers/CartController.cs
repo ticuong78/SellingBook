@@ -40,5 +40,27 @@ namespace SellingBook.Controllers
                 cartQuantity = _cartRepository.GetCartItemsCountBasedOnRealTotal()
             });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteCartItem(int cartItemId)
+        {
+            _logger.LogInformation(cartItemId.ToString());
+
+            CartItem cartItem = _cartRepository.GetCartItems().FirstOrDefault(c => c.CartItemId == cartItemId);
+
+            if (cartItem == null)
+            {
+                return NotFound();
+            }
+
+            _cartRepository.DeleteCartItem(cartItem);
+
+            ProductCartItemViewModel productCartItemViewModel = new();
+
+            productCartItemViewModel.CartItems = _cartRepository.GetCartItems();
+            productCartItemViewModel.Products = await _productRepository.GetAllProductsAsync();
+
+            return View("Index", productCartItemViewModel);
+        }
     }
 }

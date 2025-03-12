@@ -2,6 +2,7 @@
 using SellingBook.Repositories;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SellingBook.Models.BasicModels;
+using SellingBook.Models;
 
 namespace SellingBook.Controllers
 {
@@ -9,12 +10,15 @@ namespace SellingBook.Controllers
     {
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ICartRepository _cartRepository;
 
-        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository)
+        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository, ICartRepository cartRepository)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
+            _cartRepository = cartRepository;
         }
+
         public async Task<IActionResult> Index()
         {
             var products = await _productRepository.GetAllProductsAsync();
@@ -23,7 +27,6 @@ namespace SellingBook.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var catgories = await _categoryRepository.GetAllCategoriesAsync();
             ViewBag.CategoryId = new SelectList(await _categoryRepository.GetAllCategoriesAsync(), "CategoryId", "CategoryName");
             return View();
         }
@@ -41,29 +44,30 @@ namespace SellingBook.Controllers
                 await _productRepository.AddProductAsync(product);
                 return RedirectToAction(nameof(Index));
             }
-            // Nếu ModelState không hợp lệ, hiển thị form với dữ liệu đã nhập 
-            var categories = await _categoryRepository.GetAllCategoriesAsync();
-            ViewBag.Categories = new SelectList(categories, "CategoryId", "CategoryName");
+
+            ViewBag.Categories = new SelectList(await _categoryRepository.GetAllCategoriesAsync(), "CategoryId", "CategoryName");
             return View(product);
         }
 
         private async Task<string> SaveImage(IFormFile image)
         {
-            var savePath = Path.Combine("wwwroot/images", image.FileName); 
+            var savePath = Path.Combine("wwwroot/images", image.FileName);
             using (var fileStream = new FileStream(savePath, FileMode.Create))
             {
                 await image.CopyToAsync(fileStream);
             }
-            return "/images/" + image.FileName; // Trả về đường dẫn tương đối 
+            return "/images/" + image.FileName;
         }
 
-        public async Task<IActionResult> Display(int id)
+        public async Task<IActionResult> Display(int productId)
         {
-            var product = await _productRepository.GetProductByIdAsync(id);
+            var product = await _productRepository.GetProductByIdAsync(productId);
             if (product == null)
             {
                 return NotFound();
             }
+
+            ViewBag.CartQuantity = _cartRepository.GetCartItemsCountBasedOnRealTotal();
             return View(product);
         }
 
@@ -75,15 +79,14 @@ namespace SellingBook.Controllers
                 return NotFound();
             }
 
-            var categories = await _categoryRepository.GetAllCategoriesAsync();
-            ViewBag.Categories = new SelectList(categories, "CategoryId", "CategoryName", product.CategoryId);
+            ViewBag.Categories = new SelectList(await _categoryRepository.GetAllCategoriesAsync(), "CategoryId", "CategoryName", product.CategoryId);
             return View(product);
         }
 
         [HttpPost]
         public async Task<IActionResult> Update(int id, Product product, IFormFile imageUrl)
         {
-            ModelState.Remove("ImageUrl"); // Loại bỏ xác thực ModelState cho ImageUrl
+            ModelState.Remove("ImageUrl");
             if (id != product.ProductId)
             {
                 return NotFound();
@@ -91,17 +94,14 @@ namespace SellingBook.Controllers
 
             if (ModelState.IsValid)
             {
+                var existingProduct = await _productRepository.GetProductByIdAsync(id);
 
-                var existingProduct = await _productRepository.GetProductByIdAsync(id); // Giả định có phương thức GetByIdAsync 
-
-                // Giữ nguyên thông tin hình ảnh nếu không có hình mới được tải lên
                 if (imageUrl == null)
                 {
                     product.ImageUrl = existingProduct.ImageUrl;
                 }
                 else
                 {
-                    // Lưu hình ảnh mới 
                     product.ImageUrl = await SaveImage(imageUrl);
                 }
                 existingProduct.ProductName = product.ProductName;
@@ -112,8 +112,8 @@ namespace SellingBook.Controllers
                 await _productRepository.UpdateProductAsync(existingProduct);
                 return RedirectToAction(nameof(Index));
             }
-            var categories = await _categoryRepository.GetAllCategoriesAsync();
-            ViewBag.Categories = new SelectList(categories, "CategoryId", "CategoryName");
+
+            ViewBag.Categories = new SelectList(await _categoryRepository.GetAllCategoriesAsync(), "CategoryId", "CategoryName");
             return View(product);
         }
 
@@ -134,5 +134,14 @@ namespace SellingBook.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult Search(string keyword)
+        {
+            var products = string.IsNullOrEmpty(keyword)
+                ? _productRepository.GetAllProductsAsync().Result.ToList()
+                : _productRepository.GetAllProductsAsync().Result.Where(p => p.ProductName.Contains(keyword)).ToList();
+
+            ViewBag.Keyword = keyword;
+            return View(products);
+        }
     }
 }

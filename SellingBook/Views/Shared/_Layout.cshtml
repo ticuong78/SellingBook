@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -9,75 +9,85 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SellingBook.styles.css" asp-append-version="true" />
     <style>
-        *{
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .cart-quantity{
-        text-align: center;
-        font-size: 12.5px;
-        width: 20px;
-        height: 20px;
-        position: absolute;
-        border-radius: 50%;
-        background-color: red;
-        color: white;
-        bottom: -9px;
-        right: -10px;
+        /* Smaller cart quantity indicator */
+        .cart-quantity {
+            text-align: center;
+            font-size: 10px;
+            width: 15px;
+            height: 15px;
+            position: absolute;
+            border-radius: 50%;
+            background-color: red;
+            color: white;
+            bottom: -5px;
+            right: -5px;
+            line-height: 15px;
         }
 
-        .navbar{
-        padding-right: 10px;
+        .navbar {
+            padding-right: 10px;
+        }
+
+        .search-bar {
+            width: 400px; /* Adjust as needed */
+            max-width: 100%;
+        }
+
+        /* Bigger icons */
+        .nav-icon {
+            font-size: 1.5rem; /* Equivalent to Bootstrap fs-4 */
         }
     </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Nhà sách Việt Namk</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Sản Phẩm</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <form asp-controller="Cart" asp-action="Index" method="get">
-                <button class="btn btn-outline-dark" style="position: relative" asp-controller="Cart" asp-action="Index">
-                    <div class="cart-quantity" style="display: @(ViewBag.CartQuantity != null && ViewBag.CartQuantity != 0 ? "block": "none")">@ViewBag.CartQuantity</div>
-                    <i class="bi-cart-fill me-1"></i>
-                    Giỏ Hàng
-                </button>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Nhà sách Việt Nam</a>
+
+            <!-- Thanh tìm kiếm -->
+            <form class="d-flex flex-grow-1 mx-3" method="get" action="/Product/Search" style="max-width: 500px;">
+                <input class="form-control me-2 search-bar" type="search" name="keyword" placeholder="Tìm kiếm sản phẩm..." aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Tìm kiếm</button>
             </form>
-        </nav>
-    </header>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item position-relative">
+                        <a class="nav-link" href="/Cart">
+                            <i class="bi bi-cart3 nav-icon"></i>
+                            <span class="cart-quantity" style="display: @(ViewBag.CartQuantity != null && ViewBag.CartQuantity != 0 ? "block": "none")">@ViewBag.CartQuantity</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Account/Login">
+                            <i class="bi bi-person nav-icon"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - SellingBook - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/payment.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
