@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using SellingBook.Models;
 using SellingBook.Models.Momo;
-using SellingBook.Services;
 using SellingBook.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,10 +16,6 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
-
-//Custom momo api
-builder.Services.Configure<MomoOptionModel>(builder.Configuration.GetSection("MomoAPI"));
-builder.Services.AddScoped<IMomoService, MomoService>(); // add service
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

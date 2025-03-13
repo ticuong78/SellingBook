@@ -10,13 +10,13 @@ namespace SellingBook.Controllers
     {
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
-        private readonly ApplicationDbContext _context;
+        private readonly ICartRepository _cartRepository;
 
-        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository, ApplicationDbContext context)
+        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository, ICartRepository cartRepository)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
-            _context = context;
+            _cartRepository = cartRepository;
         }
 
         public async Task<IActionResult> Index()
@@ -59,13 +59,15 @@ namespace SellingBook.Controllers
             return "/images/" + image.FileName;
         }
 
-        public async Task<IActionResult> Display(int id)
+        public async Task<IActionResult> Display(int productId)
         {
-            var product = await _productRepository.GetProductByIdAsync(id);
+            var product = await _productRepository.GetProductByIdAsync(productId);
             if (product == null)
             {
                 return NotFound();
             }
+
+            ViewBag.CartQuantity = _cartRepository.GetCartItemsCountBasedOnRealTotal();
             return View(product);
         }
 
@@ -135,8 +137,8 @@ namespace SellingBook.Controllers
         public IActionResult Search(string keyword)
         {
             var products = string.IsNullOrEmpty(keyword)
-                ? _context.Products.ToList()
-                : _context.Products.Where(p => p.ProductName.Contains(keyword)).ToList();
+                ? _productRepository.GetAllProductsAsync().Result.ToList()
+                : _productRepository.GetAllProductsAsync().Result.Where(p => p.ProductName.Contains(keyword)).ToList();
 
             ViewBag.Keyword = keyword;
             return View(products);

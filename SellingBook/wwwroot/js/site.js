@@ -1,4 +1,15 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
+﻿async function addProduct(cartItemObj, onSuccessCallBack, onFailedCallBack) {
+    fetch("/Cart/AddCartItem", {
+        "method": "Post",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": JSON.stringify(cartItemObj)
+    })
+        .then(async (response) => {
+            await onSuccessCallBack(response);
+        })
+        .catch(error => {
+            onFailedCallBack(error);
+        })
+}

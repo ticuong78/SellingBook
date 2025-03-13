@@ -1,5 +1,4 @@
-﻿﻿
-<!DOCTYPE html>
+﻿﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -16,21 +15,33 @@
             box-sizing: border-box;
         }
 
+        /* Smaller cart quantity indicator */
         .cart-quantity {
             text-align: center;
-            font-size: 12.5px;
-            width: 20px;
-            height: 20px;
+            font-size: 10px;
+            width: 15px;
+            height: 15px;
             position: absolute;
             border-radius: 50%;
             background-color: red;
             color: white;
-            bottom: -9px;
-            right: -10px;
+            bottom: -5px;
+            right: -5px;
+            line-height: 15px;
         }
 
         .navbar {
             padding-right: 10px;
+        }
+
+        .search-bar {
+            width: 400px; /* Adjust as needed */
+            max-width: 100%;
+        }
+
+        /* Bigger icons */
+        .nav-icon {
+            font-size: 1.5rem; /* Equivalent to Bootstrap fs-4 */
         }
     </style>
 </head>
@@ -40,8 +51,8 @@
             <a class="navbar-brand" href="/">Nhà sách Việt Nam</a>
 
             <!-- Thanh tìm kiếm -->
-            <form class="d-flex" method="get" action="/Product/Search">
-                <input class="form-control me-2" type="search" name="keyword" placeholder="Tìm kiếm sản phẩm..." aria-label="Search">
+            <form class="d-flex flex-grow-1 mx-3" method="get" action="/Product/Search" style="max-width: 500px;">
+                <input class="form-control me-2 search-bar" type="search" name="keyword" placeholder="Tìm kiếm sản phẩm..." aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">Tìm kiếm</button>
             </form>
 
@@ -51,11 +62,16 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Cart">Giỏ hàng</a>
+                    <li class="nav-item position-relative">
+                        <a class="nav-link" href="/Cart">
+                            <i class="bi bi-cart3 nav-icon"></i>
+                            <span class="cart-quantity" style="display: @(ViewBag.CartQuantity != null && ViewBag.CartQuantity != 0 ? "block": "none")">@ViewBag.CartQuantity</span>
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/Account/Login">Đăng nhập</a>
+                        <a class="nav-link" href="/Account/Login">
+                            <i class="bi bi-person nav-icon"></i>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -71,7 +87,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
+    <script src="~/js/payment.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
