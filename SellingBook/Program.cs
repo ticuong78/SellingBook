@@ -1,8 +1,7 @@
-
 using Microsoft.EntityFrameworkCore;
 using SellingBook.Models;
-using SellingBook.Models.Momo;
 using SellingBook.Repositories;
+using SellingBook.Services.VNPay;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +21,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ICartRepository, EFCartRepository>();
 builder.Services.AddScoped<IProductRepository, EFProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
+
+// Add payment method
+builder.Services.AddScoped<IVNPayService, VNPayService>();
 
 var app = builder.Build();
 
