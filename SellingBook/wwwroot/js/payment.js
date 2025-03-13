@@ -21,7 +21,9 @@ function updateTotal() {
     document.getElementById('selectedTotalPrice').innerHTML = total.toLocaleString() + " <u>đ</u>";
 }
 
-function processPayment() {
+async function processPayment(name) {
+    let url;
+    let payload;
     let selectedItems = [];
     document.querySelectorAll('.cartItemCheckbox:checked').forEach(checkbox => {
         selectedItems.push(checkbox.value);
@@ -33,17 +35,30 @@ function processPayment() {
     }
 
     let paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').id;
-    alert(`Thanh toán với ${paymentMethod} cho các sản phẩm: ${selectedItems.join(", ")}`);
 
-    if (paymentMethod === 'momo') {
-        const url = '/Checkout/CreatePayment?amount=' + total;
-        console.log(url);
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ amount: total })
-        })
+    if (paymentMethod === 'vnpay') {
+        url = '/Checkout/CreatePaymentUrlVnPay';
+        payload = {
+            Amount: total,
+            OrderDescription: "Thanh toán VNPay",
+            OrderType: "other",
+            Name: name
+        }
     }
+
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    })
+
+    if (!response.ok) {
+        console.error("Failed to get payment URL");
+        return;
+    }
+
+    const data = await response.json();
+    window.location.href = data.paymentUrl; // Redirect user to VNPay
 }

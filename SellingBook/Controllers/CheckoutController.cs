@@ -1,26 +1,29 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SellingBook.Models.VNPay;
+using SellingBook.Repositories;
 using SellingBook.Services.VNPay;
-using System.Security.Claims;
-using System.Text.Json;
 
 namespace SellingBook.Controllers
 {
     public class CheckoutController : Controller
     {
-
         private readonly IVNPayService _vnPayService;
-        public CheckoutController(IVNPayService vnPayService)
-        {
+        private readonly IOrderRepository _orderRepository;
 
+        public CheckoutController(IVNPayService vnPayService, IOrderRepository orderRepository)
+        {
+            _orderRepository = orderRepository;
             _vnPayService = vnPayService;
         }
 
-        public IActionResult CreatePaymentUrlVnPay(PaymentInformationModel model)
+        public IActionResult CreatePaymentUrlVnPay([FromBody] PaymentInformationModel model)
         {
             var url = _vnPayService.CreatePaymentUrl(model, HttpContext);
 
-            return Redirect(url);
+            return Json(new
+            {
+                paymentUrl = url
+            });
         }
 
         [HttpGet]
@@ -28,7 +31,13 @@ namespace SellingBook.Controllers
         {
             var response = _vnPayService.PaymentExecute(Request.Query);
 
-            return Json(response);
+            if (response.Success)
+            {
+                ViewBag.OrderId = response.OrderId;
+                return View("PaymentSucceed");
+            }
+
+            return View("PaymentFailed");
         }
     }
 }
