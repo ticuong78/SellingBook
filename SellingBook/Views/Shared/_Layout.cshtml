@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Nhà sách Việt Nam</title>
+    <title>@ViewData["Title"] - @Localizer["WebName"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -48,12 +48,12 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">Nhà sách Việt Nam</a>
+            <a class="navbar-brand" href="/">@Localizer["WebName"]</a>
 
             <!-- Thanh tìm kiếm -->
             <form class="d-flex flex-grow-1 mx-3" method="get" action="/Product/Search" style="max-width: 500px;">
-                <input class="form-control me-2 search-bar" type="search" name="keyword" placeholder="Tìm kiếm sản phẩm..." aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Tìm kiếm</button>
+                <input class="form-control me-2 search-bar" type="search" name="keyword" placeholder="@Localizer["SearchPlaceHolder"]" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">@Localizer["Search"]</button>
             </form>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

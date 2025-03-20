@@ -1,77 +1,87 @@
 ﻿@using SellingBook.Models.BasicModels
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @model IEnumerable<SellingBook.Models.BasicModels.Product>
 
 <form method="get" action="/search">
 </form>
 
-<h2>Kết quả tìm kiếm:</h2>
+<h2>@Localizer["SearchResultTitle"]</h2>
 
 @if (!Model.Any())
 {
-    <p>Không tìm thấy sản phẩm nào!</p>
+        <p>@Localizer["NoProductFound"]</p>
 }
 else
 {
-    <section class="py-2">
-        <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+        <section class="py-2">
+            <div class="container px-4 px-lg-5 mt-5">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                 @foreach (Product product in Model)
                 {
-                    <div class="col mb-5 a-product-@product.ProductId" data-price="@product.ProductPrice" data-cartQuantity="1">
-                        <div class="card gap-3" style="width: 18rem">
-                            <img src="~/images/@product.ImageUrl" class="card-img-top" alt="@product.ImageUrl" style="height: 300px">
-                            <div class="card-body">
-                                <h5 class="card-title">
-                                    @product.ProductName
-                                </h5>
-                                <div class="d-flex">
-                                    <span>Price: </span>
-                                    <p class="mx-3">@product.ProductPrice.ToString("#,##0") Vnđ</p>
+                            <div class="col mb-5 a-product-@product.ProductId" 
+                                 data-price="@product.ProductPrice" 
+                                 data-cartQuantity="1">
+                                <div class="card gap-3" style="width: 18rem">
+                                    <a asp-action="Display" asp-controller="Product" asp-route-productId="@product.ProductId">
+                                        <div class="card-header" style="overflow: hidden; margin: 0; padding: 0">
+                                            <img src="~/images/@product.ImageUrl" 
+                                                 class="card-img-top image-zooming" 
+                                                 alt="@product.ImageUrl" 
+                                                 style="height: 300px">
+                                        </div>
+                                    </a>
+                                    <div class="card-body">
+                                        <a asp-action="Display" 
+                                           asp-route-productId="@product.ProductId" 
+                                           asp-controller="Product" 
+                                           style="text-decoration: none;">
+                                            <h5 class="card-title">
+                                        @product.ProductName
+                                            </h5>
+                                        </a>
+                                        <div class="d-flex">
+                                            <span>@Localizer["PriceLabel"]</span>
+                                            <p class="mx-3">@product.ProductPrice.ToString("#,##0") Vnđ</p>
+                                        </div>
+                                        <button class="btn btn-outline-dark" onclick="onClick(@product.ProductId);">
+                                            <i class="bi-cart-fill me-1"></i> @Localizer["AddToCart"]
+                                        </button>
+                                    </div>
                                 </div>
-                                <button class="btn btn-outline-dark" onclick="addProduct(@product.ProductId)">
-                                    <i class="bi-cart-fill me-1"></i> Add to Cart
-                                </button>
                             </div>
-                        </div>
-                    </div>
                 }
+                </div>
             </div>
-        </div>
-    </section>
-}
+        </section>
+            <script>
+        async function onClick(productId) {
+            const productElement = document.querySelector('.a-product-' + productId);
+            const cartQuantitySelector = document.querySelector(".cart-quantity");
 
-<script>
-    function addProduct(productId){
-        const productElement = document.querySelector('.a-product-' + productId);
-        const cartItemObj = {
-            UserId: 1,
-            ProductId: productId,
-            CartItemQuantity: parseInt(productElement.dataset.cartquantity),
-            CartItemPrice: parseFloat(productElement.dataset.price)
+            const cartItemObj = {
+                UserId: 1,
+                ProductId: productId,
+                CartItemQuantity: parseInt(productElement.dataset.cartquantity),
+                CartItemPrice: parseFloat(productElement.dataset.price)
+            };
+
+            const onSuccessCallBack = async (response) => {
+                const parsed_data = await response.json();
+                if (parsed_data != null) {
+                    cartQuantitySelector.style.display = "block";
+                    cartQuantitySelector.innerText = parsed_data.cartQuantity;
+                }
+                console.log(parsed_data);
+            };
+
+            const onFailedCallBack = (error) => {
+                console.log(error);
+                cartQuantitySelector.style.display = "none";
+            };
+
+            // Ensure addProduct is called inside an async function
+            await addProduct(cartItemObj, onSuccessCallBack, onFailedCallBack);
         }
-
-        const cartQuantitySelector = document.querySelector(".cart-quantity");
-
-        const payload = fetch("/Cart/AddCartItem", {
-            "method": "Post",
-            "headers": {
-                "Content-Type": "application/json"
-            },
-            "body": JSON.stringify(cartItemObj)
-        })
-        .then(async (response) => {
-            parsed_data = await response.json();
-
-            if(parsed_data != null){
-                cartQuantitySelector.style.display = "block";
-                cartQuantitySelector.innerText = parsed_data.cartQuantity;
-            }
-
-            console.log(parsed_data);
-        })
-        .catch(error => {
-            console.log(error);
-            cartQuantitySelector.style.display = "none";
-        })
-    }
-</script>
+    </script>
+}
