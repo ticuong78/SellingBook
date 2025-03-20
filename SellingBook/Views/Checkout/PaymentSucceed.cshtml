@@ -1,19 +1,24 @@
-﻿@{ 
-    ViewData["Title"] = "Thanh toán thành công"; 
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{ 
+    ViewData["Title"] = Localizer["PaymentSuccessTitle"]; 
 }
 
-<div class= "container text-center py-5" >
-    <h2 class= "text-success" > Thanh toán thành công!</h2>
-    <p class= "lead" > Cảm ơn bạn đã mua hàng tại <strong>Nhà sách Việt Nam</strong>.</p>
-    <p>Mã đơn hàng: <strong> @ViewBag.OrderId </strong ></p>
-    <p> Số tiền thanh toán: <strong> @ViewBag.Amount VND </strong ></p>
+<div class="container text-center py-5">
+    <h2 class="text-success">@Localizer["PaymentSuccessHeader"]</h2>
+    <p class="lead">
+        @Localizer["ThankYouMessage"] <strong>Nhà sách Việt Nam</strong>.
+    </p>
+    <p>@Localizer["OrderCode"] <strong>@ViewBag.OrderId</strong></p>
+    <p>@Localizer["PaymentAmount"] <strong>@ViewBag.Amount VND</strong></p>
 
-    <div class= "my-4" >
-        <a href = "/" class= "btn btn-primary" > Tiếp tục mua sắm</a>
-        <a href="/Order/Details?id=@ViewBag.OrderId" class= "btn btn-outline-secondary" > Xem đơn hàng</a>
+    <div class="my-4">
+        <a href="/" class="btn btn-primary">@Localizer["ContinueShopping"]</a>
+        <a href="/Order/Details?id=@ViewBag.OrderId" class="btn btn-outline-secondary">@Localizer["ViewOrder"]</a>
     </div>
 
-    <div class= "alert alert-info mt-4" role = "alert" >
-        Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ <a href="/Contact">hỗ trợ khách hàng</a>.
+    <div class="alert alert-info mt-4" role="alert">
+        @Localizer["SupportNote"] <a href="/Contact">@Localizer["CustomerSupport"]</a>.
     </div>
 </div>
