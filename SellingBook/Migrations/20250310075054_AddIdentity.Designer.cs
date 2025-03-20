@@ -12,8 +12,8 @@ using SellingBook.Models;
 namespace SellingBook.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250228145135_Initial")]
-    partial class Initial
+    [Migration("20250310075054_AddIdentity")]
+    partial class AddIdentity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,11 +25,12 @@ namespace SellingBook.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SellingBook.Models.CartItem", b =>
+            modelBuilder.Entity("SellingBook.Models.BasicModels.CartItem", b =>
                 {
                     b.Property<int>("CartItemId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartItemId"));
 
@@ -54,7 +55,7 @@ namespace SellingBook.Migrations
                     b.ToTable("CartItems");
                 });
 
-            modelBuilder.Entity("SellingBook.Models.Category", b =>
+            modelBuilder.Entity("SellingBook.Models.BasicModels.Category", b =>
                 {
                     b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
@@ -70,7 +71,7 @@ namespace SellingBook.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("SellingBook.Models.Order", b =>
+            modelBuilder.Entity("SellingBook.Models.BasicModels.Order", b =>
                 {
                     b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd()
@@ -107,7 +108,7 @@ namespace SellingBook.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("SellingBook.Models.OrderItem", b =>
+            modelBuilder.Entity("SellingBook.Models.BasicModels.OrderItem", b =>
                 {
                     b.Property<int>("OrderItemId")
                         .ValueGeneratedOnAdd()
@@ -136,7 +137,7 @@ namespace SellingBook.Migrations
                     b.ToTable("OrderItems");
                 });
 
-            modelBuilder.Entity("SellingBook.Models.Product", b =>
+            modelBuilder.Entity("SellingBook.Models.BasicModels.Product", b =>
                 {
                     b.Property<int>("ProductId")
                         .ValueGeneratedOnAdd()
@@ -175,7 +176,7 @@ namespace SellingBook.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("SellingBook.Models.Rate", b =>
+            modelBuilder.Entity("SellingBook.Models.BasicModels.Rate", b =>
                 {
                     b.Property<int>("RateId")
                         .ValueGeneratedOnAdd()
@@ -204,7 +205,7 @@ namespace SellingBook.Migrations
                     b.ToTable("Rates");
                 });
 
-            modelBuilder.Entity("SellingBook.Models.User", b =>
+            modelBuilder.Entity("SellingBook.Models.BasicModels.User", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
@@ -229,15 +230,15 @@ namespace SellingBook.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("SellingBook.Models.CartItem", b =>
+            modelBuilder.Entity("SellingBook.Models.BasicModels.CartItem", b =>
                 {
-                    b.HasOne("SellingBook.Models.Product", "Product")
+                    b.HasOne("SellingBook.Models.BasicModels.Product", "Product")
                         .WithMany("CartItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SellingBook.Models.User", "User")
+                    b.HasOne("SellingBook.Models.BasicModels.User", "User")
                         .WithMany("CartItems")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -248,9 +249,9 @@ namespace SellingBook.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SellingBook.Models.Order", b =>
+            modelBuilder.Entity("SellingBook.Models.BasicModels.Order", b =>
                 {
-                    b.HasOne("SellingBook.Models.User", "User")
+                    b.HasOne("SellingBook.Models.BasicModels.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -259,15 +260,15 @@ namespace SellingBook.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SellingBook.Models.OrderItem", b =>
+            modelBuilder.Entity("SellingBook.Models.BasicModels.OrderItem", b =>
                 {
-                    b.HasOne("SellingBook.Models.Order", "Order")
+                    b.HasOne("SellingBook.Models.BasicModels.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SellingBook.Models.Product", "Product")
+                    b.HasOne("SellingBook.Models.BasicModels.Product", "Product")
                         .WithMany("OrderItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -278,9 +279,9 @@ namespace SellingBook.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("SellingBook.Models.Product", b =>
+            modelBuilder.Entity("SellingBook.Models.BasicModels.Product", b =>
                 {
-                    b.HasOne("SellingBook.Models.Category", "Category")
+                    b.HasOne("SellingBook.Models.BasicModels.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -289,15 +290,15 @@ namespace SellingBook.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("SellingBook.Models.Rate", b =>
+            modelBuilder.Entity("SellingBook.Models.BasicModels.Rate", b =>
                 {
-                    b.HasOne("SellingBook.Models.Product", "Product")
+                    b.HasOne("SellingBook.Models.BasicModels.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SellingBook.Models.User", "User")
+                    b.HasOne("SellingBook.Models.BasicModels.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -308,24 +309,24 @@ namespace SellingBook.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SellingBook.Models.Category", b =>
+            modelBuilder.Entity("SellingBook.Models.BasicModels.Category", b =>
                 {
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("SellingBook.Models.Order", b =>
+            modelBuilder.Entity("SellingBook.Models.BasicModels.Order", b =>
                 {
                     b.Navigation("OrderItems");
                 });
 
-            modelBuilder.Entity("SellingBook.Models.Product", b =>
+            modelBuilder.Entity("SellingBook.Models.BasicModels.Product", b =>
                 {
                     b.Navigation("CartItems");
 
                     b.Navigation("OrderItems");
                 });
 
-            modelBuilder.Entity("SellingBook.Models.User", b =>
+            modelBuilder.Entity("SellingBook.Models.BasicModels.User", b =>
                 {
                     b.Navigation("CartItems");
 

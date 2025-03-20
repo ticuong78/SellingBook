@@ -1,0 +1,13 @@
+﻿using SellingBook.Models.BasicModels;
+
+namespace SellingBook.Repositories
+{
+    public interface ICartRepository
+    {
+        int GetCartItemsCountBasedOnIds();
+        int GetCartItemsCountBasedOnRealTotal();
+        void AddCartItem(CartItem cartItem);
+        void DeleteCartItem(CartItem cartItem);
+        IEnumerable<CartItem> GetCartItems();
+    }
+}

@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Order Details";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-center text-primary">Order Details</h2>
+        <table class="table table-bordered mt-3">
+            <tr>
+                <th class="bg-light">Order Info</th>
+                <td>@Model.OrderInfo</td>
+            </tr>
+            <tr>
+                <th class="bg-light">Amount</th>
+                <td class="text-success">@Model.Amount.ToString("C")</td>
+            </tr>
+            <tr>
+                <th class="bg-light">Bank Code</th>
+                <td>@Model.BankCode</td>
+            </tr>
+            <tr>
+                <th class="bg-light">Transaction No</th>
+                <td>@Model.TransactionNo</td>
+            </tr>
+            <tr>
+                <th class="bg-light">Transaction Status</th>
+                <td>
+                    <span class="badge @(Model.TransactionStatus == "00" ? "bg-success" : "bg-danger")">
+                        @(Model.TransactionStatus == "00" ? "Success" : "Failed")
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th class="bg-light">Response Code</th>
+                <td>@Model.ResponseCode</td>
+            </tr>
+            <tr>
+                <th class="bg-light">Payment Date</th>
+                <td>@Model.PaymentDate</td>
+            </tr>
+        </table>
+        <div class="text-center mt-4">
+            <a href="/" class="btn btn-primary">Return to Home</a>
+        </div>
+    </div>
+</div>

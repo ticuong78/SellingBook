@@ -1,8 +1,7 @@
-﻿namespace SellingBook.Models
+﻿namespace SellingBook.Models.BasicModels
 {
     public class OrderItem
     {
-
         public int OrderItemId { get; set; }
         public int OrderId { get; set; }
         public Order Order { get; set; }
@@ -10,6 +9,5 @@
         public Product Product { get; set; }
         public int OrderItemQuantity { get; set; }
         public decimal OrderItemPrice { get; set; }
-
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SellingBook.Models;
+using SellingBook.Models.BasicModels;
 using SellingBook.Repositories;
 
 namespace SellingBook.Controllers
