@@ -1,10 +1,12 @@
 ﻿@using SellingBook.Models.BasicModels
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Trang Chủ";
+    ViewData["Title"] = Localizer["HomeTitle"];
 }
 
 <style>
-    .image-zooming{
+    .image-zooming {
         width: 100%;
         transition: transform 0.3s ease-in-out;
     }
@@ -20,33 +22,42 @@
 
             @foreach (Product product in Model)
             {
-                <div class="col mb-5 a-product-@product.ProductId" data-price="@product.ProductPrice" data-cartQuantity="1">
-                    <div class="card gap-3" style="width: 18rem">
-                        <a asp-action="Display" asp-controller="Product" asp-route-productId="@product.ProductId">
-                            <div class="card-header" style="overflow: hidden; margin: 0; padding: 0">
-                                <img src="~/images/@product.ImageUrl" class="card-img-top image-zooming" alt="@product.ImageUrl" style="height: 300px">
-                            </div>
-                        </a>
-                        <div class="card-body">
-                            <a asp-action="Display" asp-route-productId="@product.ProductId" asp-controller="Product" style="text-decoration: none;">
-                                <h5 class="card-title">
-                                    @product.ProductName
-                                </h5>
+                    <div class="col mb-5 a-product-@product.ProductId" 
+                         data-price="@product.ProductPrice" 
+                         data-cartQuantity="1">
+                        <div class="card gap-3" style="width: 18rem">
+                            <a asp-action="Display" asp-controller="Product" asp-route-productId="@product.ProductId">
+                                <div class="card-header" style="overflow: hidden; margin: 0; padding: 0">
+                                    <img src="~/images/@product.ImageUrl" 
+                                         class="card-img-top image-zooming" 
+                                         alt="@product.ImageUrl" 
+                                         style="height: 300px">
+                                </div>
                             </a>
-                            <div class="d-flex">
-                                <span>Price: </span>
-                                <p class="mx-3">@product.ProductPrice.ToString("#,##0") Vnđ</p>
+                            <div class="card-body">
+                                <a asp-action="Display" 
+                                   asp-route-productId="@product.ProductId" 
+                                   asp-controller="Product" 
+                                   style="text-decoration: none;">
+                                    <h5 class="card-title">
+                                    @product.ProductName
+                                    </h5>
+                                </a>
+                                <div class="d-flex">
+                                    <span>@Localizer["PriceLabel"]</span>
+                                    <p class="mx-3">@product.ProductPrice.ToString("#,##0") Vnđ</p>
+                                </div>
+                                <button class="btn btn-outline-dark" onclick="onClick(@product.ProductId);">
+                                    <i class="bi-cart-fill me-1"></i> @Localizer["AddToCart"]
+                                </button>
                             </div>
-                            <button class="btn btn-outline-dark" onclick="onClick(@product.ProductId);">
-                                    <i class="bi-cart-fill me-1"></i> Add to Cart
-                             </button>
                         </div>
                     </div>
-                </div>
             }
         </div>
     </div>
 </section>
+
 <script>
     async function onClick(productId) {
         const productElement = document.querySelector('.a-product-' + productId);
@@ -73,7 +84,6 @@
             cartQuantitySelector.style.display = "none";
         };
 
-        // Ensure addProduct is called inside an async function
         await addProduct(cartItemObj, onSuccessCallBack, onFailedCallBack);
     }
 </script>

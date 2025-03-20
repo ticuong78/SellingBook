@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using SellingBook.Models.Error;
 using SellingBook.Repositories;
-
 namespace SellingBook.Controllers;
 
 public class HomeController : Controller

@@ -1,13 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
 using SellingBook.Models;
 using SellingBook.Repositories;
 using SellingBook.Services.VNPay;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -16,16 +20,17 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
+
 builder.Services.AddScoped<ICartRepository, EFCartRepository>();
 builder.Services.AddScoped<IOrderRepository, EFOrderRepository>();
 builder.Services.AddScoped<IProductRepository, EFProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
 
-builder.Services.AddHttpClient();
-// Add payment method
 builder.Services.AddScoped<IVNPayService, VNPayService>();
+builder.Services.AddHttpClient();
 
 builder.Services.AddCors(options =>
 {
@@ -38,29 +43,34 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+var supportedCultures = new[] { new CultureInfo("en"), new CultureInfo("vi") };
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("en"), // Set default to Vietnamese
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+});
+
 app.UseCors("CorsPolicy");
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
-app.MapControllerRoute(
-    name: "search",
-    pattern: "search",
-    defaults: new { controller = "Product", action = "Search" }
-);
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession();
 
 app.UseRouting();
-
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "search",
+    pattern: "search",
+    defaults: new { controller = "Product", action = "Search" }
+);
 
 app.MapControllerRoute(
     name: "default",
