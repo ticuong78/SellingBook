@@ -60,17 +60,28 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
+           <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+                    <!-- Nút đổi ngôn ngữ đưa lên đầu -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link text-dark nav-icon" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-globe"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+                            <li><a class="dropdown-item" href="?culture=vi&ui-culture=vi">🇻🇳 Tiếng Việt</a></li>
+                            <li><a class="dropdown-item" href="?culture=en&ui-culture=en">🇬🇧 English</a></li>
+                        </ul>
+                    </li>
+
                     <li class="nav-item position-relative">
-                        <a class="nav-link" href="/Cart">
-                            <i class="bi bi-cart3 nav-icon"></i>
+                        <a class="nav-link text-dark nav-icon" href="/Cart">
+                            <i class="bi bi-cart3"></i>
                             <span class="cart-quantity" style="display: @(ViewBag.CartQuantity != null && ViewBag.CartQuantity != 0 ? "block": "none")">@ViewBag.CartQuantity</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/Account/Login">
-                            <i class="bi bi-person nav-icon"></i>
+                        <a class="nav-link text-dark nav-icon" href="/Account/Login">
+                            <i class="bi bi-person"></i>
                         </a>
                     </li>
                 </ul>

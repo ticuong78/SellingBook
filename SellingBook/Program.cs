@@ -46,7 +46,7 @@ var app = builder.Build();
 var supportedCultures = new[] { new CultureInfo("en"), new CultureInfo("vi") };
 app.UseRequestLocalization(new RequestLocalizationOptions
 {
-    DefaultRequestCulture = new RequestCulture("en"), // Set default to Vietnamese
+    DefaultRequestCulture = new RequestCulture("vi"), // Set default to Vietnamese
     SupportedCultures = supportedCultures,
     SupportedUICultures = supportedCultures
 });
