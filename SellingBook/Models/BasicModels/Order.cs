@@ -1,10 +1,12 @@
-﻿namespace SellingBook.Models.BasicModels
+﻿using SellingBook.Models.Identity;
+
+namespace SellingBook.Models.BasicModels
 {
     public class Order
     {
-        public int OrderId { get; set; }
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public string OrderId { get; set; }
+        public string UserId { get; set; }
+        public ApplicationUser User { get; set; }
         public string OrderAddress { get; set; }
         public string OrderPhone { get; set; }
         public string OrderEmail { get; set; }

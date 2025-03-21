@@ -1,5 +1,6 @@
 ﻿using SellingBook.Models;
 using SellingBook.Models.BasicModels;
+using SellingBook.Models.Identity;
 
 namespace SellingBook.Repositories
 {
@@ -17,7 +18,7 @@ namespace SellingBook.Repositories
         {
             _logger.LogInformation(cartItem.UserId.ToString());
 
-            User user = _applicationDbContext.Users.FirstOrDefault(user => user.UserId == cartItem.UserId);
+            ApplicationUser user = _applicationDbContext.Users.FirstOrDefault(user => user.Id == cartItem.UserId);
             Product product = _applicationDbContext.Products.FirstOrDefault(product => product.ProductId == cartItem.ProductId);
             CartItem existingCartItem = _applicationDbContext.CartItems.FirstOrDefault(item => item.ProductId == cartItem.ProductId);
 
@@ -53,17 +54,17 @@ namespace SellingBook.Repositories
 
         public IEnumerable<CartItem> GetCartItems()
         {
-            return _applicationDbContext.CartItems.Where(cartItem => cartItem.UserId == 1);
+            return _applicationDbContext.CartItems.Where(cartItem => cartItem.UserId == "");
         }
 
         public int GetCartItemsCountBasedOnIds()
         {
-            return _applicationDbContext.CartItems.Where(cartItem => cartItem.UserId == 1).Count();
+            return _applicationDbContext.CartItems.Where(cartItem => cartItem.UserId == "").Count();
         }
 
         public int GetCartItemsCountBasedOnRealTotal()
         {
-            return _applicationDbContext.CartItems.Where(cartItem => cartItem.UserId == 1).Sum(cart => cart.CartItemQuantity);
+            return _applicationDbContext.CartItems.Where(cartItem => cartItem.UserId == "").Sum(cart => cart.CartItemQuantity);
         }
     }
 }
