@@ -1,5 +1,6 @@
 ﻿namespace SellingBook.Models.BasicModels
 {
+    [Obsolete("Use ApplicationUser model from Identity instead.")]
     public class User
     {
         public int UserId { get; set; }

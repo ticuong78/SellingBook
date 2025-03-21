@@ -1,10 +1,12 @@
-﻿namespace SellingBook.Models.BasicModels
+﻿using SellingBook.Models.Identity;
+
+namespace SellingBook.Models.BasicModels
 {
     public class Rate
     {
         public int RateId { get; set; }
         public int UserId { get; set; }
-        public User User { get; set; }
+        public ApplicationUser User { get; set; }
         public int ProductId { get; set; }
         public Product Product { get; set; }
         public int RateAmount { get; set; }

@@ -32,6 +32,27 @@ namespace SellingBook.Repositories
             _context.Products.Update(product);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Product> DeleteProductByIdAsync(int id)
+        {
+            try
+            {
+                var product = _context.Products.Find(id);
+
+                if (product != null)
+                {
+                    _context.Products.Remove(product);
+                    await _context.SaveChangesAsync();
+                    return product;
+                }
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         public async Task DeleteProductAsync(int id)
         {
             var product = await _context.Products.FindAsync(id);
