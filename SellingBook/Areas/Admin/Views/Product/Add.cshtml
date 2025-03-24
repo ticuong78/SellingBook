@@ -12,13 +12,13 @@
         <div asp-validation-summary="All" class="alert alert-danger"></div>
 
         <div class="mb-3">
-            <label asp-for="ProductName" class="form-label">Name</label>
+            <label asp-for="ProductName" class="form-label">Product Name</label>
             <input asp-for="ProductName" class="form-control" required />
             <span asp-validation-for="ProductName" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="ProductPrice" class="form-label">Price</label>
+            <label asp-for="ProductPrice" class="form-label">Product Price</label>
             <input asp-for="ProductPrice" type="number" class="form-control" required />
             <span asp-validation-for="ProductPrice" class="text-danger"></span>
         </div>

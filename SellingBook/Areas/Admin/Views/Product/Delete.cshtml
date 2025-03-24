@@ -10,7 +10,7 @@
     </div>
 
     <form asp-area="Admin" asp-action="DeleteConfirmed" method="post" class="mt-3">
-        <input type="hidden" asp-for="@Model.ProductId" />
+        <input type="hidden" asp-for="ProductId" />
         <button type="submit" class="btn btn-danger">Delete</button>
         <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
     </form>

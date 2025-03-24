@@ -86,9 +86,9 @@
 
                     <!-- Cart -->
                     <li class="nav-item position-relative">
-                        <a class="nav-link text-dark nav-icon" href="/Cart">
+                        <a class="nav-link text-dark nav-icon" asp-area="Customer" asp-controller="Cart" asp-action="Index">
                             <i class="bi bi-cart3"></i>
-                            <span class="cart-quantity" style="display: @(ViewBag.CartQuantity != null && ViewBag.CartQuantity != 0 ? "block": "none")">@ViewBag.CartQuantity</span>
+                            <span class="cart-quantity" style="display: @(ViewData["CartQuantity"] != null && Convert.ToInt32(ViewData["CartQuantity"]) != 0 ? "block" : "none")">@ViewData["CartQuantity"]</span>
                         </a>
                     </li>
 
