@@ -27,7 +27,7 @@
                 <td>@(product.Category?.CategoryName ?? "No Category")</td>
                 <td>
                     <a asp-action="Display" asp-route-id="@product.ProductId">View</a> |
-                    <a asp-action="Update" asp-route-id="@product.ProductId">Edit</a> |
+                    <a asp-action="Edit" asp-route-id="@product.ProductId">Edit</a> |
                     <a asp-action="Delete" asp-route-id="@product.ProductId">Delete</a>
                 </td>
             </tr>

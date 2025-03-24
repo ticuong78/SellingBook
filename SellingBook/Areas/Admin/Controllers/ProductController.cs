@@ -37,7 +37,7 @@ namespace SellingBook.Areas.Admin.Controllers
         public async Task<IActionResult> Add()
         {
             var categories = await _categoryRepository.GetAllCategoriesAsync();
-            ViewBag.Categories = new SelectList(categories, "ID", "Name");
+            ViewBag.Categories = new SelectList(categories, "CategoryId", "CategoryName");
             return View();
         }
 
@@ -82,7 +82,7 @@ namespace SellingBook.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var product = await _productRepository.GetProductByIdAsync(id);
-            ViewBag.Categories = new SelectList(await _categoryRepository.GetAllCategoriesAsync(), "ID", "Name");
+            ViewBag.Categories = new SelectList(await _categoryRepository.GetAllCategoriesAsync(), "CategoryId", "CategoryName");
 
             if (product == null)
             {
