@@ -16,8 +16,6 @@ namespace SellingBook.Repositories
 
         public void AddCartItem(CartItem cartItem)
         {
-            _logger.LogInformation(cartItem.UserId.ToString());
-
             ApplicationUser user = _applicationDbContext.Users.FirstOrDefault(user => user.Id == cartItem.UserId);
             Product product = _applicationDbContext.Products.FirstOrDefault(product => product.ProductId == cartItem.ProductId);
             CartItem existingCartItem = _applicationDbContext.CartItems.FirstOrDefault(item => item.ProductId == cartItem.ProductId);

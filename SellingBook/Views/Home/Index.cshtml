@@ -28,8 +28,8 @@
                         <div class="card gap-3" style="width: 18rem">
                             <a asp-action="Display" asp-controller="Product" asp-route-productId="@product.ProductId">
                                 <div class="card-header" style="overflow: hidden; margin: 0; padding: 0">
-                                    <img src="~/images/@product.ImageUrl" 
-                                         class="card-img-top image-zooming" 
+                                <img src="~@product.ImageUrl"
+                                     class="card-img-top image-zooming" 
                                          alt="@product.ImageUrl" 
                                          style="height: 300px">
                                 </div>

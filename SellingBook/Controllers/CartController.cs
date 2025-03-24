@@ -33,7 +33,6 @@ namespace SellingBook.Controllers
         [HttpPost]
         public IActionResult AddCartItem([FromBody] CartItem cartItem)
         {
-            _logger.LogInformation(cartItem.UserId.ToString());
             _cartRepository.AddCartItem(cartItem);
             return Ok(new
             {

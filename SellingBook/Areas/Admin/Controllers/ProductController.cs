@@ -1,14 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SellingBook.Repositories;
-using SellingBook.Models.BasicModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using SellingBook.Models.BasicModels;
 using SellingBook.Models.Roles;
+using SellingBook.Repositories;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace SellingBook.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = SD.Role_Admin)]
+    [Authorize(Roles = $"{SD.Role_Admin},{SD.Role_Employee},{SD.Role_Customer}")]
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;
@@ -36,6 +38,12 @@ namespace SellingBook.Areas.Admin.Controllers
 
         public async Task<IActionResult> Add()
         {
+            if (User.IsInRole("Customer"))
+            {
+                return Redirect("/Identity/Account/AccessDenied");
+
+            }
+
             var categories = await _categoryRepository.GetAllCategoriesAsync();
             ViewBag.Categories = new SelectList(categories, "CategoryId", "CategoryName");
             return View();
@@ -44,6 +52,12 @@ namespace SellingBook.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> AddConfirmed(Product product, IFormFile imageURL, List<IFormFile> imageURLs)
         {
+            if (User.IsInRole("Customer"))
+            {
+                return Redirect("/Identity/Account/AccessDenied");
+
+            }
+
             if (ModelState.IsValid)
             {
                 if (imageURL != null)
@@ -56,7 +70,7 @@ namespace SellingBook.Areas.Admin.Controllers
                     product.Images = new List<string>();
                     foreach (var image in imageURLs)
                     {
-                        product.Images.Append(await AddImage(image));
+                        product.Images.Add(AddImage(image).Result);
                     }
                 }
 
@@ -81,6 +95,12 @@ namespace SellingBook.Areas.Admin.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
+            if (User.IsInRole("Customer"))
+            {
+                return Redirect("/Identity/Account/AccessDenied");
+
+            }
+
             var product = await _productRepository.GetProductByIdAsync(id);
             ViewBag.Categories = new SelectList(await _categoryRepository.GetAllCategoriesAsync(), "CategoryId", "CategoryName");
 
@@ -95,6 +115,12 @@ namespace SellingBook.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> EditConfirmed(Product product, IFormFile imageURl)
         {
+            if (User.IsInRole("Customer"))
+            {
+                return Redirect("/Identity/Account/AccessDenied");
+
+            }
+
             ModelState.Remove("ImageURL");
             if (ModelState.IsValid)
             {
@@ -109,27 +135,24 @@ namespace SellingBook.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Categories = new SelectList(await _categoryRepository.GetAllCategoriesAsync(), "ID", "Name");
+            ViewBag.Categories = new SelectList(await _categoryRepository.GetAllCategoriesAsync(), "CategoryId", "CategoryName");
             return View("Edit", product);
         }
 
-        public async Task<IActionResult> Delete(int id) //display deleting object
+        [Authorize(Roles = SD.Role_Admin)]
+        public async Task<IActionResult> Delete(int id)
         {
             var product = await _productRepository.GetProductByIdAsync(id);
-
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return View(product);
+            return product == null ? NotFound() : View(product);
         }
 
-        [HttpPost] //delete the object after UI deleting confirmation (pressing Delete button in Display.cshtml)
+        [HttpPost, ActionName("DeleteConfirmed")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _productRepository.DeleteProductByIdAsync(id);
-            return RedirectToAction("Index");
+            await _productRepository.DeleteProductByIdAsync(id);
+            return RedirectToAction(nameof(Index));
         }
+
     }
 }
