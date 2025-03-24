@@ -1,38 +1,21 @@
-using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
-using SellingBook.Models.Error;
 using SellingBook.Repositories;
 namespace SellingBook.Controllers;
 
+[AllowAnonymous]
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
-    private readonly IProductRepository _productRepository;
-    private readonly ICartRepository _userService;
-
-    public HomeController(ILogger<HomeController> logger, IProductRepository productRepository, ICartRepository userService)
+    private readonly ICartRepository _cartRepository;
+    public HomeController(ICartRepository cartRepository)
     {
-        _logger = logger;
-        _productRepository = productRepository;
-        _userService = userService;
+        _cartRepository = cartRepository;
     }
 
     public async Task<IActionResult> Index()
     {
-        var products = await _productRepository.GetAllProductsAsync();
-        ViewBag.CartQuantity = _userService.GetCartItemsCountBasedOnRealTotal();
-        return View(products);
-    }
+        ViewData["CartQuantity"] = _cartRepository.GetCartItemsCountBasedOnRealTotal();
 
-    public IActionResult Privacy()
-    {
         return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }

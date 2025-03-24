@@ -5,6 +5,7 @@ using SellingBook.Models;
 using SellingBook.Models.Identity;
 using SellingBook.Repositories;
 using SellingBook.Services.Email;
+using SellingBook.Services.User;
 using SellingBook.Services.VNPay;
 using System.Globalization;
 
@@ -43,6 +44,7 @@ builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
 // Add Services
 builder.Services.AddScoped<IVNPayService, VNPayService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddHttpClient();
 
 // CORS policy
@@ -97,21 +99,24 @@ app.UseAuthorization();
 
 // 3) Map your routes
 // Optionally define an admin area route
+// Area route (for both Admin and Customer areas)
+// Admin & Employee Area
 app.MapControllerRoute(
-    name: "Admin",
+    name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
-// A custom "search" route
+// Custom route for search
 app.MapControllerRoute(
     name: "search",
     pattern: "search",
     defaults: new { controller = "Product", action = "Search" }
 );
 
-// Default route
+// Default Route — Only HomeController is exposed to Anonymous users by default
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 // Razor Pages (for Identity UI)
 app.MapRazorPages();
