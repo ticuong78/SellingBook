@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using SellingBook.Models;
@@ -43,7 +44,7 @@ builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
 
 // Add Services
 builder.Services.AddScoped<IVNPayService, VNPayService>();
-builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IEmailSender, EmailService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddHttpClient();
 

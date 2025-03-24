@@ -1,9 +1,10 @@
-﻿using System.Net;
+﻿using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Net;
 using System.Net.Mail;
 
 namespace SellingBook.Services.Email
 {
-    public class EmailService: IEmailService
+    public class EmailService: IEmailService, IEmailSender
     {
         // Các thông số cấu hình lấy từ appsettings.json
         private readonly string _smtpHost;
