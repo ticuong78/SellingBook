@@ -1,0 +1,122 @@
+﻿@model SellingBook.Models.BasicModels.Product
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Model.ProductName;
+}
+
+<style>
+    .product-detail-container {
+        max-width: 1000px;
+        margin: 40px auto;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-image {
+        flex: 1 1 400px;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    .product-info {
+        flex: 1 1 500px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .product-info h1 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+    .product-price {
+        font-size: 1.8rem;
+        color: #0d6efd;
+        font-weight: 600;
+        margin: 15px 0;
+    }
+
+    .rating-stars {
+        color: #f4c542;
+        font-size: 1.2rem;
+    }
+
+    .product-description {
+        line-height: 1.6;
+        color: #333;
+        margin-top: 20px;
+    }
+
+    .add-to-cart-btn {
+        margin-top: 30px;
+        padding: 14px 30px;
+        background-color: #0d6efd;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        transition: background-color 0.3s;
+        width: fit-content;
+    }
+
+    .add-to-cart-btn:hover {
+        background-color: #084298;
+    }
+</style>
+
+<div class="product-detail-container">
+    <div class="product-image">
+        <img src="@Model.ImageUrl" alt="@Model.ProductName" />
+    </div>
+
+    <div class="product-info">
+        <div>
+            <h1>@Model.ProductName</h1>
+            <p class="product-price">@Model.ProductPrice.ToString("#,##0") Vnđ</p>
+
+            <div class="rating-stars">
+                @for (var i = 1; i <= 5; i++)
+                {
+                    if (Model.Rate.HasValue && i <= Math.Floor(Model.Rate.Value))
+                    {
+                                <span>★</span>
+                    }
+                    else
+                    {
+                                <span>☆</span>
+                    }
+                }
+                <span> (@Model.RateAmount votes)</span>
+            </div>
+
+            <p><strong>@Localizer["Category"]:</strong> @Model.Category?.CategoryName</p>
+
+            <div class="product-description">
+                @Model.Description
+            </div>
+        </div>
+
+        <button class="add-to-cart-btn" onclick="addToCart(@Model.ProductId)">
+            <i class="bi-cart-fill me-2"></i> @Localizer["AddToCart"]
+        </button>
+    </div>
+</div>
+
+<script>
+    function addToCart(productId) {
+        alert("Product " + productId + " added to cart!");
+    }
+</script>

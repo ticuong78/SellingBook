@@ -1,22 +1,30 @@
 ﻿using SellingBook.Models;
 using SellingBook.Models.BasicModels;
 using SellingBook.Models.Identity;
+using SellingBook.Services.User;
+using System.Security.Claims;
 
 namespace SellingBook.Repositories
 {
     public class EFCartRepository : ICartRepository
     {
-        private ILogger<EFCartRepository> _logger;
-        private ApplicationDbContext _applicationDbContext;
-        public EFCartRepository(ApplicationDbContext applicationDbContext, ILogger<EFCartRepository> logger)
+        private readonly ILogger<EFCartRepository> _logger;
+        private readonly ApplicationDbContext _applicationDbContext;
+        private readonly IUserService _userService;
+        public EFCartRepository(
+            ApplicationDbContext applicationDbContext, 
+            ILogger<EFCartRepository> logger,
+            IUserService userService
+        )
         {
+            _userService = userService;
             _applicationDbContext = applicationDbContext;
             _logger = logger;
         }
 
         public void AddCartItem(CartItem cartItem)
         {
-            ApplicationUser user = _applicationDbContext.Users.FirstOrDefault(user => user.Id == cartItem.UserId);
+            ApplicationUser user = _applicationDbContext.Users.FirstOrDefault(u => u.Email == _userService.GetCurrentUserEmail());
             Product product = _applicationDbContext.Products.FirstOrDefault(product => product.ProductId == cartItem.ProductId);
             CartItem existingCartItem = _applicationDbContext.CartItems.FirstOrDefault(item => item.ProductId == cartItem.ProductId);
 
@@ -24,6 +32,8 @@ namespace SellingBook.Repositories
             {
                 existingCartItem.CartItemQuantity += cartItem.CartItemQuantity;
                 existingCartItem.CartItemPrice += cartItem.CartItemPrice;
+                existingCartItem.User = user;
+                existingCartItem.UserId = user.Id;
                 _applicationDbContext.SaveChanges();
                 return;
             }
@@ -38,6 +48,7 @@ namespace SellingBook.Repositories
             {
                 _logger.LogInformation("User is null");
                 cartItem.User = user;
+                cartItem.UserId = user.Id;
             }
 
             _applicationDbContext.CartItems.Add(cartItem);
@@ -52,17 +63,17 @@ namespace SellingBook.Repositories
 
         public IEnumerable<CartItem> GetCartItems()
         {
-            return _applicationDbContext.CartItems.Where(cartItem => cartItem.UserId == "");
+            return _applicationDbContext.CartItems.Where(cartItem => cartItem.User.Email == _userService.GetCurrentUserEmail());
         }
 
         public int GetCartItemsCountBasedOnIds()
         {
-            return _applicationDbContext.CartItems.Where(cartItem => cartItem.UserId == "").Count();
+            return _applicationDbContext.CartItems.Where(cartItem => cartItem.User.Email == _userService.GetCurrentUserEmail()).Count();
         }
 
         public int GetCartItemsCountBasedOnRealTotal()
         {
-            return _applicationDbContext.CartItems.Where(cartItem => cartItem.UserId == "").Sum(cart => cart.CartItemQuantity);
+            return _applicationDbContext.CartItems.Where(cartItem => cartItem.User.Email == _userService.GetCurrentUserEmail()).Sum(cart => cart.CartItemQuantity);
         }
     }
 }

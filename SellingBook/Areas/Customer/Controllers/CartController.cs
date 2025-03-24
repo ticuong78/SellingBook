@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SellingBook.Models.BasicModels;
 using SellingBook.Models.Checkout;
+using SellingBook.Models.Roles;
 using SellingBook.Repositories;
 
-namespace SellingBook.Controllers
+namespace SellingBook.Areas.Customer.Controllers
 {
+    [Area(SD.Role_Customer)]
+    [Authorize]
     public class CartController : Controller
     {
         private ILogger<CartController> _logger;
@@ -18,7 +22,6 @@ namespace SellingBook.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
         public async Task<IActionResult> Index()
         {
             _logger.LogInformation("Cart Index");
