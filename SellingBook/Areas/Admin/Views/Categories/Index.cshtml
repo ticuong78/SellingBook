@@ -1,0 +1,76 @@
+﻿@model IEnumerable<SellingBook.Models.BasicModels.Category>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="my-4 text-center text-dark fw-bold">Category List</h2>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped shadow-sm">
+        <thead class="thead-light">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in Model.Select((item, index) => new { item, index }))
+            {
+                <tr>
+                    <td>@(category.index + 1)</td>
+                    <td>@category.item.CategoryName</td>
+                    <td>
+                        <a asp-action="Update" asp-route-id="@category.item.CategoryId" class="btn btn-warning btn-sm text-white">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@category.item.CategoryId" class="btn btn-danger btn-sm text-white">Delete</a>
+                    </td>
+                </tr>
+            }
+            <tr class="table-light text-center" onclick="window.location='@Url.Action("Add", "Categories")'" style="cursor:pointer;">
+                <td colspan="4" class="fw-bold text-primary">+ Add New Category </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+<style>
+    /* Tiêu đề bảng */
+    .table th {
+        background-color: #343a40; /* Màu đen cho header */
+        color: white;
+        text-align: center;
+    }
+
+    /* Nút Edit - Màu vàng */
+    .btn-warning {
+        background-color: #f0ad4e;
+        border-color: #f0ad4e;
+    }
+
+    /* Nút View - Màu xanh dương */
+    .btn-info {
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+    }
+
+    /* Nút Delete - Màu đỏ */
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    /* Nút Add Category */
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    /* Thêm chút hiệu ứng hover cho nút */
+    .btn:hover {
+        opacity: 0.8;
+    }
+</style>
