@@ -117,13 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Search" xml:space="preserve">
-    <value>Tìm kiếm</value>
+  <data name="A room without books is like a body without a soul." xml:space="preserve">
+    <value>Một căn phòng không có sách giống như một thân xác mà không có linh hồn.</value>
   </data>
-  <data name="SearchPlaceHolder" xml:space="preserve">
-    <value>Tìm kiếm sản phẩm ...</value>
+  <data name="Browse through our collection, find your next read, and enjoy the journey." xml:space="preserve">
+    <value>Duyệt qua bộ sưu tập của chúng tôi, tìm những cuốn sách tiếp theo của bạn và tận hưởng cuộc hành trình.</value>
   </data>
-  <data name="WebName" xml:space="preserve">
-    <value>Nhà sách Việt Nam</value>
+  <data name="Hello user, welcome to your next favorite bookstore!" xml:space="preserve">
+    <value>Chào mừng quý khách đã đến với nhà sách của chúng tôi!</value>
+  </data>
+  <data name="Start Explore" xml:space="preserve">
+    <value>Bắt Đầu Khám Phá</value>
   </data>
 </root>

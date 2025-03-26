@@ -1,7 +1,8 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using SellingBook.Models;
 using SellingBook.Models.Identity;
 using SellingBook.Repositories;
@@ -13,6 +14,7 @@ using System.Globalization;
 var builder = WebApplication.CreateBuilder(args);
 
 // 1) Configure services
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -25,6 +27,18 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+// Localization first
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new[] { "en-US", "vi-VN" }; // Hỗ trợ tiếng Anh và tiếng Việt
+    options.DefaultRequestCulture = new RequestCulture("vi-VN"); // Mặc định là tiếng Việt
+    options.SupportedCultures = supportedCultures.Select(c => new CultureInfo(c)).ToList();
+    options.SupportedUICultures = supportedCultures.Select(c => new CultureInfo(c)).ToList();
+});
+
 
 // Identity with EF
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -64,17 +78,10 @@ builder.Services.AddCors(options =>
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
+var localizationOptions = app.Services.GetService<IOptions<RequestLocalizationOptions>>().Value;
+app.UseRequestLocalization(localizationOptions);
 
 // 2) Configure middleware pipeline
-
-// Localization first
-var supportedCultures = new[] { new CultureInfo("en"), new CultureInfo("vi") };
-app.UseRequestLocalization(new RequestLocalizationOptions
-{
-    DefaultRequestCulture = new RequestCulture("vi"), // Default: Vietnamese
-    SupportedCultures = supportedCultures,
-    SupportedUICultures = supportedCultures
-});
 
 // Production exception handling
 if (!app.Environment.IsDevelopment())
@@ -115,7 +122,7 @@ app.MapControllerRoute(
     defaults: new { controller = "Product", action = "Search" }
 );
 
-// Default Route � Only HomeController is exposed to Anonymous users by default
+// Default Route — Only HomeController is exposed to Anonymous users by default
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

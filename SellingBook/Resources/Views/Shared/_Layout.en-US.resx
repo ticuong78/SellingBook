@@ -117,13 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddToCart" xml:space="preserve">
-    <value>Thêm Vào Giỏ Hàng</value>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
   </data>
-  <data name="HomeTitle" xml:space="preserve">
-    <value>Trang chủ</value>
+  <data name="SearchPlaceHolder" xml:space="preserve">
+    <value>Search...</value>
   </data>
-  <data name="PriceLabel" xml:space="preserve">
-    <value>Giá:</value>
+  <data name="WebName" xml:space="preserve">
+    <value>VietName Book Store</value>
   </data>
 </root>
