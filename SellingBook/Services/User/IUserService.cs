@@ -7,5 +7,7 @@ namespace SellingBook.Services.User
         Task<ApplicationUser> GetCurrentUserAsync();
         string GetCurrentUserId();
         string GetCurrentUserEmail();
+        Task<ApplicationUser> FindUserByEmailAsync(string email);
+        Task UpdateUserAsync(ApplicationUser user);
     }
 }

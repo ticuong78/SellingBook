@@ -2,7 +2,7 @@
 using SellingBook.Models.BasicModels;
 using SellingBook.Repositories;
 
-namespace SellingBook.Controllers
+namespace SellingBook.Areas.Admin.Controllers
 {
     public class CategoryController : Controller
     {

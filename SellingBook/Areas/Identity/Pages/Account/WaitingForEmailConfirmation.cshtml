@@ -1,0 +1,8 @@
+﻿@{
+    ViewData["Title"] = "Chờ xác nhận email";
+}
+
+<h2>Chờ xác nhận email</h2>
+<p>Chúng tôi đã gửi một email xác nhận đến <strong>@ViewBag.Email</strong>. Vui lòng kiểm tra hộp thư đến của bạn và nhấp vào liên kết trong email để xác nhận tài khoản.</p>
+<p>Nếu bạn không thấy email, vui lòng kiểm tra thư mục spam hoặc thử lại.</p>
+<p><a href="@Url.Action("ResendConfirmation", "Account")">Gửi lại email xác nhận</a></p>

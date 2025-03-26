@@ -1,0 +1,24 @@
+﻿@page
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Confirm your email";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+    Thank you for registering, <strong>@Model.Email</strong>!
+</p>
+
+<p>
+    A confirmation link has been sent to your email address.
+    Please check your inbox and click the confirmation link to activate your account.
+</p>
+
+<p>
+    Didn't receive the email? <a asp-page="ResendEmailConfirmation" asp-route-email="@Model.Email">Resend Confirmation Email</a>
+</p>
+
+<p>
+    <a asp-page="/Index" asp-area="Customer">Return to Home</a>
+</p>
