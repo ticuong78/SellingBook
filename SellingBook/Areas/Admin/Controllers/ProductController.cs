@@ -123,5 +123,6 @@ namespace SellingBook.Areas.Admin.Controllers
             await _productRepository.DeleteProductByIdAsync(id);
             return RedirectToAction(nameof(Index));
         }
+
     }
 }
