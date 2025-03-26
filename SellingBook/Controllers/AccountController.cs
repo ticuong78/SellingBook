@@ -46,7 +46,12 @@ namespace SellingBook.Controllers
             user.EmailConfirmed = true;
             await _userService.UpdateUserAsync(user);
 
-            return RedirectToPage("/Account/ConfirmEmailSuccess");
+            return View("ConfirmEmailSuccess");
+        }
+
+        public IActionResult ConfirmEmailSuccess()
+        {
+            return View();
         }
     }
 }

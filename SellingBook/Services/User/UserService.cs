@@ -43,7 +43,9 @@ public class UserService : IUserService
             return null;
         }
 
-        return await _userManager.FindByEmailAsync(email);
+        var something = await _userManager.FindByEmailAsync(email);
+
+        return something;
     }
 
     public async Task UpdateUserAsync(ApplicationUser user)
