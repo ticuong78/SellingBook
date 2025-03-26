@@ -86,14 +86,19 @@ namespace SellingBook.Areas.Admin.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> EditConfirmed(Product product, IFormFile imageFile)
+        public async Task<IActionResult> EditConfirmed(Product product, IFormFile imageUrl)
         {
             ModelState.Remove("ImageURL");
             if (ModelState.IsValid)
             {
-                if (imageFile != null)
+                if (imageUrl != null)
                 {
-                    product.ImageUrl = await AddImage(imageFile);
+                    product.ImageUrl = await AddImage(imageUrl);
+                }
+                else
+                {
+                    var oldProduct = await _productRepository.GetProductByIdAsync(product.ProductId);
+                    product.ImageUrl = oldProduct.ImageUrl;
                 }
 
                 await _productRepository.UpdateProductAsync(product);

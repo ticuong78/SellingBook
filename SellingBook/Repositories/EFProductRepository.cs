@@ -27,9 +27,12 @@ namespace SellingBook.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateProductAsync(Product product)
+        public async Task UpdateProductAsync(Product updatedProduct)
         {
-            _context.Products.Update(product);
+            var existingProduct = await _context.Products.FindAsync(updatedProduct.ProductId);
+            if (existingProduct == null) return;
+
+            _context.Entry(existingProduct).CurrentValues.SetValues(updatedProduct);
             await _context.SaveChangesAsync();
         }
 
