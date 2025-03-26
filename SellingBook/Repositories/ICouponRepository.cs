@@ -4,6 +4,6 @@ namespace SellingBook.Repositories
 {
     public interface ICouponRepository
     {
-        decimal? ValidateAsync(string code);
+        Task<decimal?> ValidateAsync(string code);
     }
 }

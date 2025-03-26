@@ -3,25 +3,33 @@ using SellingBook.Repositories;
 
 namespace SellingBook.Areas.Customer.Controllers
 {
+    [Area("Customer")]
+    [Route("Customer/Coupon")]
     public class CouponController : Controller
     {
         private readonly ICouponRepository _couponRepository;
+
         public CouponController(ICouponRepository couponRepository)
         {
             _couponRepository = couponRepository;
         }
 
-        [HttpPost]
-        public IActionResult ValidateCode([FromBody] string code)
+        [HttpPost("ValidateCode")]
+        public async Task<IActionResult> ValidateCode([FromBody] string code)
         {
-            var discountValue = _couponRepository.ValidateAsync(code);
+            Console.WriteLine($"ValidateCode - Received Code: {code}");
 
-            if(discountValue != null)
+            var discountValue = await _couponRepository.ValidateAsync(code);
+
+            if (discountValue.HasValue)
             {
-                return Json(discountValue);
-            } else
+                Console.WriteLine($"ValidateCode - Discount: {discountValue.Value}");
+                return Json(new { discountValue });
+            }
+            else
             {
-                return NotFound("Cannot not find any matched Coupon");
+                Console.WriteLine("ValidateCode - Invalid Code!");
+                return NotFound(new { message = "Mã giảm giá không hợp lệ!" });
             }
         }
     }

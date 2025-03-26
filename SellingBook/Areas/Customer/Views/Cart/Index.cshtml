@@ -105,21 +105,18 @@
 </div>
 
 <script>
-    let discountAmount = 0;
-
-    async function applyDiscount() {
+            async function applyDiscount() {
         const code = document.getElementById("discountCode").value.trim();
-
         if (!code) {
             alert("❌ Vui lòng nhập mã giảm giá.");
             return;
         }
 
         try {
-            const response = await fetch('Customer/Coupon/ValidateCode', {
+            const response = await fetch('/Customer/Coupon/ValidateCode', { // Đảm bảo đúng route
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ code: code })
+                body: JSON.stringify(code)
             });
 
             if (!response.ok) {
@@ -127,46 +124,16 @@
             }
 
             const data = await response.json();
-            discountAmount = data.discountValue;
+            const discountAmount = data.discountValue;
 
             document.getElementById("discountMessage").textContent = `✅ Áp dụng thành công! Giảm ${discountAmount.toLocaleString()} đ`;
             document.getElementById("discountMessage").classList.remove("text-danger");
             document.getElementById("discountMessage").classList.add("text-success");
 
-            updateTotal();
         } catch (error) {
             document.getElementById("discountMessage").textContent = "❌ Mã giảm giá không hợp lệ!";
             document.getElementById("discountMessage").classList.add("text-danger");
         }
     }
 
-    function updateTotal() {
-        let localTotal = 0;
-
-        document.querySelectorAll('.cartItemCheckbox:checked').forEach(checkbox => {
-            let row = checkbox.closest('tr');
-            let itemPrice = parseInt(row.cells[4].innerText.replace(/\D/g, ''), 10);
-            localTotal += itemPrice;
-        });
-
-        let total = Math.max(0, localTotal - discountAmount);
-
-        // Làm tròn số tiền đến hàng nghìn gần nhất
-        total = Math.round(total / 1000) * 1000;
-
-        document.getElementById('selectedTotalPrice').innerHTML = total.toLocaleString() + " <u>đ</u>";
-    }
-
-    function toggleAllItems() {
-        const selectAllCheckbox = document.getElementById("selectAll");
-        const checkboxes = document.querySelectorAll(".cartItemCheckbox");
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = selectAllCheckbox.checked;
-        });
-        updateTotal();
-    }
-
-    function processPayment() {
-        alert("🛒 Đơn hàng đang được xử lý. Cảm ơn bạn đã mua sắm!");
-    }
 </script>
