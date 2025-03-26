@@ -76,11 +76,15 @@ app.UseRequestLocalization(new RequestLocalizationOptions
     SupportedUICultures = supportedCultures
 });
 
-// Production exception handling
-if (!app.Environment.IsDevelopment())
+// Handling environment for Development and Production
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();  // Show detailed error in development
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
+    app.UseHsts();  // Security
 }
 
 // HTTPS & static files
@@ -119,7 +123,6 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 
 // Razor Pages (for Identity UI)
 app.MapRazorPages();

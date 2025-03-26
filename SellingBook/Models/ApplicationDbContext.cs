@@ -14,5 +14,6 @@ namespace SellingBook.Models
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Rate> Rates { get; set; }
+        public DbSet<ProductComment> ProductComments { get; set; }
     }
 }
