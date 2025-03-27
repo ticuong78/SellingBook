@@ -43,6 +43,7 @@ builder.Services.AddScoped<ICartRepository, EFCartRepository>();
 builder.Services.AddScoped<IOrderRepository, EFOrderRepository>();
 builder.Services.AddScoped<IProductRepository, EFProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
+builder.Services.AddScoped<ICouponRepository, EFCouponRepository>();
 
 // Add Services
 builder.Services.AddScoped<IVNPayService, VNPayService>();

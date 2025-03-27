@@ -1,4 +1,5 @@
 ﻿let total = 0;
+let discountValue = 0; // Giá trị giảm giá
 
 function toggleAllItems() {
     const isChecked = document.getElementById('selectAll').checked;
@@ -17,14 +18,40 @@ function updateTotal() {
         localTotal += itemPrice;
     });
 
-    total = localTotal;
+    total = localTotal - discountValue; // Trừ giá trị giảm giá
+
+    if (total < 0) total = 0; // Không để tổng tiền âm
+
     document.getElementById('selectedTotalPrice').innerHTML = total.toLocaleString() + " <u>đ</u>";
 }
 
+async function applyDiscount() {
+    let discountCode = document.getElementById('discountCode').value;
+
+    const response = await fetch('/Customer/Coupon/ValidateCode', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(discountCode)
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        discountValue = data.discountValue; // Cập nhật giá trị giảm giá
+        document.getElementById('discountMessage').innerHTML = `✅ Áp dụng thành công! Giảm ${discountValue.toLocaleString()} đ`;
+    } else {
+        discountValue = 0; // Nếu mã không hợp lệ, không giảm giá
+        document.getElementById('discountMessage').innerHTML = `❌ Mã giảm giá không hợp lệ!`;
+    }
+
+    updateTotal(); // Cập nhật tổng tiền sau khi áp dụng giảm giá
+}
 async function processPayment(name) {
     let url;
     let payload;
     let selectedItems = [];
+
     document.querySelectorAll('.cartItemCheckbox:checked').forEach(checkbox => {
         selectedItems.push(checkbox.value);
     });
@@ -34,7 +61,13 @@ async function processPayment(name) {
         return;
     }
 
-    let paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').id;
+    let paymentMethodElement = document.querySelector('input[name="paymentMethod"]:checked');
+    if (!paymentMethodElement) {
+        alert("Vui lòng chọn phương thức thanh toán.");
+        return;
+    }
+
+    let paymentMethod = paymentMethodElement.id;
 
     if (paymentMethod === 'vnpay') {
         url = '/Checkout/CreatePaymentUrlVnPay';
@@ -43,7 +76,15 @@ async function processPayment(name) {
             OrderDescription: "Thanh toán VNPay",
             OrderType: "other",
             Name: name
-        }
+        };
+    } else {
+        alert("Hiện tại chỉ hỗ trợ thanh toán qua VNPay!");
+        return;
+    }
+
+    if (!url) {
+        console.error("Không tìm thấy URL thanh toán!");
+        return;
     }
 
     const response = await fetch(url, {
@@ -52,13 +93,13 @@ async function processPayment(name) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(payload)
-    })
+    });
 
     if (!response.ok) {
-        console.error("Failed to get payment URL");
+        console.error("Không thể lấy URL thanh toán.");
         return;
     }
 
     const data = await response.json();
-    window.location.href = data.paymentUrl; // Redirect user to VNPay
+    window.location.href = data.paymentUrl; // Chuyển hướng đến VNPay
 }
