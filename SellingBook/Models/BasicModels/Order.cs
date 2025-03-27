@@ -13,5 +13,10 @@ namespace SellingBook.Models.BasicModels
         public string OrderStatus { get; set; }
         public DateTime CreatedAt { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
+        public int? CouponId { get; set; } // Có thể không có mã giảm giá
+        public Coupon Coupon { get; set; }
+
+        // Tổng tiền sau khi áp dụng mã giảm giá
+        public decimal TotalAmount { get; set; }
     }
 }
