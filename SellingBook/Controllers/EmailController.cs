@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace SellingBook.Controllers
 {
-    public class AccountController : Controller
+    public class EmailController : Controller
     {
         private readonly IUserService _userService;
         private readonly IEmailSender _emailService;
 
-        public AccountController(IUserService userService, IEmailSender emailService)
+        public EmailController(IUserService userService, IEmailSender emailService)
         {
             _userService = userService;
             _emailService = emailService;

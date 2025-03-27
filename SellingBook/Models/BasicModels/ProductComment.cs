@@ -1,4 +1,5 @@
 ﻿using SellingBook.Models.BasicModels;
+using SellingBook.Models.Identity;
 
 namespace SellingBook.Models
 {
@@ -14,6 +15,6 @@ namespace SellingBook.Models
         // Các quan hệ với các bảng khác
         public Order Order { get; set; }  // Liên kết với bảng Order
         public Product Product { get; set; }  // Liên kết với bảng Product
-        public User User { get; set; }    // Liên kết với bảng User
+        public ApplicationUser User { get; set; }    // Liên kết với bảng User
     }
 }

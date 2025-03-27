@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +26,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// Identity with EF
+// ✅ Fix: Configure Identity correctly
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = true;
@@ -34,9 +34,19 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+// ✅ Fix: Ensure Identity uses the correct paths
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Identity/Account/Login";  // Now you can access /Account/Login
+    options.LogoutPath = "/Identity/Account/Logout";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+});
+
 builder.Services.AddControllersWithViews()
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();
+
+builder.Services.AddRazorPages();  // Ensure Razor Pages are enabled
 
 // Register your repositories
 builder.Services.AddScoped<ICartRepository, EFCartRepository>();
@@ -60,9 +70,6 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader()
               .AllowCredentials());
 });
-
-// Razor Pages (for Identity UI)
-builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
@@ -106,9 +113,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // 3) Map your routes
-// Optionally define an admin area route
-// Area route (for both Admin and Customer areas)
-// Admin & Employee Area
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
@@ -120,12 +124,12 @@ app.MapControllerRoute(
     defaults: new { controller = "Product", action = "Search" }
 );
 
-// Default Route � Only HomeController is exposed to Anonymous users by default
+// Default Route — Only HomeController is exposed to Anonymous users by default
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// Razor Pages (for Identity UI)
+// ✅ Fix: Ensure Identity UI Razor Pages are mapped correctly
 app.MapRazorPages();
 
 app.Run();
