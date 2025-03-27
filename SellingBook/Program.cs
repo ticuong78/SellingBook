@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.CodeAnalysis.Host;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using SellingBook.Middlewares;
 using SellingBook.Models;
 using SellingBook.Models.Identity;
 using SellingBook.Repositories;
+using SellingBook.Services.ChangeLanguage;
 using SellingBook.Services.Email;
 using SellingBook.Services.User;
 using SellingBook.Services.VNPay;
@@ -74,6 +77,7 @@ builder.Services.AddScoped<ICouponRepository, EFCouponRepository>();
 builder.Services.AddScoped<IVNPayService, VNPayService>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IChangeLanguageService, ChangeLanguageService>();
 builder.Services.AddHttpClient();
 
 var app = builder.Build();
@@ -99,6 +103,9 @@ app.UseCors("CorsPolicy");
 app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Custom Middlewares
+app.UseMiddleware<CultureMiddleware>();
 
 // 3) Map Routes
 app.MapControllerRoute(

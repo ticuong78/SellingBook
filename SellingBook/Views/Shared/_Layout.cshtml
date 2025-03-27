@@ -79,8 +79,18 @@
                             <i class="bi bi-globe"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
-                            <li><a class="dropdown-item" href="@Url.Action("ChangeLanguage", "Home", new { culture = "vi-VN" })">Tiếng Việt</a></li>
-                            <li><a class="dropdown-item" href="@Url.Action("ChangeLanguage", "Home", new { culture = "en-US" })">English</a></li>
+                            <li><a class="dropdown-item"
+                                   asp-action="ChangeLanguage"
+                                   asp-controller="Home"
+                                   asp-area=""
+                                   asp-route-culture="vi-VN">Tiếng Việt</a>
+                            </li>
+                            <li><a class="dropdown-item"
+                                   asp-action="ChangeLanguage"
+                                   asp-controller="Home"
+                                   asp-area="" 
+                                   asp-route-culture="en-US">English</a>
+                            </li>
                         </ul>
                     </li>
 

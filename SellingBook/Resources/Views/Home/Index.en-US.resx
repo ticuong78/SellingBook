@@ -126,7 +126,7 @@
   <data name="Hello user, welcome to your next favorite bookstore!" xml:space="preserve">
     <value>Hello user, welcome to your next favorite bookstore!</value>
   </data>
-  <data name="Start Explore" xml:space="preserve">
-    <value>Start Explore</value>
+  <data name="Start Exploring" xml:space="preserve">
+    <value>Start Exploring</value>
   </data>
 </root>
