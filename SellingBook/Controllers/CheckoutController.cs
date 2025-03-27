@@ -31,7 +31,7 @@ namespace SellingBook.Controllers
         {
             var response = _vnPayService.PaymentExecute(Request.Query);
 
-            if (response.Success)
+            if (response.VnPayResponseCode == "00")
             {
                 ViewBag.OrderId = response.OrderId;
                 return View("PaymentSucceed");

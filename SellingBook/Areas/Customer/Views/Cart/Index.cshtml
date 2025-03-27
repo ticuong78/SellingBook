@@ -103,37 +103,3 @@
         </div>
     }
 </div>
-
-<script>
-            async function applyDiscount() {
-        const code = document.getElementById("discountCode").value.trim();
-        if (!code) {
-            alert("❌ Vui lòng nhập mã giảm giá.");
-            return;
-        }
-
-        try {
-            const response = await fetch('/Customer/Coupon/ValidateCode', { // Đảm bảo đúng route
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(code)
-            });
-
-            if (!response.ok) {
-                throw new Error("Mã giảm giá không hợp lệ!");
-            }
-
-            const data = await response.json();
-            const discountAmount = data.discountValue;
-
-            document.getElementById("discountMessage").textContent = `✅ Áp dụng thành công! Giảm ${discountAmount.toLocaleString()} đ`;
-            document.getElementById("discountMessage").classList.remove("text-danger");
-            document.getElementById("discountMessage").classList.add("text-success");
-
-        } catch (error) {
-            document.getElementById("discountMessage").textContent = "❌ Mã giảm giá không hợp lệ!";
-            document.getElementById("discountMessage").classList.add("text-danger");
-        }
-    }
-
-</script>
