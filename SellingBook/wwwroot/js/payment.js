@@ -81,7 +81,7 @@ async function processPayment(name) {
         url = '/Checkout/CreatePaymentUrlVnPay';
         payload = {
             Amount: total,
-            OrderDescription: orderDescription.join("\n") + "\nTổng: ", // Xuống hàng giữa mỗi sản phẩm
+            OrderDescription: orderDescription.join("\n"), // Xuống hàng giữa mỗi sản phẩm
             OrderType: "other",
             Name: name
         };
