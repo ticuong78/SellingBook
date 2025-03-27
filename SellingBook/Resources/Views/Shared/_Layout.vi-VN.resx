@@ -118,12 +118,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Search" xml:space="preserve">
-    <value>Search</value>
+    <value>Tìm kiếm</value>
   </data>
   <data name="SearchPlaceHolder" xml:space="preserve">
-    <value>Finding items ...</value>
+    <value>Tìm kiếm...</value>
   </data>
   <data name="WebName" xml:space="preserve">
-    <value>Viet Nam Book store</value>
+    <value>Nhà Sách Việt Nam</value>
   </data>
 </root>

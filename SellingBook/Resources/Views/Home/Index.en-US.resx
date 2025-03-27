@@ -117,13 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddToCart" xml:space="preserve">
-    <value>Add To Cart</value>
+  <data name="A room without books is like a body without a soul." xml:space="preserve">
+    <value>A room without books is like a body without a soul.</value>
   </data>
-  <data name="HomeTitle" xml:space="preserve">
-    <value>Home</value>
+  <data name="Browse through our collection, find your next read, and enjoy the journey." xml:space="preserve">
+    <value>Browse through our collection, find your next read, and enjoy the journey.</value>
   </data>
-  <data name="PriceLabel" xml:space="preserve">
-    <value>Price:</value>
+  <data name="Hello user, welcome to your next favorite bookstore!" xml:space="preserve">
+    <value>Hello user, welcome to your next favorite bookstore!</value>
+  </data>
+  <data name="Start Explore" xml:space="preserve">
+    <value>Start Explore</value>
   </data>
 </root>

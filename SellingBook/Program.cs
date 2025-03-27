@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using SellingBook.Models;
 using SellingBook.Models.Identity;
 using SellingBook.Repositories;
@@ -13,6 +14,7 @@ using System.Globalization;
 var builder = WebApplication.CreateBuilder(args);
 
 // 1) Configure services
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -27,6 +29,19 @@ builder.Services.AddSession(options =>
 });
 
 // ✅ Fix: Configure Identity correctly
+// Localization first
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new[] { "en-US", "vi-VN" }; // Hỗ trợ tiếng Anh và tiếng Việt
+    options.DefaultRequestCulture = new RequestCulture("vi-VN"); // Mặc định là tiếng Việt
+    options.SupportedCultures = supportedCultures.Select(c => new CultureInfo(c)).ToList();
+    options.SupportedUICultures = supportedCultures.Select(c => new CultureInfo(c)).ToList();
+});
+
+
+// Identity with EF
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = true;
@@ -72,6 +87,8 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+var localizationOptions = app.Services.GetService<IOptions<RequestLocalizationOptions>>().Value;
+app.UseRequestLocalization(localizationOptions);
 
 // 2) Configure middleware pipeline
 
@@ -90,6 +107,8 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();  // Show detailed error in development
 }
 else
+// Production exception handling
+if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();  // Security
