@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SellingBook.Extensions;
 using SellingBook.Models.BasicModels;
+using SellingBook.Models.DTO;
 using SellingBook.Models.VNPay;
 using SellingBook.Repositories;
 using SellingBook.Services;
@@ -39,7 +40,7 @@ namespace SellingBook.Controllers
             if (response.VnPayResponseCode == "00")
             {
                 ViewBag.OrderId = response.OrderId;
-                _orderService.AddOrder(response.OrderId, "CurrentOrderItems", this.HttpContext.Session);
+                _orderService.AddOrder(response.OrderId, response.OrderDescription, "CurrentCouponId", "CurrentOrderItems", HttpContext.Session);
                 return View("PaymentSucceed");
             }
 
@@ -47,11 +48,12 @@ namespace SellingBook.Controllers
         }
 
         [HttpPost]
-        public IActionResult PrepareForOrder([FromBody] IEnumerable<CartItem> cartItems)
+        public IActionResult PrepareForOrder([FromBody] PrepareOrderRequest request)
         {
             try
             {
-                HttpContext.Session.SetObjectAsJson("CurrentOrderItems", cartItems.ToList());
+                HttpContext.Session.SetObjectAsJson("CurrentOrderItems", request.SelectedItems);
+                HttpContext.Session.SetInt32("CurrentCouponId", request.CouponId);
 
                 return Ok();
             }

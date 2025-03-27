@@ -1,6 +1,6 @@
 ﻿using SellingBook.Models.BasicModels;
 
-namespace SellingBook.Models.Checkout
+namespace SellingBook.Models.DTO
 {
     public class ProductCartItemViewModel
     {

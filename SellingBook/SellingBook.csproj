@@ -27,4 +27,13 @@
     <PackageReference Include="RestSharp" Version="112.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Areas\Customer\Views\Cart\Index.en.resx">
+      <CustomToolNamespace></CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Areas\Customer\Views\Cart\Index.vi.resx">
+      <CustomToolNamespace></CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

@@ -1,5 +1,6 @@
 ﻿let total = 0;
 let discountValue = 0; // Giá trị giảm giá
+let couponId = 0;
 
 function toggleAllItems() {
     const isChecked = document.getElementById('selectAll').checked;
@@ -39,6 +40,7 @@ async function applyDiscount() {
     if (response.ok) {
         const data = await response.json();
         discountValue = data.discountValue; // Cập nhật giá trị giảm giá
+        couponId = data.couponId; // Cập nhật mã giảm giá
         document.getElementById('discountMessage').innerHTML = `Áp dụng thành công! Giảm ${discountValue.toLocaleString()} đ`;
         document.getElementById('discountMessage').style.color = 'green';
     } else {
@@ -115,13 +117,17 @@ async function processPayment(name) {
         return;
     } else {
         const data = await response.json();
+        const payload_2 = {
+            selectedItems,
+            couponId
+        } 
         window.location.href = data.paymentUrl;
         await fetch('/Checkout/PrepareForOrder', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(selectedItems)
+            body: JSON.stringify(payload_2)
         });
     }
 }

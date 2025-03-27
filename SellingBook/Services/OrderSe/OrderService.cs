@@ -2,23 +2,31 @@
 using SellingBook.Models;
 using SellingBook.Models.BasicModels;
 using SellingBook.Repositories;
+using SellingBook.Services.User;
 
 namespace SellingBook.Services.OrderSe
 {
     public class OrderService: IOrderService
     {
+        private readonly IUserService _userService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IOrderRepository _orderRepository;
 
-        public OrderService(IOrderRepository orderRepository, IHttpContextAccessor httpContextAccessor)
+        public OrderService(IOrderRepository orderRepository, IHttpContextAccessor httpContextAccessor, IUserService userService)
         {
             _orderRepository = orderRepository;
             _httpContextAccessor = httpContextAccessor;
+            _userService = userService;
         }
 
-        public void AddOrder(string orderId, string sessionKey, ISession? session = null)
+        public void AddOrder(string orderId, string orderDescription, string cartSessionKey, ISession? session = null)
         {
-            if(string.IsNullOrEmpty(orderId) || string.IsNullOrEmpty(sessionKey)) // Null or empty check
+            AddOrder(orderId, orderDescription, null, cartSessionKey, session);
+        }
+
+        public void AddOrder(string orderId, string orderDescription, string couponSessionKey, string cartSessionKey, ISession? session = null)
+        {
+            if(string.IsNullOrEmpty(orderId) || string.IsNullOrEmpty(cartSessionKey)) // Null or empty check
             {
                 throw new InvalidOperationException("Invalid order id or session key.");
             }
@@ -28,7 +36,8 @@ namespace SellingBook.Services.OrderSe
                 session = _httpContextAccessor.HttpContext?.Session;
             }
 
-            var cartItems = session?.GetObjectFromJson<List<CartItem>>(sessionKey);
+            var cartItems = session?.GetObjectFromJson<List<CartItem>>(cartSessionKey);
+            var couponId = session?.GetInt32(couponSessionKey);
 
             if (cartItems == null || !cartItems.Any()) // Null or empty check
             {
@@ -38,13 +47,18 @@ namespace SellingBook.Services.OrderSe
             var order = new Order
             {
                 OrderId = orderId,
+                CouponId = couponId,
+                OrderDescription = orderDescription == null ? "Không có mô tả" : orderDescription,
+                UserId = _userService.GetCurrentUserId(),
+                CreatedAt = DateTime.Now,
+                TotalAmount = cartItems.Sum(x => x.CartItemPrice * x.CartItemQuantity),
                 OrderItems = cartItems.Select(x => new OrderItem
                 {
                     ProductId = x.ProductId,
                     OrderItemQuantity = x.CartItemQuantity,
                     OrderItemPrice = x.CartItemPrice,
                     OrderId = orderId,
-                    OrderItemId = Guid.NewGuid().ToString()
+                    OrderItemId = Guid.NewGuid().ToString(),
                 }).ToList()
             };
 
