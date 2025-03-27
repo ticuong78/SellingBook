@@ -8,8 +8,10 @@ using SellingBook.Middlewares;
 using SellingBook.Models;
 using SellingBook.Models.Identity;
 using SellingBook.Repositories;
+using SellingBook.Services;
 using SellingBook.Services.ChangeLanguage;
 using SellingBook.Services.Email;
+using SellingBook.Services.OrderSe;
 using SellingBook.Services.User;
 using SellingBook.Services.VNPay;
 using System.Globalization;
@@ -35,6 +37,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.SignIn.RequireConfirmedAccount = true;
 })
     .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddRoles<IdentityRole>()
     .AddDefaultTokenProviders();
 
 builder.Services.ConfigureApplicationCookie(options =>
@@ -77,6 +80,7 @@ builder.Services.AddScoped<ICouponRepository, EFCouponRepository>();
 builder.Services.AddScoped<IVNPayService, VNPayService>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IChangeLanguageService, ChangeLanguageService>();
 builder.Services.AddHttpClient();
 

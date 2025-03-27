@@ -28,6 +28,12 @@ namespace SellingBook.Models
                 .WithMany()
                 .HasForeignKey(o => o.CouponId)
                 .OnDelete(DeleteBehavior.SetNull); // Nếu xóa mã giảm giá, giữ nguyên đơn hàng
+
+            modelBuilder.Entity<ProductComment>()
+                .HasOne(pc => pc.Order)
+                .WithMany()  // No navigation property needed in Order
+                .HasForeignKey(pc => pc.OrderId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

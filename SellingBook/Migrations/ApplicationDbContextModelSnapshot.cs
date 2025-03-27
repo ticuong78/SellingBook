@@ -259,16 +259,11 @@ namespace SellingBook.Migrations
 
             modelBuilder.Entity("SellingBook.Models.BasicModels.OrderItem", b =>
                 {
-                    b.Property<int>("OrderItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("OrderItemId")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderItemId"));
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("OrderId1")
+                    b.Property<string>("OrderId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("OrderItemPrice")
@@ -282,7 +277,7 @@ namespace SellingBook.Migrations
 
                     b.HasKey("OrderItemId");
 
-                    b.HasIndex("OrderId1");
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
 
@@ -560,7 +555,9 @@ namespace SellingBook.Migrations
                 {
                     b.HasOne("SellingBook.Models.BasicModels.Order", "Order")
                         .WithMany("OrderItems")
-                        .HasForeignKey("OrderId1");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SellingBook.Models.BasicModels.Product", "Product")
                         .WithMany("OrderItems")
@@ -608,7 +605,7 @@ namespace SellingBook.Migrations
                     b.HasOne("SellingBook.Models.BasicModels.Order", "Order")
                         .WithMany()
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("SellingBook.Models.BasicModels.Product", "Product")

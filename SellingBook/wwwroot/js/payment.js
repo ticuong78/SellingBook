@@ -58,9 +58,16 @@ async function processPayment(name) {
 
     document.querySelectorAll('.cartItemCheckbox:checked').forEach(checkbox => {
         let row = checkbox.closest('tr');
+        let cartItemId = checkbox.value;
         let productName = row.cells[1].innerText.trim(); // Lấy tên sản phẩm
+        let price = parseInt(row.cells[2].innerText.replace(/\D/g, ''), 10); // Lấy giá
         let quantity = row.cells[3].innerText.trim(); // Lấy số lượng
-        selectedItems.push(checkbox.value);
+        selectedItems.push({
+            CartItemId: cartItemId,
+            ProductId: cartItemId,
+            CartItemQuantity: quantity,
+            CartItemPrice: price
+        });
         orderDescription.push(`${productName} x${quantity}`);
     });
 
@@ -106,8 +113,15 @@ async function processPayment(name) {
     if (!response.ok) {
         console.error("Không thể lấy URL thanh toán.");
         return;
+    } else {
+        const data = await response.json();
+        window.location.href = data.paymentUrl;
+        await fetch('/Checkout/PrepareForOrder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(selectedItems)
+        });
     }
-
-    const data = await response.json();
-    window.location.href = data.paymentUrl; // Chuyển hướng đến VNPay
 }

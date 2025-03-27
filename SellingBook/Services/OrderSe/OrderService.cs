@@ -1,45 +1,62 @@
-﻿using SellingBook.Models;
+﻿using SellingBook.Extensions;
+using SellingBook.Models;
 using SellingBook.Models.BasicModels;
 using SellingBook.Repositories;
-using System.Collections.Generic;
 
 namespace SellingBook.Services.OrderSe
 {
-    public class OrderService
+    public class OrderService: IOrderService
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IOrderRepository _orderRepository;
 
-        public OrderService(IOrderRepository orderRepository)
+        public OrderService(IOrderRepository orderRepository, IHttpContextAccessor httpContextAccessor)
         {
             _orderRepository = orderRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
-        // Thêm đơn hàng mới
-        public void CreateOrder(Order order)
+        public void AddOrder(string orderId, string sessionKey, ISession? session = null)
         {
+            if(string.IsNullOrEmpty(orderId) || string.IsNullOrEmpty(sessionKey)) // Null or empty check
+            {
+                throw new InvalidOperationException("Invalid order id or session key.");
+            }
+
+            if(session == null) // Null check
+            {
+                session = _httpContextAccessor.HttpContext?.Session;
+            }
+
+            var cartItems = session?.GetObjectFromJson<List<CartItem>>(sessionKey);
+
+            if (cartItems == null || !cartItems.Any()) // Null or empty check
+            {
+                throw new InvalidOperationException("Cart is empty or session expired.");
+            }
+
+            var order = new Order
+            {
+                OrderId = orderId,
+                OrderItems = cartItems.Select(x => new OrderItem
+                {
+                    ProductId = x.ProductId,
+                    OrderItemQuantity = x.CartItemQuantity,
+                    OrderItemPrice = x.CartItemPrice,
+                    OrderId = orderId,
+                    OrderItemId = Guid.NewGuid().ToString()
+                }).ToList()
+            };
+
             _orderRepository.AddOrder(order);
         }
 
-        // Xóa đơn hàng theo đối tượng
-        public void RemoveOrder(Order order)
-        {
-            _orderRepository.DeleteOrder(order);
-        }
-
-        // Lấy danh sách tất cả đơn hàng
         public IEnumerable<Order> GetAllOrders()
         {
             return _orderRepository.GetOrders();
         }
 
-        // Đếm số lượng đơn hàng trong hệ thống
-        public int GetOrderCount()
-        {
-            return _orderRepository.GetOrdersCountBasedOnIds();
-        }
-
-        // Lưu bình luận vào đơn hàng
-        public ProductComment AddCommentToOrder(string orderId, string comment, int productId, string userId)
+        public ProductComment SaveComment(string orderId, string comment, int productId, string userId)
         {
             return _orderRepository.SaveComment(orderId, comment, productId, userId);
         }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SellingBook.Migrations
 {
     /// <inheritdoc />
-    public partial class InitNew : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -219,10 +219,7 @@ namespace SellingBook.Migrations
                 {
                     OrderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    OrderAddress = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OrderPhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OrderEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OrderStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CouponId = table.Column<int>(type: "int", nullable: true),
                     TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
@@ -304,10 +301,8 @@ namespace SellingBook.Migrations
                 name: "OrderItems",
                 columns: table => new
                 {
-                    OrderItemId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderId = table.Column<int>(type: "int", nullable: false),
-                    OrderId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    OrderItemId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    OrderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     OrderItemQuantity = table.Column<int>(type: "int", nullable: false),
                     OrderItemPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
@@ -316,10 +311,11 @@ namespace SellingBook.Migrations
                 {
                     table.PrimaryKey("PK_OrderItems", x => x.OrderItemId);
                     table.ForeignKey(
-                        name: "FK_OrderItems_Orders_OrderId1",
-                        column: x => x.OrderId1,
+                        name: "FK_OrderItems_Orders_OrderId",
+                        column: x => x.OrderId,
                         principalTable: "Orders",
-                        principalColumn: "OrderId");
+                        principalColumn: "OrderId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_OrderItems_Products_ProductId",
                         column: x => x.ProductId,
@@ -352,8 +348,7 @@ namespace SellingBook.Migrations
                         name: "FK_ProductComments_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
-                        principalColumn: "OrderId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "OrderId");
                     table.ForeignKey(
                         name: "FK_ProductComments_Products_ProductId",
                         column: x => x.ProductId,
@@ -412,9 +407,9 @@ namespace SellingBook.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderItems_OrderId1",
+                name: "IX_OrderItems_OrderId",
                 table: "OrderItems",
-                column: "OrderId1");
+                column: "OrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_ProductId",

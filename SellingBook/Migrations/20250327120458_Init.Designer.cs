@@ -12,8 +12,8 @@ using SellingBook.Models;
 namespace SellingBook.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250326064903_AddProductComment")]
-    partial class AddProductComment
+    [Migration("20250327120458_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -180,16 +180,11 @@ namespace SellingBook.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("int");
-
                     b.HasKey("CartItemId");
 
                     b.HasIndex("ProductId");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("CartItems");
                 });
@@ -210,58 +205,68 @@ namespace SellingBook.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("SellingBook.Models.BasicModels.Coupon", b =>
+                {
+                    b.Property<int>("CouponId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CouponId"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal>("DiscountValue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.HasKey("CouponId");
+
+                    b.ToTable("Coupons");
+                });
+
             modelBuilder.Entity("SellingBook.Models.BasicModels.Order", b =>
                 {
                     b.Property<string>("OrderId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int?>("CouponId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("OrderAddress")
+                    b.Property<string>("OrderDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OrderEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OrderPhone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OrderStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("int");
-
                     b.HasKey("OrderId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("CouponId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("SellingBook.Models.BasicModels.OrderItem", b =>
                 {
-                    b.Property<int>("OrderItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("OrderItemId")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderItemId"));
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("OrderId1")
+                    b.Property<string>("OrderId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("OrderItemPrice")
@@ -275,7 +280,7 @@ namespace SellingBook.Migrations
 
                     b.HasKey("OrderItemId");
 
-                    b.HasIndex("OrderId1");
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
 
@@ -338,44 +343,17 @@ namespace SellingBook.Migrations
                     b.Property<int>("RateAmount")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("RateId");
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Rates");
-                });
-
-            modelBuilder.Entity("SellingBook.Models.BasicModels.User", b =>
-                {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
-
-                    b.Property<string>("UserEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserPassword")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("SellingBook.Models.Identity.ApplicationUser", b =>
@@ -475,10 +453,7 @@ namespace SellingBook.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId1")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -486,7 +461,7 @@ namespace SellingBook.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("ProductComments");
                 });
@@ -556,10 +531,6 @@ namespace SellingBook.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SellingBook.Models.BasicModels.User", null)
-                        .WithMany("CartItems")
-                        .HasForeignKey("UserId1");
-
                     b.Navigation("Product");
 
                     b.Navigation("User");
@@ -567,15 +538,18 @@ namespace SellingBook.Migrations
 
             modelBuilder.Entity("SellingBook.Models.BasicModels.Order", b =>
                 {
+                    b.HasOne("SellingBook.Models.BasicModels.Coupon", "Coupon")
+                        .WithMany()
+                        .HasForeignKey("CouponId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("SellingBook.Models.Identity.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SellingBook.Models.BasicModels.User", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId1");
+                    b.Navigation("Coupon");
 
                     b.Navigation("User");
                 });
@@ -584,7 +558,9 @@ namespace SellingBook.Migrations
                 {
                     b.HasOne("SellingBook.Models.BasicModels.Order", "Order")
                         .WithMany("OrderItems")
-                        .HasForeignKey("OrderId1");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SellingBook.Models.BasicModels.Product", "Product")
                         .WithMany("OrderItems")
@@ -618,7 +594,9 @@ namespace SellingBook.Migrations
 
                     b.HasOne("SellingBook.Models.Identity.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Product");
 
@@ -630,7 +608,7 @@ namespace SellingBook.Migrations
                     b.HasOne("SellingBook.Models.BasicModels.Order", "Order")
                         .WithMany()
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("SellingBook.Models.BasicModels.Product", "Product")
@@ -639,9 +617,9 @@ namespace SellingBook.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SellingBook.Models.BasicModels.User", "User")
+                    b.HasOne("SellingBook.Models.Identity.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -667,13 +645,6 @@ namespace SellingBook.Migrations
                     b.Navigation("CartItems");
 
                     b.Navigation("OrderItems");
-                });
-
-            modelBuilder.Entity("SellingBook.Models.BasicModels.User", b =>
-                {
-                    b.Navigation("CartItems");
-
-                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

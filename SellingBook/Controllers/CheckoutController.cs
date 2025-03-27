@@ -1,19 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using SellingBook.Extensions;
+using SellingBook.Models.BasicModels;
 using SellingBook.Models.VNPay;
 using SellingBook.Repositories;
+using SellingBook.Services;
 using SellingBook.Services.VNPay;
+using System.Text.Json;
 
 namespace SellingBook.Controllers
 {
     public class CheckoutController : Controller
     {
+        private readonly IOrderService _orderService;
         private readonly IVNPayService _vnPayService;
-        private readonly IOrderRepository _orderRepository;
 
-        public CheckoutController(IVNPayService vnPayService, IOrderRepository orderRepository)
+        public CheckoutController(IVNPayService vnPayService, IOrderService orderService)
         {
-            _orderRepository = orderRepository;
             _vnPayService = vnPayService;
+            _orderService = orderService;
         }
 
         public IActionResult CreatePaymentUrlVnPay([FromBody] PaymentInformationModel model)
@@ -34,6 +39,7 @@ namespace SellingBook.Controllers
             if (response.VnPayResponseCode == "00")
             {
                 ViewBag.OrderId = response.OrderId;
+                _orderService.AddOrder(response.OrderId, "CurrentOrderItems", this.HttpContext.Session);
                 return View("PaymentSucceed");
             }
 
@@ -41,9 +47,27 @@ namespace SellingBook.Controllers
         }
 
         [HttpPost]
+        public IActionResult PrepareForOrder([FromBody] IEnumerable<CartItem> cartItems)
+        {
+            try
+            {
+                HttpContext.Session.SetObjectAsJson("CurrentOrderItems", cartItems.ToList());
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return Json(new
+                {
+                    message = e.Message
+                });
+            }
+        }
+
+        [HttpPost]
         public IActionResult SubmitComment(string orderId, string comment, int productId, string userId)
         {
-            var savedComment = _orderRepository.SaveComment(orderId, comment, productId, userId);
+            var savedComment = _orderService.SaveComment(orderId, comment, productId, userId);
             if (savedComment != null)
             {
                 // Bình luận đã được lưu thành công, có thể sử dụng savedComment ở đây

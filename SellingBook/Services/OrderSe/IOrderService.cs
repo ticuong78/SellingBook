@@ -5,10 +5,8 @@ namespace SellingBook.Services
 {
     public interface IOrderService
     {
-        void CreateOrder(Order order);
-        void RemoveOrder(Order order);
+        public void AddOrder(string orderId, string sessionKey, ISession? session = null);
         IEnumerable<Order> GetAllOrders();
-        int GetTotalOrders();
-        ProductComment AddCommentToOrder(string orderId, string comment, int productId, string userId);
+        ProductComment SaveComment(string orderId, string comment, int productId, string userId);
     }
 }
