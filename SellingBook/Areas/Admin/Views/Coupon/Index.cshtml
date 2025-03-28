@@ -1,0 +1,139 @@
+﻿@{
+    ViewData["Title"] = "Quản lý mã giảm giá";
+}
+
+<h2>Quản lý mã giảm giá</h2>
+
+<!-- Bảng hiển thị danh sách mã giảm giá -->
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Mã giảm giá</th>
+            <th>Giá trị giảm</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody id="couponTable">
+        <!-- Dữ liệu sẽ được thêm vào đây bằng JavaScript -->
+    </tbody>
+</table>
+
+<!-- Nút mở modal thêm mã giảm giá -->
+<button class="btn btn-primary" onclick="openAddModal()">Thêm mã giảm giá</button>
+
+<!-- Modal Thêm / Cập nhật mã giảm giá -->
+<div id="couponModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thêm / Cập nhật mã giảm giá</h4>
+                <button type="button" class="close" onclick="$('#couponModal').modal('hide')">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="couponId">
+                <div class="form-group">
+                    <label>Mã giảm giá:</label>
+                    <input type="text" id="couponCode" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Giá trị giảm:</label>
+                    <input type="number" id="discountValue" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Trạng thái:</label>
+                    <select id="isActive" class="form-control">
+                        <option value="true">Kích hoạt</option>
+                        <option value="false">Tắt</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" onclick="saveCoupon()">Lưu</button>
+                <button class="btn btn-secondary" onclick="$('#couponModal').modal('hide')">Đóng</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function loadCoupons() {
+        const response = await fetch('/Admin/Coupon/GetAll');
+        const coupons = await response.json();
+
+        let tableHtml = "";
+        coupons.forEach(coupon => {
+            tableHtml += `
+                <tr>
+                    <td>${coupon.couponId}</td>
+                    <td>${coupon.code}</td>
+                    <td>${coupon.discountValue.toLocaleString()} đ</td>
+                    <td>${coupon.isActive ? '✔️ Kích hoạt' : '❌ Tắt'}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="editCoupon(${coupon.couponId}, '${coupon.code}', ${coupon.discountValue}, ${coupon.isActive})">Sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteCoupon(${coupon.couponId})">Xóa</button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        document.getElementById("couponTable").innerHTML = tableHtml;
+    }
+
+    function openAddModal() {
+        document.getElementById("couponId").value = "";
+        document.getElementById("couponCode").value = "";
+        document.getElementById("discountValue").value = "";
+        document.getElementById("isActive").value = "true";
+        $("#couponModal").modal("show");
+    }
+
+    function editCoupon(id, code, discountValue, isActive) {
+        document.getElementById("couponId").value = id;
+        document.getElementById("couponCode").value = code;
+        document.getElementById("discountValue").value = discountValue;
+        document.getElementById("isActive").value = isActive;
+        $("#couponModal").modal("show");
+    }
+
+    async function saveCoupon() {
+        const id = document.getElementById("couponId").value;
+        const code = document.getElementById("couponCode").value.trim();
+        const discountValue = document.getElementById("discountValue").value;
+        const isActive = document.getElementById("isActive").value === "true";
+
+        if (!code || discountValue <= 0) {
+            alert("❌ Vui lòng nhập đúng dữ liệu!");
+            return;
+        }
+
+        const method = id ? "PUT" : "POST";
+        const url = id ? `/Admin/Coupon/Update/${id}` : "/Admin/Coupon/Create";
+
+        const response = await fetch(url, {
+            method: method,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ Code: code, DiscountValue: discountValue, IsActive: isActive })
+        });
+
+        const data = await response.json();
+        alert(data.message);
+        $("#couponModal").modal("hide");
+        loadCoupons();
+    }
+
+    async function deleteCoupon(id) {
+        if (!confirm("Bạn có chắc muốn xóa mã giảm giá này?")) return;
+
+        const response = await fetch(`/Admin/Coupon/Delete/${id}`, { method: "DELETE" });
+        const data = await response.json();
+        alert(data.message);
+        loadCoupons();
+    }
+
+
+    document.addEventListener("DOMContentLoaded", loadCoupons);
+</script>
