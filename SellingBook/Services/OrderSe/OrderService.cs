@@ -47,7 +47,7 @@ namespace SellingBook.Services.OrderSe
             var order = new Order
             {
                 OrderId = orderId,
-                CouponId = couponId,
+                //CouponId = couponId,
                 OrderDescription = orderDescription == null ? "Không có mô tả" : orderDescription,
                 UserId = _userService.GetCurrentUserId(),
                 CreatedAt = DateTime.Now,
