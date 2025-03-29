@@ -1,18 +1,19 @@
-﻿async function addProduct(cartItemObj, onSuccessCallBack, onFailedCallBack) {
+﻿async function addProduct(cartItemObj, onSuccess, onError) {
     try {
-        const response = await fetch("/Customer/Cart/AddCartItem", {
+        const response = await fetch("/Customer/Product/AddToCart", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify(cartItemObj)
         });
 
-        // Optional: basic status check
         if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
+            onError(response.statusText);
+        } else {
+            onSuccess(response);
         }
-
-        await onSuccessCallBack(response);
     } catch (error) {
-        onFailedCallBack(error);
+        onError(error);
     }
 }

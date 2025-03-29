@@ -23,12 +23,12 @@
         flex: 1 1 400px;
     }
 
-    .product-image img {
-        width: 100%;
-        height: auto;
-        border-radius: 8px;
-        object-fit: cover;
-    }
+        .product-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            object-fit: cover;
+        }
 
     .product-info {
         flex: 1 1 500px;
@@ -37,10 +37,10 @@
         justify-content: space-between;
     }
 
-    .product-info h1 {
-        font-size: 2rem;
-        margin-bottom: 10px;
-    }
+        .product-info h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
 
     .product-price {
         font-size: 1.8rem;
@@ -72,8 +72,14 @@
         width: fit-content;
     }
 
-    .add-to-cart-btn:hover {
-        background-color: #084298;
+        .add-to-cart-btn:hover {
+            background-color: #084298;
+        }
+
+    .quantity-input {
+        width: 80px;
+        padding: 5px;
+        margin-top: 10px;
     }
 </style>
 
@@ -92,11 +98,11 @@
                 {
                     if (Model.Rate.HasValue && i <= Math.Floor(Model.Rate.Value))
                     {
-                                <span>★</span>
+                        <span>★</span>
                     }
                     else
                     {
-                                <span>☆</span>
+                        <span>☆</span>
                     }
                 }
                 <span> (@Model.RateAmount votes)</span>
@@ -107,16 +113,28 @@
             <div class="product-description">
                 @Model.Description
             </div>
-        </div>
 
-        <button class="add-to-cart-btn" onclick="addToCart(@Model.ProductId)">
-            <i class="bi-cart-fill me-2"></i> @Localizer["AddToCart"]
-        </button>
+           
+        </div>
+        <!-- Form Add to Cart -->
+        <form method="post" asp-action="AddToCart" asp-route-id="@Model.ProductId">
+            <input type="hidden" id="productId" name="productId" value="@Model.ProductId" />
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+                <input type="number" name="quantity" id="quantity" class="form-control" value="1" min="1" />
+            </div>
+            <button type="submit" class="add-to-cart-btn">
+                <i class="bi-cart-fill me-2"></i> @Localizer["AddToCart"]
+            </button>
+        </form>
     </div>
 </div>
 
 <script>
-    function addToCart(productId) {
-        alert("Product " + productId + " added to cart!");
-    }
+    // Lắng nghe sự thay đổi trong input số lượng
+    document.getElementById("quantity").addEventListener("input", function() {
+        var quantity = document.getElementById("quantity").value;
+        // Cập nhật giá trị ẩn cho số lượng khi thay đổi
+        document.querySelector("input[name='quantity']").value = quantity;
+    });
 </script>
