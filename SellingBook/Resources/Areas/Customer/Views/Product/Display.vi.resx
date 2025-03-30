@@ -120,6 +120,9 @@
   <data name="AddToCart" xml:space="preserve">
     <value>Thêm Vào Giỏ Hàng</value>
   </data>
+  <data name="Category" xml:space="preserve">
+    <value>Thể loại</value>
+  </data>
   <data name="Decrease" xml:space="preserve">
     <value>➖</value>
   </data>
@@ -130,7 +133,7 @@
     <value>Giá</value>
   </data>
   <data name="Rating" xml:space="preserve">
-    <value>lượt đánh giá</value>
+    <value>Lượt đánh giá</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Loại</value>

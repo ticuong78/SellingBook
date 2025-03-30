@@ -123,8 +123,29 @@
   <data name="Decrease" xml:space="preserve">
     <value>➖</value>
   </data>
+  <data name="Description" xml:space="preserve">
+    <value>Mô tả</value>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>Hình ảnh</value>
+  </data>
+  <data name="Images" xml:space="preserve">
+    <value>Hình ảnh thêm</value>
+  </data>
   <data name="Increase" xml:space="preserve">
     <value>➕</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Tên sản phẩm</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Giá</value>
+  </data>
+  <data name="Product Details" xml:space="preserve">
+    <value>Chi tiết sản phẩm</value>
+  </data>
+  <data name="Product Information" xml:space="preserve">
+    <value>Thông tin sản phẩm</value>
   </data>
   <data name="Rating" xml:space="preserve">
     <value>lượt đánh giá</value>

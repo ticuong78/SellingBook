@@ -117,22 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="+ Add New Category" xml:space="preserve">
-    <value>+ Thêm thể loại</value>
+  <data name="Back" xml:space="preserve">
+    <value>Quay lại</value>
   </data>
-  <data name="Actions" xml:space="preserve">
-    <value>Hành động</value>
+  <data name="Category List" xml:space="preserve">
+    <value>Danh sách thể loại</value>
   </data>
-  <data name="Categories" xml:space="preserve">
-    <value>Danh mục thể loại</value>
+  <data name="Category Name" xml:space="preserve">
+    <value>Tên thể loại</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Xóa</value>
   </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Sửa</value>
-  </data>
-  <data name="Name" xml:space="preserve">
-    <value>Tên thể loại</value>
+  <data name="Save" xml:space="preserve">
+    <value>Lưu</value>
   </data>
 </root>

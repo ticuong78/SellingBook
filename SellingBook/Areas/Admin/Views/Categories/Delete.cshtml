@@ -1,14 +1,15 @@
 ﻿@model SellingBook.Models.BasicModels.Category
+@inject IViewLocalizer Localizer
 
 @{
     ViewData["Title"] = "Delete";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="container mt-5">
-    <h2 class="text-center text-danger fw-bold">Delete Category</h2>
+    <h2 class="text-center text-danger fw-bold">@Localizer["Delete Category"]</h2>
 
     <div class="alert alert-warning text-center mb-4">
-        <p>Are you sure you want to delete the category "<strong>@Model.CategoryName</strong>"?</p>
+        <p>@Localizer["Are you sure you want to delete the category"] "<strong>@Model.CategoryName</strong>" ?</p>
     </div>
 
     <div class="card shadow-sm border-danger p-4">
@@ -16,8 +17,8 @@
             <input type="hidden" asp-for="CategoryId" />
 
             <div class="d-flex justify-content-center">
-                <button type="submit" class="btn btn-danger btn-lg px-4 py-2 me-3">Delete</button>
-                <a asp-action="Index" class="btn btn-secondary btn-lg px-4 py-2">Cancel</a>
+                <button type="submit" class="btn btn-danger btn-lg px-4 py-2 me-3">@Localizer["Delete"]</button>
+                <a asp-action="Index" class="btn btn-secondary btn-lg px-4 py-2">@Localizer["Cancel"]</a>
             </div>
         </form>
     </div>

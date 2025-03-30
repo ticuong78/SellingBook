@@ -1,7 +1,7 @@
 ﻿@model SellingBook.Models.BasicModels.Product
-
+@inject IViewLocalizer Localizer
 <div class="container mt-4">
-    <h2 class="mb-4">Edit Product</h2>
+    <h2 class="mb-4">@Localizer["Edit Product"]</h2>
 
     <div class="card shadow-sm">
         <div class="card-body">
@@ -10,37 +10,37 @@
                 <input type="hidden" asp-for="CategoryId" />
 
                 <div class="mb-3">
-                    <label asp-for="ProductName" class="form-label"></label>
+                    <label asp-for="ProductName" class="form-label">@Localizer["ProductName"]</label>
                     <input asp-for="ProductName" class="form-control" required />
                     <span asp-validation-for="ProductName" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="ProductPrice" class="form-label"></label>
+                    <label asp-for="ProductPrice" class="form-label">@Localizer["ProductPrice"]</label>
                     <input asp-for="ProductPrice" type="number" class="form-control" required />
                     <span asp-validation-for="ProductPrice" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Description" class="form-label"></label>
+                    <label asp-for="Description" class="form-label">@Localizer["Description"]</label>
                     <textarea asp-for="Description" class="form-control" rows="3"></textarea>
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="CategoryId" class="form-label">Category</label>
+                    <label asp-for="CategoryId" class="form-label">@Localizer["Category"]</label>
                     <select asp-for="CategoryId" asp-items="@ViewBag.Categories" class="form-select">
-                        <option value="">Select a category</option>
+                        <option value="">@Localizer["Select a category"]</option>
                     </select>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="ImageUrl" class="form-label">Image</label>
+                    <label asp-for="ImageUrl" class="form-label">@Localizer["Image"]</label>
                     <input asp-for="ImageUrl" type="file" class="form-control" id="imageInput" />
                     <span asp-validation-for="ImageUrl" class="text-danger"></span>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">@Localizer["Submit"]</button>
             </form>
 
             <div class="mt-4 text-center">

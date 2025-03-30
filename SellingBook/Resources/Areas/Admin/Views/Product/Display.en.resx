@@ -123,8 +123,29 @@
   <data name="Decrease" xml:space="preserve">
     <value>➖</value>
   </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="Images" xml:space="preserve">
+    <value>Images</value>
+  </data>
   <data name="Increase" xml:space="preserve">
     <value>➕</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="Product Details" xml:space="preserve">
+    <value>Product Details</value>
+  </data>
+  <data name="Product Information" xml:space="preserve">
+    <value>Product Information</value>
   </data>
   <data name="Rating" xml:space="preserve">
     <value>ratings</value>

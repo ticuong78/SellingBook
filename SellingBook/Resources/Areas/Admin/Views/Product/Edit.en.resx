@@ -117,22 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="+ Add New Category" xml:space="preserve">
-    <value>+ Thêm thể loại</value>
+  <data name="Category" xml:space="preserve">
+    <value>Category</value>
   </data>
-  <data name="Actions" xml:space="preserve">
-    <value>Hành động</value>
+  <data name="Choose File" xml:space="preserve">
+    <value>Choose File</value>
   </data>
-  <data name="Categories" xml:space="preserve">
-    <value>Danh mục thể loại</value>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
   </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Xóa</value>
+  <data name="Edit Product" xml:space="preserve">
+    <value>Edit Product</value>
   </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Sửa</value>
+  <data name="Image" xml:space="preserve">
+    <value>Image</value>
   </data>
-  <data name="Name" xml:space="preserve">
-    <value>Tên thể loại</value>
+  <data name="No file chosen" xml:space="preserve">
+    <value>No file chosen</value>
+  </data>
+  <data name="ProductName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="ProductPrice" xml:space="preserve">
+    <value>Price</value>
+  </data>
+  <data name="Select a category" xml:space="preserve">
+    <value>Select a category</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Submit</value>
   </data>
 </root>
