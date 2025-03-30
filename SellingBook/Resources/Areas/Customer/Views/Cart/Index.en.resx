@@ -120,6 +120,9 @@
   <data name="Action" xml:space="preserve">
     <value>Action</value>
   </data>
+  <data name="ApplyDiscount" xml:space="preserve">
+    <value>Apply</value>
+  </data>
   <data name="BankTransfer" xml:space="preserve">
     <value>🏦 Bank Transfer</value>
   </data>
@@ -140,6 +143,12 @@
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
+  </data>
+  <data name="DiscountCode" xml:space="preserve">
+    <value>Discount Code</value>
+  </data>
+  <data name="EnterDiscountCode" xml:space="preserve">
+    <value>Enter Discount Code</value>
   </data>
   <data name="NoProductFound" xml:space="preserve">
     <value>No product found</value>
