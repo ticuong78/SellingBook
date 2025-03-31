@@ -13,13 +13,13 @@
             <div asp-validation-summary="All" class="alert alert-danger"></div>
 
             <div class="mb-3">
-                <label asp-for="ProductName" class="form-label fw-bold">@Localizer["Product Name"]</label>
+                <label asp-for="ProductName" class="form-label fw-bold">@Localizer["ProductName"]</label>
                 <input asp-for="ProductName" class="form-control" required />
                 <span asp-validation-for="ProductName" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label asp-for="ProductPrice" class="form-label fw-bold">@Localizer["Product Price"]</label>
+                <label asp-for="ProductPrice" class="form-label fw-bold">@Localizer["ProductPrice"]</label>
                 <input asp-for="ProductPrice" type="number" class="form-control" required />
                 <span asp-validation-for="ProductPrice" class="text-danger"></span>
             </div>
@@ -34,7 +34,7 @@
             <div class="mb-3">
                 <label asp-for="CategoryId" class="form-label fw-bold">@Localizer["Category"]</label>
                 <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select">
-                    <option value="">@Localizer["Select a category"]</option>
+                    <option value="">@Localizer["SelectCategory"]</option>
                 </select>
             </div>
 

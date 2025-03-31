@@ -141,6 +141,9 @@
   <data name="Image" xml:space="preserve">
     <value>Hình ảnh</value>
   </data>
+  <data name="Images" xml:space="preserve">
+    <value>HÌnh ảnh mô tả</value>
+  </data>
   <data name="No file chosen" xml:space="preserve">
     <value>Chưa có hình ảnh nào được chọn</value>
   </data>
@@ -149,6 +152,9 @@
   </data>
   <data name="ProductPrice" xml:space="preserve">
     <value>Giá</value>
+  </data>
+  <data name="SelectCategory" xml:space="preserve">
+    <value>Chọn thể loại</value>
   </data>
   <data name="Submit" xml:space="preserve">
     <value>Hoàn tất</value>

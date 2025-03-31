@@ -141,6 +141,9 @@
   <data name="Image" xml:space="preserve">
     <value>Image</value>
   </data>
+  <data name="Images" xml:space="preserve">
+    <value>Descriptive Images</value>
+  </data>
   <data name="No file chosen" xml:space="preserve">
     <value>No file chosen</value>
   </data>
@@ -149,6 +152,9 @@
   </data>
   <data name="ProductPrice" xml:space="preserve">
     <value>Product Price</value>
+  </data>
+  <data name="SelectCategory" xml:space="preserve">
+    <value>Select a category</value>
   </data>
   <data name="Submit" xml:space="preserve">
     <value>Submit</value>

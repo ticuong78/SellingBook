@@ -135,6 +135,9 @@
   <data name="Name" xml:space="preserve">
     <value>Name</value>
   </data>
+  <data name="Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
   <data name="Products" xml:space="preserve">
     <value>Product List</value>
   </data>
