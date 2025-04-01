@@ -1,12 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@inject IViewLocalizer Localizer
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - @Localizer["WebName"]</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SellingBook.styles.css" asp-append-version="true" />
 
@@ -79,8 +80,18 @@
                             <i class="bi bi-globe"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
-                            <li><a class="dropdown-item" href="?culture=vi&ui-culture=vi">🇻🇳 Tiếng Việt</a></li>
-                            <li><a class="dropdown-item" href="?culture=en&ui-culture=en">🇬🇧 English</a></li>
+                            <li><a class="dropdown-item"
+                                   asp-action="ChangeLanguage"
+                                   asp-controller="Home"
+                                   asp-area=""
+                                   asp-route-culture="vi-VN">Tiếng Việt</a>
+                            </li>
+                            <li><a class="dropdown-item"
+                                   asp-action="ChangeLanguage"
+                                   asp-controller="Home"
+                                   asp-area="" 
+                                   asp-route-culture="en-US">English</a>
+                            </li>
                         </ul>
                     </li>
 
@@ -104,6 +115,7 @@
             @RenderBody()
         </main>
     </div>
+    <p>Current Culture: @System.Threading.Thread.CurrentThread.CurrentUICulture.Name</p>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

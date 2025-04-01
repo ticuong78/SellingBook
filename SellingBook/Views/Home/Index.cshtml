@@ -1,4 +1,5 @@
-﻿@{
+﻿@inject IViewLocalizer Localizer
+@{
     ViewData["Title"] = "Home";
 }
 
@@ -49,8 +50,8 @@
 </style>
 
 <div class="welcome-content">
-    <h1>Hello user, welcome to your next favorite bookstore!</h1>
-    <p class="quote">"A room without books is like a body without a soul."</p>
-    <p class="description">Browse through our collection, find your next read, and enjoy the journey.</p>
-    <a href="/Customer/Product" class="start-btn">Start Exploring</a>
+    <h1>@Localizer["Hello user, welcome to your next favorite bookstore!"]</h1>
+    <p class="quote">"@Localizer["A room without books is like a body without a soul."]"</p>
+    <p class="description">@Localizer["Browse through our collection, find your next read, and enjoy the journey."]</p>
+    <a href="/Customer/Product" class="start-btn">@Localizer["Start Exploring"]</a>
 </div>

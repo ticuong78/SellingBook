@@ -3,55 +3,59 @@
     var abc = ViewBag.Categories;
     Console.WriteLine(abc);
 }
-
+@inject IViewLocalizer Localizer
 
 <div class="container mt-4">
-    <h1 class="mb-4">Add Product</h1>
+    <h1 class="mb-4">@Localizer["Add Product"]</h1>
 
-    <form asp-area="Admin" asp-action="AddConfirmed" enctype="multipart/form-data" class="needs-validation" novalidate>
-        <div asp-validation-summary="All" class="alert alert-danger"></div>
+    <div class="card p-4 shadow-lg">
+        <form asp-area="Admin" asp-action="AddConfirmed" enctype="multipart/form-data" class="needs-validation" novalidate>
+            <div asp-validation-summary="All" class="alert alert-danger"></div>
 
-        <div class="mb-3">
-            <label asp-for="ProductName" class="form-label">Product Name</label>
-            <input asp-for="ProductName" class="form-control" required />
-            <span asp-validation-for="ProductName" class="text-danger"></span>
-        </div>
+            <div class="mb-3">
+                <label asp-for="ProductName" class="form-label fw-bold">@Localizer["ProductName"]</label>
+                <input asp-for="ProductName" class="form-control" required />
+                <span asp-validation-for="ProductName" class="text-danger"></span>
+            </div>
 
-        <div class="mb-3">
-            <label asp-for="ProductPrice" class="form-label">Product Price</label>
-            <input asp-for="ProductPrice" type="number" class="form-control" required />
-            <span asp-validation-for="ProductPrice" class="text-danger"></span>
-        </div>
+            <div class="mb-3">
+                <label asp-for="ProductPrice" class="form-label fw-bold">@Localizer["ProductPrice"]</label>
+                <input asp-for="ProductPrice" type="number" class="form-control" required />
+                <span asp-validation-for="ProductPrice" class="text-danger"></span>
+            </div>
 
-        <div class="mb-3">
-            <label asp-for="Description" class="form-label">Description</label>
-            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
-            <span asp-validation-for="Description" class="text-danger"></span>
-        </div>
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label fw-bold">@Localizer["Description"]</label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
 
-        <!-- Category dropdown with Add Category button -->
-        <div class="mb-3 d-flex align-items-center">
-            <div class="flex-grow-1">
-                <label asp-for="CategoryId" class="form-label">Category</label>
+            <!-- Category dropdown -->
+            <div class="mb-3">
+                <label asp-for="CategoryId" class="form-label fw-bold">@Localizer["Category"]</label>
                 <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select">
-                    <option value="">Select a category</option>
+                    <option value="">@Localizer["SelectCategory"]</option>
                 </select>
             </div>
-        </div>
 
-        <div class="mb-3">
-            <label asp-for="ImageUrl" class="form-label">Image</label>
-            <input asp-for="ImageUrl" type="file" class="form-control" />
-            <span asp-validation-for="ImageUrl" class="text-danger"></span>
-        </div>
+            <div class="mb-3">
+                <label asp-for="ImageUrl" class="form-label fw-bold">@Localizer["Image"]</label>
+                <input asp-for="ImageUrl" type="file" class="form-control" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
 
-        <div class="mb-3">
-            <label asp-for="Images" class="form-label">Images</label>
-            <input asp-for="Images" type="file" class="form-control" multiple />
-            <span asp-validation-for="Images" class="text-danger"></span>
-        </div>
+            <div class="mb-3">
+                <label asp-for="Images" class="form-label fw-bold">@Localizer["Images"]</label>
+                <input asp-for="Images" type="file" class="form-control" multiple />
+                <span asp-validation-for="Images" class="text-danger"></span>
+            </div>
 
-        <button type="submit" class="btn btn-primary">Add</button>
-    </form>
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">@Localizer["Add"]</button>
+                <a asp-controller="Product" asp-action="Index" class="btn btn-secondary">
+                    @Localizer["Back to Products"]
+                </a>
+            </div>
+        </form>
+    </div>
 </div>
-

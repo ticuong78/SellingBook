@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SellingBook.Models.BasicModels;
-using SellingBook.Models.Checkout;
+using SellingBook.Models.DTO;
 using SellingBook.Models.Roles;
 using SellingBook.Repositories;
 

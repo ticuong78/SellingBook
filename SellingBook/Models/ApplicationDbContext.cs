@@ -15,6 +15,7 @@ namespace SellingBook.Models
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Rate> Rates { get; set; }
+        public DbSet<ProductComment> ProductComments { get; set; }
         public DbSet<Coupon> Coupons { get; set; } // Thêm DbSet Coupon
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,6 +28,12 @@ namespace SellingBook.Models
                 .WithMany()
                 .HasForeignKey(o => o.CouponId)
                 .OnDelete(DeleteBehavior.SetNull); // Nếu xóa mã giảm giá, giữ nguyên đơn hàng
+
+            modelBuilder.Entity<ProductComment>()
+                .HasOne(pc => pc.Order)
+                .WithMany()  // No navigation property needed in Order
+                .HasForeignKey(pc => pc.OrderId)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

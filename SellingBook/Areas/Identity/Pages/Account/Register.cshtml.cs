@@ -164,7 +164,7 @@ namespace SellingBook.Areas.Identity.Pages.Account
                     //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Action(
                         action: "ConfirmEmail",
-                        controller: "Account",
+                        controller: "Email",
                         values: new { area = "", email = Input.Email, returnUrl },
                         protocol: Request.Scheme);
 

@@ -1,0 +1,30 @@
+﻿@model IEnumerable<SellingBook.Models.BasicModels.Category>
+@inject  IViewLocalizer Localizer
+
+<div class="container mt-4">
+    <h2 class="mb-4">@Localizer["Categories"]</h2>
+
+    <table class="table table-hover shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>@Localizer["Name"]</th>
+                <th class="text-center">@Localizer["Actions"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in Model)
+            {
+                <tr>
+                    <td>@category.CategoryName</td>
+                    <td class="text-center">
+                        <a asp-area="Admin" asp-action="Update" asp-route-id="@category.CategoryId" class="btn btn-sm btn-warning">@Localizer["Edit"]</a>
+                        <a asp-area="Admin" asp-action="Delete" asp-route-id="@category.CategoryId" class="btn btn-sm btn-danger">@Localizer["Delete"]</a>
+                    </td>
+                </tr>
+            }
+            <tr class="table-light text-center" onclick="window.location='@Url.Action("Add", "Categories")'" style="cursor:pointer;">
+                <td colspan="2" class="fw-bold text-primary">@Localizer["+ Add New Category"]</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
