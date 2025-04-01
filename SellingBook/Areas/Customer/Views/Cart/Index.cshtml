@@ -87,11 +87,15 @@
                         <div class="form-group mt-3">
                             <label for="discountCode">@Localizer["DiscountCode"]:</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="discountCode" placeholder="@Localizer["EnterDiscountCode"]">
+                                <select id="discountCode" class="form-control">
+                                    <option value="">Chọn mã giảm giá</option>
+                                    <!-- Danh sách mã giảm giá sẽ được điền vào đây từ backend -->
+                                </select>
                                 <button type="button" class="btn btn-primary" onclick="applyDiscount()">@Localizer["ApplyDiscount"]</button>
                             </div>
                             <small id="discountMessage" class="text-success"></small>
                         </div>
+
 
                         <hr>
                         <div class="d-grid">
@@ -105,3 +109,53 @@
         </div>
     }
 </div>
+<script>
+async function loadDiscountCodes() {
+    try {
+        const response = await fetch('/Customer/Coupon/GetCoupons'); // Lấy danh sách mã giảm giá từ backend
+        const coupons = await response.json();
+
+        const discountCodeSelect = document.getElementById('discountCode');
+        coupons.forEach(coupon => {
+            const option = document.createElement('option');
+            option.value = coupon.code;
+            option.textContent = `Mã: ${coupon.code} - Giảm ${coupon.discountValue.toLocaleString()} đ`;
+            discountCodeSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error("Không thể tải mã giảm giá.", error);
+    }
+}
+
+async function applyDiscount() {
+    const code = document.getElementById("discountCode").value.trim();
+    if (!code) {
+        alert("❌ Vui lòng chọn mã giảm giá.");
+        return;
+    }
+
+    try {
+        const response = await fetch('/Customer/Coupon/ValidateCode', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code })
+        });
+
+        if (!response.ok) {
+            throw new Error("Mã giảm giá không hợp lệ!");
+        }
+
+        const data = await response.json();
+        const discountAmount = data.discountValue;
+
+        document.getElementById("discountMessage").textContent = `✅ Áp dụng thành công! Giảm ${discountAmount.toLocaleString()} đ`;
+        document.getElementById("discountMessage").classList.remove("text-danger");
+        document.getElementById("discountMessage").classList.add("text-success");
+    } catch (error) {
+        document.getElementById("discountMessage").textContent = "❌ Mã giảm giá không hợp lệ!";
+        document.getElementById("discountMessage").classList.add("text-danger");
+    }
+}
+
+window.onload = loadDiscountCodes; // Tải danh sách mã giảm giá khi trang web được tải
+    </script>

@@ -88,9 +88,15 @@
                                 <span class="price-label">@Localizer["PriceLabel"]:</span>
                                 <span class="price-amount ms-2">@product.ProductPrice.ToString("#,##0") Vnđ</span>
                             </div>
-                            <button class="add-to-cart-btn mt-3" onclick="onClick(@product.ProductId);">
-                                <i class="bi bi-cart-fill me-1"></i> @Localizer["AddToCart"]
-                            </button>
+                            <form method="post" asp-action="AddToCart">
+                                <input type="hidden" name="productId" value="@product.ProductId" />
+                                <input type="hidden" name="quantity" value="1" /> <!-- Default quantity is 1 -->
+                                <button type="submit" class="btn btn-primary d-flex justify-content-center align-items-center w-100">
+                                    AddToCart
+                                </button>
+                            </form>
+
+
                         </div>
                     </div>
                 </div>

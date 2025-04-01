@@ -1,37 +1,61 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
-using SellingBook.Models.Error;
-using SellingBook.Models.Roles;
+﻿using SellingBook.Models.BasicModels;
 using SellingBook.Repositories;
-namespace SellingBook.Controllers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using SellingBook.Models.Identity;
 
-[Area(SD.Role_Customer)]
-[Authorize]
-public class ProductController : Controller
+namespace SellingBook.Controllers
 {
-    private readonly ILogger<ProductController> _logger;
-    private readonly IProductRepository _productRepository;
-    private readonly ICartRepository _userService;
-
-    public ProductController(ILogger<ProductController> logger, IProductRepository productRepository, ICartRepository userService)
+    [Area("Customer")]
+    [Authorize]
+    public class ProductController : Controller
     {
-        _logger = logger;
-        _productRepository = productRepository;
-        _userService = userService;
-    }
+        private readonly IProductRepository _productRepository;
+        private readonly ICartRepository _cartRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-    public async Task<IActionResult> Index()
-    {
-        var products = await _productRepository.GetAllProductsAsync();
-        ViewBag.CartQuantity = _userService.GetCartItemsCountBasedOnRealTotal();
-        return View(products);
-    }
+        public ProductController(IProductRepository productRepository, ICartRepository cartRepository, UserManager<ApplicationUser> userManager)
+        {
+            _productRepository = productRepository;
+            _cartRepository = cartRepository;
+            _userManager = userManager;
+        }
 
-    public IActionResult Display(int id)
-    {
-        var product = _productRepository.GetProductByIdAsync(id).Result;
-        return View(product);
+        // Phương thức hiển thị danh sách sản phẩm
+        public async Task<IActionResult> Index()
+        {
+            var products = await _productRepository.GetAllProductsAsync();
+            ViewBag.CartQuantity = _cartRepository.GetCartItemsCountBasedOnRealTotal(); // Hiển thị tổng số lượng giỏ hàng
+            return View(products);
+        }
+
+        // Phương thức hiển thị chi tiết sản phẩm
+        public IActionResult Display(int id)
+        {
+            var product = _productRepository.GetProductByIdAsync(id).Result;
+            return View(product);
+        }
+
+        // Phương thức thêm sản phẩm vào giỏ hàng
+        [HttpPost("addtocart")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddToCart(int productId, int quantity = 1) // Default quantity is 1
+        {
+            var userId = _userManager.GetUserId(User);
+
+            // Create CartItem with productId, quantity and price
+            var cartItem = new CartItem
+            {
+                ProductId = productId,
+                CartItemQuantity = quantity,
+                CartItemPrice = (await _productRepository.GetProductByIdAsync(productId)).ProductPrice * quantity,
+            };
+
+            await _cartRepository.AddCartItem(cartItem); // Add the product to the cart
+            return RedirectToAction("Index"); // Redirect to Index after adding to cart
+        }
+
+
     }
 }
