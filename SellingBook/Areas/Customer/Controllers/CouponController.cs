@@ -32,5 +32,22 @@ namespace SellingBook.Areas.Customer.Controllers
                 return NotFound(new { message = "Mã giảm giá không hợp lệ!" });
             }
         }
+        [HttpGet("GetCoupons")]
+        public async Task<IActionResult> GetCoupons()
+        {
+            try
+            {
+                var coupons = await _couponRepository.GetAllCoupons();  // Lấy tất cả mã giảm giá từ CSDL
+                var result = coupons.Select(c => new { c.Code, c.DiscountValue }).ToList();
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Lỗi khi lấy danh sách mã giảm giá." });
+            }
+        }
+
+
+
     }
 }

@@ -117,61 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Action" xml:space="preserve">
-    <value> Thao Tác</value>
+  <data name="Category" xml:space="preserve">
+    <value>Category</value>
   </data>
-  <data name="ApplyDiscount" xml:space="preserve">
-    <value>Áp dụng</value>
+  <data name="Choose File" xml:space="preserve">
+    <value>Choose File</value>
   </data>
-  <data name="BankTransfer" xml:space="preserve">
-    <value>🏦 Chuyển khoản ngân hàng</value>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
   </data>
-  <data name="CartAndCheckout" xml:space="preserve">
-    <value>Giỏ Hàng và Thanh Toán</value>
+  <data name="Edit Product" xml:space="preserve">
+    <value>Edit Product</value>
   </data>
-  <data name="CashOnDelivery" xml:space="preserve">
-    <value>💵 Thanh toán khi nhận hàng</value>
+  <data name="Image" xml:space="preserve">
+    <value>Image</value>
   </data>
-  <data name="CheckoutButton" xml:space="preserve">
-    <value> Thanh Toán</value>
-  </data>
-  <data name="CheckoutTitle" xml:space="preserve">
-    <value>Thanh Toán</value>
-  </data>
-  <data name="CreditCard" xml:space="preserve">
-    <value> 💳 Thẻ tín dụng/Ghi nợ</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Xóa</value>
-  </data>
-  <data name="DiscountCode" xml:space="preserve">
-    <value>Mã giảm giá</value>
-  </data>
-  <data name="EnterDiscountCode" xml:space="preserve">
-    <value>Nhập mã giảm giá</value>
-  </data>
-  <data name="NoProductFound" xml:space="preserve">
-    <value>Không tìm thấy sản phẩm nào</value>
-  </data>
-  <data name="PaymentMethodTitle" xml:space="preserve">
-    <value>Phương Thức Thanh Toán</value>
-  </data>
-  <data name="Price" xml:space="preserve">
-    <value> Giá</value>
+  <data name="No file chosen" xml:space="preserve">
+    <value>No file chosen</value>
   </data>
   <data name="ProductName" xml:space="preserve">
-    <value>Tên Sản Phẩm</value>
+    <value>Name</value>
   </data>
-  <data name="Quantity" xml:space="preserve">
-    <value>Số Lượng</value>
+  <data name="ProductPrice" xml:space="preserve">
+    <value>Price</value>
   </data>
-  <data name="TotalItemPrice" xml:space="preserve">
-    <value>Thành Tiền</value>
+  <data name="Select a category" xml:space="preserve">
+    <value>Select a category</value>
   </data>
-  <data name="TotalPrice" xml:space="preserve">
-    <value>Tổng tiền:</value>
-  </data>
-  <data name="Vnpay" xml:space="preserve">
-    <value>📱 Thanh toán bằng ví điện tử VnPay</value>
+  <data name="Submit" xml:space="preserve">
+    <value>Submit</value>
   </data>
 </root>

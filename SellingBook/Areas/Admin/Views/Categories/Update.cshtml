@@ -1,5 +1,5 @@
 ﻿@model SellingBook.Models.BasicModels.Category
-
+@inject IViewLocalizer Localizer
 @{
     ViewData["Title"] = "Update";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,7 +7,7 @@
 
 
 <div class="container mt-5">
-    <h2 class="my-4 text-center text-dark fw-bold">Category List</h2>
+    <h2 class="my-4 text-center text-dark fw-bold">@Localizer["Category List"]</h2>
 
     <form asp-action="Update" method="post" class="card p-4 shadow-lg">
         <div asp-validation-summary="All" class="text-danger mb-3"></div>
@@ -15,19 +15,19 @@
         <input type="hidden" asp-for="CategoryId" />
 
         <div class="form-group mb-3">
-            <label asp-for="CategoryName" class="fw-bold">Category Name</label>
-            <input asp-for="CategoryName" class="form-control" placeholder="Enter category name..." />
+            <label asp-for="CategoryName" class="fw-bold">@Localizer["Category Name"]</label>
+            <input asp-for="CategoryName" class="form-control" placeholder=@Localizer["Enter category name..."] />
             <span asp-validation-for="CategoryName" class="text-danger"></span>
         </div>
 
         <div class="text-center">
-            <button type="submit" class="btn btn-primary btn-lg me-2">Save</button>
+            <button type="submit" class="btn btn-primary btn-lg me-2">@Localizer["Save"]</button>
             <button type="submit" formaction="@Url.Action("DeleteConfirmed", "Categories", new { id = Model.CategoryId })"
                     class="btn btn-danger btn-lg"
-                    onclick="return confirm('Are you sure you want to delete this category?');">
-                Delete
+                    onclick="return confirm(@Localizer["Are you sure you want to delete this category?"]);">
+                @Localizer["Delete"]
             </button>
-            <a asp-action="Index" class="btn btn-secondary btn-lg me-2">Back</a>
+            <a asp-action="Index" class="btn btn-secondary btn-lg me-2">@Localizer["Back"]</a>
         </div>
     </form>
 </div>
