@@ -8,7 +8,6 @@ using SellingBook.Models.Identity;
 namespace SellingBook.Controllers
 {
     [Area("Customer")]
-    [Authorize]
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;
