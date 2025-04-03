@@ -7,11 +7,17 @@
     body {
         background: linear-gradient(to right, #fef9f3, #f2f4f8);
         font-family: 'Segoe UI', sans-serif;
+        margin: 0; /* Remove default body margin */
     }
 
     .welcome-content {
         text-align: center;
-        padding: 120px 20px;
+        padding: 0 20px; /* Remove top/bottom padding */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh; /* Make it fill the viewport height */
     }
 
         .welcome-content h1 {
@@ -34,6 +40,26 @@
             margin-bottom: 40px;
         }
 
+    .category-dropdown {
+        background-color: #fff;
+        color: #333;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .category-dropdown-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        padding: 20px;
+        background: transparent;
+        width: 100%;
+    }
+
     .start-btn {
         background-color: #0d6efd;
         color: #fff;
@@ -53,6 +79,7 @@
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 20px;
         padding: 40px 20px;
+        position: relative;
     }
 
     .product-item {
@@ -62,6 +89,8 @@
         padding: 20px;
         text-align: center;
         transition: transform 0.3s ease;
+        justify-content: space-between;
+        height: 100%;
     }
 
         .product-item:hover {
@@ -77,6 +106,7 @@
 
     .product-title {
         font-size: 1.2rem;
+        min-height: 3.5em;
         margin-top: 15px;
         color: #333;
     }
@@ -92,19 +122,47 @@
     <h1>@Localizer["Hello user, welcome to your next favorite bookstore!"]</h1>
     <p class="quote">"@Localizer["A room without books is like a body without a soul."]"</p>
     <p class="description">@Localizer["Browse through our collection, find your next read, and enjoy the journey."]</p>
-    <a href="/Customer/Product" class="start-btn">@Localizer["Start Exploring"]</a>
+    <button onclick="" class="start-btn btn" id="start-exploring-btn">@Localizer["Start Exploring"]</button>
 </div>
 
+<div class="category-dropdown-container">
+    <div>
+        <label for="category-dropdown">@Localizer["Select Category"]</label>
+        <select id="category-dropdown" class="category-dropdown">
+            <option value="">@Localizer["-- Select a Category --"]</option>
+            @foreach (Category category in Model.Categories)
+            {
+                <option value="@category.CategoryId">@category.CategoryName</option>
+            }
+        </select>
+    </div>
+    <div>
+        <label for="sort-dropdown">@Localizer["Sort By"]</label>
+        <select id="sort-dropdown" class="category-dropdown">
+            <option value="price-asc">@Localizer["Price: Low to High"]</option>
+            <option value="price-desc">@Localizer["High to Low"]</option>
+            <option value="newest">@Localizer["Newest Arrivals"]</option>
+        </select>
+    </div>
+</div>
 
-<!-- Sản phẩm hiển thị sau khi lướt xuống -->
-<div class="product-list">
-    @foreach (var product in Model)
+<div class="product-list" id="product-list" style="min-height: 200px;">
+    @foreach (Product product in Model.Products)
     {
         <div class="product-item">
-            <img src="@product.ImageUrl" alt="@product.Name" class="product-image" />
-            <h3 class="product-title">@product.Name</h3>
-            <p class="product-price">@product.Price.ToString("C")</p>
-            <a href="/Customer/Product/Details/@product.Id" class="btn btn-primary">View Details</a>
+            <a asp-controller="Product" asp-area="Customer" asp-action="Display" asp-route-id="@product.ProductId">
+                <img src="@product.ImageUrl" alt="@product.ProductName" class="product-image" />
+            </a>
+            <h3 class="product-title">@product.ProductName</h3>
+            <p class="product-price">@product.ProductPrice.ToString("C")</p>
+            <a asp-controller="Product" asp-area="Customer" asp-action="Display" asp-route-id="@product.ProductId" class="btn btn-primary">View Details</a>
         </div>
     }
 </div>
+
+<script>
+    document.getElementById("start-exploring-btn").addEventListener("click", function() {
+        const categoryDropdownContainer = document.querySelector(".category-dropdown-container");
+        categoryDropdownContainer.scrollIntoView({ behavior: "smooth" });
+    });
+</script>

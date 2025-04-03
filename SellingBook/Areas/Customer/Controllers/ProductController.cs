@@ -8,6 +8,7 @@ using SellingBook.Models.Identity;
 namespace SellingBook.Controllers
 {
     [Area("Customer")]
+    [Authorize]
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;
@@ -21,15 +22,8 @@ namespace SellingBook.Controllers
             _userManager = userManager;
         }
 
-        // Phương thức hiển thị danh sách sản phẩm
-        public async Task<IActionResult> Index()
-        {
-            var products = await _productRepository.GetAllProductsAsync();
-            ViewBag.CartQuantity = _cartRepository.GetCartItemsCountBasedOnRealTotal(); // Hiển thị tổng số lượng giỏ hàng
-            return View(products);
-        }
-
         // Phương thức hiển thị chi tiết sản phẩm
+        [AllowAnonymous]
         public IActionResult Display(int id)
         {
             var product = _productRepository.GetProductByIdAsync(id).Result;
@@ -52,9 +46,10 @@ namespace SellingBook.Controllers
             };
 
             await _cartRepository.AddCartItem(cartItem); // Add the product to the cart
-            return RedirectToAction("Index"); // Redirect to Index after adding to cart
+            return RedirectToAction("Index", "Home", new
+            {
+                area = ""
+            }); // Redirect to Index after adding to cart
         }
-
-
     }
 }

@@ -117,13 +117,13 @@
            
         </div>
         <!-- Form Add to Cart -->
-        <form method="post" asp-action="AddToCart" asp-route-id="@Model.ProductId">
+        <form method="post" asp-action="AddToCart" asp-route-id="@Model.ProductId" asp-route-quantity="">
             <input type="hidden" id="productId" name="productId" value="@Model.ProductId" />
             <div class="form-group">
                 <label for="quantity">Quantity</label>
                 <input type="number" name="quantity" id="quantity" class="form-control" value="1" min="1" />
             </div>
-            <button type="submit" class="add-to-cart-btn">
+            <button type="submit" class="add-to-cart-btn" >
                 <i class="bi-cart-fill me-2"></i> @Localizer["AddToCart"]
             </button>
         </form>
