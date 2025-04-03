@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Host;
+using Microsoft.EntityFrameworkCore;
 using SellingBook.Models.Error;
 using SellingBook.Repositories;
 using SellingBook.Services.ChangeLanguage;
@@ -22,9 +23,10 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
+        var cartItems = _cartRepository.GetCartItems(); // Assuming GetProducts() is a method in ICartRepository
         ViewData["CartQuantity"] = _cartRepository.GetCartItemsCountBasedOnRealTotal();
 
-        return View();
+        return View(cartItems); // Pass products to the view
     }
 
     public IActionResult ChangeLanguage(string culture)
