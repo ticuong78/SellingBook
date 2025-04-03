@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SellingBook.Migrations
 {
     /// <inheritdoc />
-    public partial class Add1 : Migration
+    public partial class Identity : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
