@@ -1,7 +1,8 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Host;
+using Microsoft.EntityFrameworkCore;
 using SellingBook.Models.Error;
 using SellingBook.Repositories;
 using SellingBook.Services.ChangeLanguage;
@@ -11,20 +12,33 @@ namespace SellingBook.Controllers;
 [AllowAnonymous]
 public class HomeController : Controller
 {
-    private readonly ICartRepository _cartRepository;
+    private readonly IProductRepository _productRepository;
     private readonly IChangeLanguageService _languageService;
+    private readonly ICartRepository _cartRepository;
+    private readonly ICategoryRepository _categoryRepository;
 
-    public HomeController(ICartRepository cartRepository, IChangeLanguageService languageService)
+    public HomeController(
+        IProductRepository productRepository, 
+        IChangeLanguageService languageService, 
+        ICartRepository cartRepository, 
+        ICategoryRepository categoryRepository)
     {
-        _cartRepository = cartRepository;
+        _productRepository = productRepository;
         _languageService = languageService;
+        _cartRepository = cartRepository;
+        _categoryRepository = categoryRepository;
     }
 
     public async Task<IActionResult> Index()
     {
-        ViewData["CartQuantity"] = _cartRepository.GetCartItemsCountBasedOnRealTotal();
-
-        return View();
+        var products = await _productRepository.GetAllProductsAsync();
+        var categories = await _categoryRepository.GetAllCategoriesAsync();
+        ViewBag.CartQuantity = _cartRepository.GetCartItemsCountBasedOnRealTotal(); // Hiển thị tổng số lượng giỏ hàng
+        return View(new
+        {
+            Products = products,
+            Categories = categories
+        });
     }
 
     public IActionResult ChangeLanguage(string culture)
