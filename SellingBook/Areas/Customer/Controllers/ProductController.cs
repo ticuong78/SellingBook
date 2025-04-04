@@ -13,12 +13,14 @@ namespace SellingBook.Controllers
     {
         private readonly IProductRepository _productRepository;
         private readonly ICartRepository _cartRepository;
+        private readonly ICategoryRepository _categoryRepository;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public ProductController(IProductRepository productRepository, ICartRepository cartRepository, UserManager<ApplicationUser> userManager)
+        public ProductController(IProductRepository productRepository, ICartRepository cartRepository, ICategoryRepository categoryRepository, UserManager<ApplicationUser> userManager)
         {
             _productRepository = productRepository;
             _cartRepository = cartRepository;
+            _categoryRepository = categoryRepository;
             _userManager = userManager;
         }
 
@@ -89,6 +91,49 @@ namespace SellingBook.Controllers
 
 
 
+        [AllowAnonymous]
+        [HttpGet("/api/products/filter")]
+        public async Task<IActionResult> FilterProducts(string keyword, int? categoryId)
+        {
+            IEnumerable<Product> products;
+
+            if (string.IsNullOrEmpty(keyword))
+            {
+                products = await _productRepository.GetAllProductsAsync();
+            }
+            else
+            {
+                products = await _productRepository.SearchProductsAsync(keyword);
+            }
+
+            if (categoryId.HasValue)
+            {
+                products = products.Where(p => p.CategoryId == categoryId.Value);
+            }
+
+            var result = products.Select(p => new
+            {
+                p.ProductId,
+                p.ProductName,
+                p.ProductPrice,
+                p.ImageUrl,
+                CategoryName = p.Category?.CategoryName ?? "Không có danh mục"
+            });
+
+            return Ok(result);
+        }
+        [AllowAnonymous]
+        [HttpGet("/api/categories")]
+        public async Task<IActionResult> GetCategories()
+        {
+            var categories = await _categoryRepository.GetAllCategoriesAsync();
+            var result = categories.Select(c => new
+            {
+                c.CategoryId,
+                c.CategoryName
+            });
+            return Ok(result);
+        }
 
     }
 }
