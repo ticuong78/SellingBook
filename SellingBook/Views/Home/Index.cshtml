@@ -125,40 +125,36 @@
     <button onclick="" class="start-btn btn" id="start-exploring-btn">@Localizer["Start Exploring"]</button>
 </div>
 
-<div class="category-dropdown-container">
-    <div>
-        <label for="category-dropdown">@Localizer["Select Category"]</label>
-        <select id="category-dropdown" class="category-dropdown">
-            <option value="">@Localizer["-- Select a Category --"]</option>
-            @foreach (Category category in Model.Categories)
-            {
-                <option value="@category.CategoryId">@category.CategoryName</option>
-            }
-        </select>
-    </div>
-    <div>
-        <label for="sort-dropdown">@Localizer["Sort By"]</label>
-        <select id="sort-dropdown" class="category-dropdown">
-            <option value="price-asc">@Localizer["Price: Low to High"]</option>
-            <option value="price-desc">@Localizer["High to Low"]</option>
-            <option value="newest">@Localizer["Newest Arrivals"]</option>
-        </select>
-    </div>
-</div>
-
-<div class="product-list" id="product-list" style="min-height: 200px;">
-    @foreach (Product product in Model.Products)
-    {
-        <div class="product-item">
-            <a asp-controller="Product" asp-area="Customer" asp-action="Display" asp-route-id="@product.ProductId">
-                <img src="@product.ImageUrl" alt="@product.ProductName" class="product-image" />
-            </a>
-            <h3 class="product-title">@product.ProductName</h3>
-            <p class="product-price">@product.ProductPrice.ToString("C")</p>
-            <a asp-controller="Product" asp-area="Customer" asp-action="Display" asp-route-id="@product.ProductId" class="btn btn-primary">View Details</a>
+<div class="filter-container mb-4">
+    <div class="row align-items-center">
+        <!-- Lọc theo danh mục -->
+        <div class="col-md-4">
+            <div class="form-group d-flex align-items-center">
+                <label for="categoryFilter" class="me-2">Lọc theo danh mục:</label>
+                <select id="categoryFilter" class="form-control">
+                    <option value="">Tất cả danh mục</option>
+                </select>
+            </div>
         </div>
-    }
-</div>
+
+        <div id="productList" class="row">
+            @foreach (var product in Model.Products)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <img src="@product.ImageUrl" class="card-img-top" alt="@product.ProductName" style="height: 200px; object-fit: cover;" />
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">@product.ProductName</h5>
+                            <p class="card-text text-muted">Danh mục: @(product.Category?.CategoryName ?? "Không có danh mục")</p>
+                            <p class="card-text text-danger fw-bold">@product.ProductPrice.ToString("N0") VNĐ</p>
+                            <a href="/Customer/Product/Display/@product.ProductId" class="btn btn-primary mt-auto">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+
 
 <script>
     document.getElementById("start-exploring-btn").addEventListener("click", function() {
@@ -166,3 +162,6 @@
         categoryDropdownContainer.scrollIntoView({ behavior: "smooth" });
     });
 </script>
+@section Scripts {
+    <script src="~/js/filterProducts.js" asp-append-version="true"></script>
+}
