@@ -102,6 +102,21 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.Use(async (context, next) =>
+{
+    if (context.Request.ContentType != null && context.Request.ContentType.Contains("application/json"))
+    {
+        context.Request.EnableBuffering();
+        using var reader = new StreamReader(context.Request.Body, leaveOpen: true);
+        var body = await reader.ReadToEndAsync();
+        context.Request.Body.Position = 0;
+
+        Console.WriteLine($"📦 Request JSON Body: {body}");
+    }
+
+    await next();
+});
+
 app.UseRouting();
 app.UseCors("CorsPolicy");
 app.UseSession();
