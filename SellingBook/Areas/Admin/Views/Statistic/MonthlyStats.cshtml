@@ -1,0 +1,44 @@
+﻿@model SellingBook.Models.Statistic.MonthlyStatistic;
+
+<h2>Thống kê theo tháng (@Model.Year)</h2>
+
+<form asp-action="MonthlyStats" method="get">
+    <label>Chọn năm:</label>
+    <input type="number" name="year" value="@Model.Year" min="2000" max="2100" />
+    <button type="submit">Xem</button>
+</form>
+
+<canvas id="monthlyChart" width="400" height="200"></canvas>
+
+<script>
+    var ctx = document.getElementById('monthlyChart').getContext('2d');
+    var monthlyChart = new Chart(ctx, {
+        type: 'bar', // Biểu đồ cột
+        data: {
+            labels: @Html.Raw(Json.Serialize(Model.Months.Select(m => "Tháng " + m))), // Tháng
+            datasets: [
+                {
+                    label: 'Số đơn hàng',
+                    data: @Html.Raw(Json.Serialize(Model.OrderCounts)),
+                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Doanh thu',
+                    data: @Html.Raw(Json.Serialize(Model.Revenues)),
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>

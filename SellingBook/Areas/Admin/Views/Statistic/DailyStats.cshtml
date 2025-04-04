@@ -1,0 +1,36 @@
+﻿@model SellingBook.Models.Statistic.DailyStatistic;
+
+<h2>Thống kê theo ngày (7 ngày gần nhất)</h2>
+
+<canvas id="dailyChart" width="400" height="200"></canvas>
+
+<script>
+    var ctx = document.getElementById('dailyChart').getContext('2d');
+    var dailyChart = new Chart(ctx, {
+        type: 'line', // Biểu đồ đường
+        data: {
+            labels: @Html.Raw(Json.Serialize(Model.Dates)), // Ngày
+            datasets: [
+                {
+                    label: 'Số đơn hàng',
+                    data: @Html.Raw(Json.Serialize(Model.OrderCounts)),
+                    borderColor: 'blue',
+                    fill: false
+                },
+                {
+                    label: 'Doanh thu',
+                    data: @Html.Raw(Json.Serialize(Model.Revenues)),
+                    borderColor: 'green',
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
