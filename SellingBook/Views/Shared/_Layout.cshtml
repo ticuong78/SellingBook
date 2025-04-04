@@ -50,11 +50,47 @@
             position: relative;
         }
 
-        .dropdown-submenu > .dropdown-menu {
-            top: 0;
-            left: 100%;
-            margin-top: -1px;
+            .dropdown-submenu > .dropdown-menu {
+                top: 0;
+                left: 100%;
+                margin-top: -1px;
+            }
+
+        /* Ensure the search container is relatively positioned */
+        .search-container {
+            position: relative;
+            width: 400px;
+            max-width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 5px; /* Khoảng cách giữa thanh tìm kiếm và nút Tìm */
         }
+
+            .search-container .form-control {
+                flex: 1; /* Thanh tìm kiếm chiếm toàn bộ không gian còn lại */
+                border-top-right-radius: 0; /* Bo góc bên phải trên của thanh tìm kiếm */
+                border-bottom-right-radius: 0; /* Bo góc bên phải dưới của thanh tìm kiếm */
+            }
+
+            .search-container .btn {
+                border-top-left-radius: 0; /* Bo góc bên trái trên của nút Tìm */
+                border-bottom-left-radius: 0; /* Bo góc bên trái dưới của nút Tìm */
+                height: 38px; /* Đảm bảo chiều cao của nút khớp với thanh tìm kiếm */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+        /* Style cho sản phẩm trong kết quả tìm kiếm để có thể nhấn được */
+        .search-result-item {
+            text-decoration: none;
+            color: inherit;
+            display: block; /* Đảm bảo thẻ <a> chiếm toàn bộ chiều rộng của card */
+        }
+
+            .search-result-item:hover {
+                background-color: #f8f9fa; /* Hiệu ứng hover nhẹ */
+            }
     </style>
 </head>
 <body>
@@ -62,10 +98,12 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="/">@Localizer["WebName"]</a>
 
-            <form class="d-flex flex-grow-1 mx-3" method="get" action="/Product/Search" style="max-width: 500px;">
-                <input class="form-control me-2 search-bar" type="search" name="keyword" placeholder="@Localizer["SearchPlaceHolder"]" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">@Localizer["Search"]</button>
-            </form>
+            <<div class="search-container">
+                <input type="text" id="searchBox" placeholder="Tìm sản phẩm..." class="form-control search-bar" />
+                <button id="searchButton" class="btn btn-primary">Tìm</button>
+                <div id="searchResults"></div>
+            </div>
+
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -124,5 +162,100 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        const searchBox = document.getElementById('searchBox');
+        const searchButton = document.getElementById('searchButton');
+        const resultsDiv = document.getElementById('searchResults');
+
+        // Hàm xử lý tìm kiếm và chuyển hướng
+        function performSearch() {
+            const keyword = searchBox.value.trim();
+            if (keyword.length > 0) {
+                // Chuyển hướng đến trang kết quả tìm kiếm với từ khóa
+                window.location.href = `/Customer/Product/Search?keyword=${encodeURIComponent(keyword)}`;
+            }
+        }
+
+        // Xử lý khi nhấn nút "Tìm"
+        searchButton.addEventListener('click', performSearch);
+
+        // Xử lý khi nhấn Enter trong thanh tìm kiếm
+        searchBox.addEventListener('keypress', function (event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Ngăn form submit mặc định (nếu có)
+                performSearch();
+            }
+        });
+
+        // Xử lý gợi ý tìm kiếm khi nhập
+        searchBox.addEventListener('input', function () {
+            const keyword = this.value.trim();
+
+            // Ẩn kết quả nếu không có từ khóa
+            if (keyword.length === 0) {
+                resultsDiv.innerHTML = '';
+                resultsDiv.style.display = 'none'; // Ẩn kết quả tìm kiếm khi không có từ khóa
+                return;
+            }
+
+            // Hiển thị kết quả khi có từ khóa
+            resultsDiv.style.display = 'block';
+
+            fetch(`/api/products/search?keyword=${encodeURIComponent(keyword)}`)
+                .then(res => res.json())
+                .then(data => {
+                    console.log('Dữ liệu từ API:', data); // Kiểm tra dữ liệu trả về từ API
+                    if (data.length === 0) {
+                        resultsDiv.innerHTML = '<p class="text-muted">Không tìm thấy sản phẩm nào.</p>';
+                        return;
+                    }
+
+                    // Định dạng container kết quả để hiển thị ngay bên dưới thanh tìm kiếm
+                    resultsDiv.style.position = 'absolute'; // Sử dụng định vị tuyệt đối để căn chỉnh với thanh tìm kiếm
+                    resultsDiv.style.top = '100%'; // Đặt ngay bên dưới thanh tìm kiếm
+                    resultsDiv.style.left = '0'; // Căn chỉnh với cạnh trái của thanh tìm kiếm
+                    resultsDiv.style.width = '100%'; // Khớp với chiều rộng của thanh tìm kiếm
+                    resultsDiv.style.backgroundColor = '#fff'; // Nền trắng để khớp với kiểu dropdown
+                    resultsDiv.style.border = '1px solid #ddd'; // Thêm viền để khớp với kiểu dropdown
+                    resultsDiv.style.borderRadius = '4px'; // Bo góc nhẹ cho container
+                    resultsDiv.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)'; // Thêm bóng nhẹ
+                    resultsDiv.style.zIndex = '1000'; // Đảm bảo hiển thị phía trên các phần tử khác
+                    resultsDiv.style.padding = '5px 0'; // Giảm padding để khớp với kiểu gọn trong hình
+                    resultsDiv.style.marginTop = '0'; // Đảm bảo không có khoảng cách thừa đẩy kết quả xuống
+
+                    // Hiển thị các sản phẩm dưới dạng danh sách dọc
+                    resultsDiv.innerHTML = data.map(product => `
+                        <a href="/Customer/Product/Display/${product.productId}" class="search-result-item">
+                            <div class="card" style="display: flex; flex-direction: row; align-items: center; padding: 8px 10px; border-bottom: 1px solid #eee;">
+                                <img src="${product.imageUrl}" class="card-img-top" style="width: 40px; height: 60px; object-fit: cover; margin-right: 10px;" alt="${product.productName}" />
+                                <div class="card-body" style="flex: 1; padding: 0;">
+                                    <h5 class="card-title" style="font-size: 14px; margin: 0; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${product.productName}</h5>
+                                    <p class="card-text text-danger fw-bold" style="font-size: 13px; margin: 3px 0 0 0;">${product.productPrice.toLocaleString()} VNĐ</p>
+                                </div>
+                            </div>
+                        </a>
+                    `).join('');
+
+                    // Xóa viền của sản phẩm cuối cùng để tránh đường viền thừa ở dưới cùng
+                    const cards = resultsDiv.querySelectorAll('.card');
+                    if (cards.length > 0) {
+                        cards[cards.length - 1].style.borderBottom = 'none';
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    resultsDiv.innerHTML = '<p class="text-danger">Có lỗi xảy ra khi tìm kiếm.</p>';
+                });
+        });
+
+        // Ẩn kết quả khi nhấn ra ngoài thanh tìm kiếm hoặc kết quả
+        document.addEventListener('click', function (event) {
+            const searchBox = document.getElementById('searchBox');
+            const resultsDiv = document.getElementById('searchResults');
+            if (!searchBox.contains(event.target) && !resultsDiv.contains(event.target)) {
+                resultsDiv.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>

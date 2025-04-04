@@ -28,6 +28,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="wwwroot\js\search.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Resources\Areas\Customer\Views\Cart\Index.en.resx">
       <CustomToolNamespace></CustomToolNamespace>
     </EmbeddedResource>

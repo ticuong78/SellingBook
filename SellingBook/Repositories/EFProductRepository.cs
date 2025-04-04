@@ -65,5 +65,13 @@ namespace SellingBook.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+        public async Task<IEnumerable<Product>> SearchProductsAsync(string keyword)
+        {
+            return await _context.Products
+                .Where(p => p.ProductName.Contains(keyword))
+                .ToListAsync();
+        }
+       
+
     }
 }
