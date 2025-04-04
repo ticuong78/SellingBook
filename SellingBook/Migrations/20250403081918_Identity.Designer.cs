@@ -12,13 +12,8 @@ using SellingBook.Models;
 namespace SellingBook.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:SellingBook/Migrations/20250403081918_Identity.Designer.cs
-    [Migration("20250403081918_Identity")]
-    partial class Identity
-========
     [Migration("20250403061958_initial")]
     partial class initial
->>>>>>>> feature/statistic:SellingBook/Migrations/20250403061958_initial.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

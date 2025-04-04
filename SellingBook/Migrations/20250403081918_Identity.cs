@@ -6,11 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SellingBook.Migrations
 {
     /// <inheritdoc />
-<<<<<<<< HEAD:SellingBook/Migrations/20250403081918_Identity.cs
-    public partial class Identity : Migration
-========
     public partial class initial : Migration
->>>>>>>> feature/statistic:SellingBook/Migrations/20250403061958_initial.cs
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
