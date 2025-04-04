@@ -51,5 +51,44 @@ namespace SellingBook.Controllers
                 area = ""
             }); // Redirect to Index after adding to cart
         }
+        [AllowAnonymous]
+        [HttpGet("/api/products/search")]
+        public async Task<IActionResult> SearchApi(string keyword)
+        {
+            var products = await _productRepository.SearchProductsAsync(keyword);
+
+            var result = products.Select(p => new
+            {
+                p.ProductId,
+                p.ProductName,
+                p.ProductPrice,
+                p.ImageUrl
+            });
+
+            return Ok(result);
+        }
+
+        // Action để hiển thị trang kết quả tìm kiếm
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> Search(string keyword)
+        {
+            IEnumerable<Product> products;
+
+            if (string.IsNullOrEmpty(keyword))
+            {
+                products = await _productRepository.GetAllProductsAsync();
+            }
+            else
+            {
+                products = await _productRepository.SearchProductsAsync(keyword);
+            }
+
+            return View(products);
+        }
+
+
+
+
     }
 }
