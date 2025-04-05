@@ -2,33 +2,85 @@
 
 <h2>Thống kê theo ngày (7 ngày gần nhất)</h2>
 
-<canvas id="dailyChart" width="400" height="200"></canvas>
+<h3>Số đơn hàng</h3>
+<canvas id="dailyOrdersChart" width="400" height="200"></canvas>
 
+<h3>Doanh thu</h3>
+<canvas id="dailyRevenueChart" width="400" height="200"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    var ctx = document.getElementById('dailyChart').getContext('2d');
-    var dailyChart = new Chart(ctx, {
-        type: 'line', // Biểu đồ đường
+    // Biểu đồ số đơn hàng
+    var ordersCtx = document.getElementById('dailyOrdersChart').getContext('2d');
+    var dailyOrdersChart = new Chart(ordersCtx, {
+        type: 'line',
         data: {
-            labels: @Html.Raw(Json.Serialize(Model.Dates)), // Ngày
-            datasets: [
-                {
-                    label: 'Số đơn hàng',
-                    data: @Html.Raw(Json.Serialize(Model.OrderCounts)),
-                    borderColor: 'blue',
-                    fill: false
-                },
-                {
-                    label: 'Doanh thu',
-                    data: @Html.Raw(Json.Serialize(Model.Revenues)),
-                    borderColor: 'green',
-                    fill: false
-                }
-            ]
+            labels: @Html.Raw(Json.Serialize(Model.Dates)),
+            datasets: [{
+                label: 'Số đơn hàng',
+                data: @Html.Raw(Json.Serialize(Model.OrderCounts)),
+                borderColor: 'blue',
+                fill: false
+            }]
         },
         options: {
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Số đơn hàng'
+                    }
+                }
+            },
+            tooltips: {
+                enabled: true,
+                mode: 'index', // Hiển thị tooltip cho tất cả các điểm tại cùng một vị trí trục X
+                intersect: false, // Tooltip xuất hiện ngay cả khi không trực tiếp hover lên điểm
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                        var value = tooltipItem.yLabel;
+                        return label + ': ' + value + ' đơn';
+                    }
+                }
+            }
+        }
+    });
+
+    // Biểu đồ doanh thu
+    var revenueCtx = document.getElementById('dailyRevenueChart').getContext('2d');
+    var dailyRevenueChart = new Chart(revenueCtx, {
+        type: 'line',
+        data: {
+            labels: @Html.Raw(Json.Serialize(Model.Dates)),
+            datasets: [{
+                label: 'Doanh thu',
+                data: @Html.Raw(Json.Serialize(Model.Revenues)),
+                borderColor: 'green',
+                fill: false
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Doanh thu (VND)'
+                    }
+                }
+            },
+            tooltips: {
+                enabled: true,
+                mode: 'index',
+                intersect: false,
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                        var value = tooltipItem.yLabel;
+                        return label + ': ' + value.toLocaleString('vi-VN') + ' VND';
+                    }
                 }
             }
         }

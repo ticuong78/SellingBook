@@ -8,35 +8,87 @@
     <button type="submit">Xem</button>
 </form>
 
-<canvas id="monthlyChart" width="400" height="200"></canvas>
+<h3>Số đơn hàng</h3>
+<canvas id="monthlyOrdersChart" width="400" height="200"></canvas>
 
+<h3>Doanh thu</h3>
+<canvas id="monthlyRevenueChart" width="400" height="200"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    var ctx = document.getElementById('monthlyChart').getContext('2d');
-    var monthlyChart = new Chart(ctx, {
-        type: 'bar', // Biểu đồ cột
+    // Biểu đồ số đơn hàng
+    var ordersCtx = document.getElementById('monthlyOrdersChart').getContext('2d');
+    var monthlyOrdersChart = new Chart(ordersCtx, {
+        type: 'bar',
         data: {
-            labels: @Html.Raw(Json.Serialize(Model.Months.Select(m => "Tháng " + m))), // Tháng
-            datasets: [
-                {
-                    label: 'Số đơn hàng',
-                    data: @Html.Raw(Json.Serialize(Model.OrderCounts)),
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                },
-                {
-                    label: 'Doanh thu',
-                    data: @Html.Raw(Json.Serialize(Model.Revenues)),
-                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }
-            ]
+            labels: @Html.Raw(Json.Serialize(Model.Months.Select(m => "Tháng " + m))),
+            datasets: [{
+                label: 'Số đơn hàng',
+                data: @Html.Raw(Json.Serialize(Model.OrderCounts)),
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
         },
         options: {
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Số đơn hàng'
+                    }
+                }
+            },
+            tooltips: {
+                enabled: true,
+                mode: 'index',
+                intersect: false,
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                        var value = tooltipItem.yLabel;
+                        return label + ': ' + value + ' đơn';
+                    }
+                }
+            }
+        }
+    });
+
+    // Biểu đồ doanh thu
+    var revenueCtx = document.getElementById('monthlyRevenueChart').getContext('2d');
+    var monthlyRevenueChart = new Chart(revenueCtx, {
+        type: 'bar',
+        data: {
+            labels: @Html.Raw(Json.Serialize(Model.Months.Select(m => "Tháng " + m))),
+            datasets: [{
+                label: 'Doanh thu',
+                data: @Html.Raw(Json.Serialize(Model.Revenues)),
+                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Doanh thu (VND)'
+                    }
+                }
+            },
+            tooltips: {
+                enabled: true,
+                mode: 'index',
+                intersect: false,
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                        var value = tooltipItem.yLabel;
+                        return label + ': ' + value.toLocaleString('vi-VN') + ' VND';
+                    }
                 }
             }
         }
