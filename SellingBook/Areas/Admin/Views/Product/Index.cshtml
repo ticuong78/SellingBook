@@ -1,5 +1,12 @@
 ﻿@model IEnumerable<SellingBook.Models.BasicModels.Product>
 @inject IViewLocalizer Localizer
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Product Management</h1>
+<p>Welcome to the Product management page!</p>
+
 <div class="container mt-4">
     <h2 class="mb-4">@Localizer["Products"]</h2>
 
