@@ -134,6 +134,68 @@ namespace SellingBook.Controllers
             });
             return Ok(result);
         }
+        [AllowAnonymous]
+        [HttpGet("/api/products/sort")]
+        public async Task<IActionResult> SortProducts(string keyword, int? categoryId, string sort = "name-asc", int page = 1, int pageSize = 9)
+        {
+            IEnumerable<Product> products;
+
+            if (string.IsNullOrEmpty(keyword))
+            {
+                products = await _productRepository.GetAllProductsAsync();
+            }
+            else
+            {
+                products = await _productRepository.SearchProductsAsync(keyword);
+            }
+
+            if (categoryId.HasValue)
+            {
+                products = products.Where(p => p.CategoryId == categoryId.Value);
+            }
+
+            // Sắp xếp
+            switch (sort)
+            {
+                case "name-asc":
+                    products = products.OrderBy(p => p.ProductName);
+                    break;
+                case "name-desc":
+                    products = products.OrderByDescending(p => p.ProductName);
+                    break;
+                case "price-asc":
+                    products = products.OrderBy(p => p.ProductPrice);
+                    break;
+                case "price-desc":
+                    products = products.OrderByDescending(p => p.ProductPrice);
+                    break;
+                default:
+                    products = products.OrderBy(p => p.ProductName);
+                    break;
+            }
+
+            // Phân trang
+            var totalItems = products.Count();
+            var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+            products = products.Skip((page - 1) * pageSize).Take(pageSize);
+
+            var result = products.Select(p => new
+            {
+                p.ProductId,
+                p.ProductName,
+                p.ProductPrice,
+                p.ImageUrl,
+                CategoryName = p.Category?.CategoryName ?? "Không có danh mục"
+            });
+
+            return Ok(new
+            {
+                Products = result,
+                TotalItems = totalItems,
+                TotalPages = totalPages,
+                CurrentPage = page
+            });
+        }
 
     }
 }
