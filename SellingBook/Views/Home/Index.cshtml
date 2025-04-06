@@ -128,12 +128,22 @@
 <div class="filter-container mb-4">
     <div class="row align-items-center">
         <!-- Lọc theo danh mục -->
-        <div class="col-md-4">
-            <div class="form-group d-flex align-items-center">
-                <label for="categoryFilter" class="me-2">Lọc theo danh mục:</label>
-                <select id="categoryFilter" class="form-control">
-                    <option value="">Tất cả danh mục</option>
-                </select>
+        <div class="filter-container mb-4">
+            <div class="row align-items-center">
+                <div class="col-md-6 d-flex align-items-center">
+                    <label for="categoryFilter" class="me-2">Lọc theo danh mục:</label>
+                    <select id="categoryFilter" class="form-control">
+                        <option>Tất cả danh mục</option>
+                    </select>
+                </div>
+                <div class="col-md-6 d-flex align-items-center">
+                    <label for="priceFilter" class="me-2">Sắp xếp theo giá tiền:</label>
+                    <select id="priceFilter" class="form-control">
+                        <option>Tăng dần</option>
+                        <option>Giảm dần</option>
+                        <option>Mới ra mắt♨🔥</option>
+                    </select>
+                </div>
             </div>
         </div>
         <!-- Sắp xếp -->
@@ -154,26 +164,29 @@
             {
                 <div class="col-md-4 mb-4">
                     <div class="card h-100">
-                        <img src="@product.ImageUrl" class="card-img-top" alt="@product.ProductName" style="height: 200px; object-fit: cover;" />
+                        <a href="/Customer/Product/Display/@product.ProductId">
+                            <img src="@product.ImageUrl" class="card-img-top" alt="@product.ProductName" style="height: 200px; object-fit: cover;" />
+                        </a>
                         <div class="card-body d-flex flex-column">
                             <h5 class="card-title">@product.ProductName</h5>
                             <p class="card-text text-muted">Danh mục: @(product.Category?.CategoryName ?? "Không có danh mục")</p>
-                            <p class="card-text text-danger fw-bold">@product.ProductPrice.ToString("N0") VNĐ</p>
+                            <p class="card-text text-danger fw-bold">@product.ProductPrice.ToString("C") <u>đ</u></p>
                             <a href="/Customer/Product/Display/@product.ProductId" class="btn btn-primary mt-auto">View Details</a>
                         </div>
                     </div>
                 </div>
             }
         </div>
-
-
+        </div>
+</div>
 
 <script>
     document.getElementById("start-exploring-btn").addEventListener("click", function() {
-        const categoryDropdownContainer = document.querySelector(".category-dropdown-container");
+        const categoryDropdownContainer = document.querySelector(".filter-container");
         categoryDropdownContainer.scrollIntoView({ behavior: "smooth" });
     });
 </script>
+
 @section Scripts {
     <script src="~/js/filterProducts.js" asp-append-version="true"></script>
     <script src="~/js/sortProducts.js" asp-append-version="true"></script>

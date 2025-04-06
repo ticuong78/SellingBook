@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SellingBook.Repositories;
 
 namespace SellingBook.Areas.Customer.Controllers
 {
     [Area("Customer")]
     [Route("Customer/Coupon")]
+    [Authorize]
     public class CouponController : Controller
     {
         private readonly ICouponRepository _couponRepository;
@@ -32,6 +34,7 @@ namespace SellingBook.Areas.Customer.Controllers
                 return NotFound(new { message = "Mã giảm giá không hợp lệ!" });
             }
         }
+
         [HttpGet("GetCoupons")]
         public async Task<IActionResult> GetCoupons()
         {
@@ -46,8 +49,5 @@ namespace SellingBook.Areas.Customer.Controllers
                 return StatusCode(500, new { message = "Lỗi khi lấy danh sách mã giảm giá." });
             }
         }
-
-
-
     }
 }

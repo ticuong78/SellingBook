@@ -1,15 +1,21 @@
 ﻿@model IEnumerable<SellingBook.Models.BasicModels.Product>
-@inject IViewLocalizer Localizer
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Product Management</h1>
+<p>Welcome to the Product management page!</p>
+
 <div class="container mt-4">
-    <h2 class="mb-4">@Localizer["Products"]</h2>
+    <h2 class="mb-4">Products</h2>
 
     <table class="table table-hover shadow-sm">
         <thead class="table-dark">
             <tr>
-                <th>@Localizer["Name"]</th>
-                <th>@Localizer["Price"]</th>
-                <th>@Localizer["Description"]</th>
-                <th class="text-center">@Localizer["Actions"]</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th class="text-center">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -20,14 +26,14 @@
                     <td>@product.ProductPrice.ToString("C")</td>
                     <td>@product.Description</td>
                     <td class="text-center">
-                            <a asp-area="Admin" asp-action="Edit" asp-route-id="@product.ProductId" class="btn btn-sm btn-warning">@Localizer["Edit"]</a>
-                            <a asp-area="Admin" asp-action="Display" asp-route-id="@product.ProductId" class="btn btn-sm btn-info text-white">@Localizer["View"]</a>
-                            <a asp-area="Admin" asp-action="Delete" asp-route-id="@product.ProductId" class="btn btn-sm btn-danger">@Localizer["Delete"]</a>
+                        <a asp-area="Admin" asp-action="Edit" asp-route-id="@product.ProductId" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-area="Admin" asp-action="Display" asp-route-id="@product.ProductId" class="btn btn-sm btn-info text-white">View</a>
+                        <a asp-area="Admin" asp-action="Delete" asp-route-id="@product.ProductId" class="btn btn-sm btn-danger">Delete</a>
                     </td>
                 </tr>
             }
             <tr class="table-light text-center" onclick="window.location='@Url.Action("Add", "Product")'" style="cursor:pointer;">
-                <td colspan="4" class="fw-bold text-primary">@Localizer["+ Add New Product"]</td>
+                <td colspan="4" class="fw-bold text-primary">+ Add New Product</td>
             </tr>
         </tbody>
     </table>

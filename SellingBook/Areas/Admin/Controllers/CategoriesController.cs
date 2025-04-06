@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using SellingBook.Models.BasicModels;
 using SellingBook.Repositories;
+using SellingBook.Models.Roles;
 
 namespace SellingBook.Area.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = $"{SD.Role_Admin},{SD.Role_Employee}")]
     public class CategoriesController : Controller
     {
         private readonly ICategoryRepository _categoryRepository;

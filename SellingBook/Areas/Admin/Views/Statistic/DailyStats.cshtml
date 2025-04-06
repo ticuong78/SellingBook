@@ -1,0 +1,88 @@
+﻿@model SellingBook.Models.Statistic.DailyStatistic;
+
+<h2>Daily Statistics (Last 7 Days)</h2>
+
+<h3>Number of Orders</h3>
+<canvas id="dailyOrdersChart" width="400" height="200"></canvas>
+
+<h3>Revenue</h3>
+<canvas id="dailyRevenueChart" width="400" height="200"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Orders Chart
+    var ordersCtx = document.getElementById('dailyOrdersChart').getContext('2d');
+    var dailyOrdersChart = new Chart(ordersCtx, {
+        type: 'line',
+        data: {
+            labels: @Html.Raw(Json.Serialize(Model.Dates)),
+            datasets: [{
+                label: 'Number of Orders',
+                data: @Html.Raw(Json.Serialize(Model.OrderCounts)),
+                borderColor: 'blue',
+                fill: false
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number of Orders'
+                    }
+                }
+            },
+            tooltips: {
+                enabled: true,
+                mode: 'index',
+                intersect: false,
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                        var value = tooltipItem.yLabel;
+                        return label + ': ' + value + ' orders';
+                    }
+                }
+            }
+        }
+    });
+
+    // Revenue Chart
+    var revenueCtx = document.getElementById('dailyRevenueChart').getContext('2d');
+    var dailyRevenueChart = new Chart(revenueCtx, {
+        type: 'line',
+        data: {
+            labels: @Html.Raw(Json.Serialize(Model.Dates)),
+            datasets: [{
+                label: 'Revenue',
+                data: @Html.Raw(Json.Serialize(Model.Revenues)),
+                borderColor: 'green',
+                fill: false
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Revenue (VND)'
+                    }
+                }
+            },
+            tooltips: {
+                enabled: true,
+                mode: 'index',
+                intersect: false,
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                        var value = tooltipItem.yLabel;
+                        return label + ': ' + value.toLocaleString('vi-VN') + ' VND';
+                    }
+                }
+            }
+        }
+    });
+</script>

@@ -1,0 +1,96 @@
+﻿@model SellingBook.Models.Statistic.MonthlyStatistic;
+
+<h2>Monthly Statistics (@Model.Year)</h2>
+
+<form asp-action="MonthlyStats" method="get">
+    <label>Select Year:</label>
+    <input type="number" name="year" value="@Model.Year" min="2000" max="2100" />
+    <button type="submit">View</button>
+</form>
+
+<h3>Number of Orders</h3>
+<canvas id="monthlyOrdersChart" width="400" height="200"></canvas>
+
+<h3>Revenue</h3>
+<canvas id="monthlyRevenueChart" width="400" height="200"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Orders Chart
+    var ordersCtx = document.getElementById('monthlyOrdersChart').getContext('2d');
+    var monthlyOrdersChart = new Chart(ordersCtx, {
+        type: 'bar',
+        data: {
+            labels: @Html.Raw(Json.Serialize(Model.Months.Select(m => "Month " + m))),
+            datasets: [{
+                label: 'Number of Orders',
+                data: @Html.Raw(Json.Serialize(Model.OrderCounts)),
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Number of Orders'
+                    }
+                }
+            },
+            tooltips: {
+                enabled: true,
+                mode: 'index',
+                intersect: false,
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                        var value = tooltipItem.yLabel;
+                        return label + ': ' + value + ' orders';
+                    }
+                }
+            }
+        }
+    });
+
+    // Revenue Chart
+    var revenueCtx = document.getElementById('monthlyRevenueChart').getContext('2d');
+    var monthlyRevenueChart = new Chart(revenueCtx, {
+        type: 'bar',
+        data: {
+            labels: @Html.Raw(Json.Serialize(Model.Months.Select(m => "Month " + m))),
+            datasets: [{
+                label: 'Revenue',
+                data: @Html.Raw(Json.Serialize(Model.Revenues)),
+                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Revenue (VND)'
+                    }
+                }
+            },
+            tooltips: {
+                enabled: true,
+                mode: 'index',
+                intersect: false,
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                        var value = tooltipItem.yLabel;
+                        return label + ': ' + value.toLocaleString('vi-VN') + ' VND';
+                    }
+                }
+            }
+        }
+    });
+</script>

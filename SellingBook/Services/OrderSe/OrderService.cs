@@ -8,12 +8,14 @@ namespace SellingBook.Services.OrderSe
 {
     public class OrderService: IOrderService
     {
+        private readonly IProductRepository _productRepository;
         private readonly IUserService _userService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IOrderRepository _orderRepository;
 
-        public OrderService(IOrderRepository orderRepository, IHttpContextAccessor httpContextAccessor, IUserService userService)
+        public OrderService(IOrderRepository orderRepository, IHttpContextAccessor httpContextAccessor, IUserService userService, IProductRepository productRepository)
         {
+            _productRepository = productRepository;
             _orderRepository = orderRepository;
             _httpContextAccessor = httpContextAccessor;
             _userService = userService;
@@ -39,6 +41,11 @@ namespace SellingBook.Services.OrderSe
             var cartItems = session?.GetObjectFromJson<List<CartItem>>(cartSessionKey);
             var couponId = session?.GetInt32(couponSessionKey);
 
+            if(couponId == 0) // Null check
+            {
+                couponId = null;
+            }
+
             if (cartItems == null || !cartItems.Any()) // Null or empty check
             {
                 throw new InvalidOperationException("Cart is empty or session expired.");
@@ -47,13 +54,14 @@ namespace SellingBook.Services.OrderSe
             var order = new Order
             {
                 OrderId = orderId,
-                //CouponId = couponId,
+                CouponId = couponId,
                 OrderDescription = orderDescription == null ? "Không có mô tả" : orderDescription,
                 UserId = _userService.GetCurrentUserId(),
                 CreatedAt = DateTime.Now,
                 TotalAmount = cartItems.Sum(x => x.CartItemPrice * x.CartItemQuantity),
                 OrderItems = cartItems.Select(x => new OrderItem
                 {
+                    Product = _productRepository.GetProductByIdAsync(x.ProductId).Result,
                     ProductId = x.ProductId,
                     OrderItemQuantity = x.CartItemQuantity,
                     OrderItemPrice = x.CartItemPrice,

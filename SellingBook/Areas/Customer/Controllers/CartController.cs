@@ -55,7 +55,7 @@ namespace SellingBook.Areas.Customer.Controllers
                 return NotFound();
             }
 
-            _cartRepository.DeleteCartItem(cartItem);
+            await _cartRepository.DeleteCartItem(cartItem);
 
             ProductCartItemViewModel productCartItemViewModel = new();
 

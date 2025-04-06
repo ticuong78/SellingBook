@@ -65,7 +65,7 @@ searchBox.addEventListener('input', function () {
                                 <img src="${product.imageUrl}" class="card-img-top" style="width: 40px; height: 60px; object-fit: cover; margin-right: 10px;" alt="${product.productName}" />
                                 <div class="card-body" style="flex: 1; padding: 0;">
                                     <h5 class="card-title" style="font-size: 14px; margin: 0; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${product.productName}</h5>
-                                    <p class="card-text text-danger fw-bold" style="font-size: 13px; margin: 3px 0 0 0;">${product.productPrice.toLocaleString()} VNĐ</p>
+                                    <p class="card-text text-danger fw-bold" style="font-size: 13px; margin: 3px 0 0 0;">${product.productPrice.toLocaleString()} <u>đ</u></p>
                                 </div>
                             </div>
                         </a>

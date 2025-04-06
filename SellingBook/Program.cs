@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Localization;
-using Microsoft.CodeAnalysis.Host;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SellingBook.Middlewares;
@@ -48,7 +47,12 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
 
-builder.Services.AddControllersWithViews()
+builder.Services.AddControllersWithViews(options =>
+{
+    // Thêm Authorization Policy mặc định để yêu cầu người dùng đã đăng nhập
+    // Nếu không có [Authorize] cụ thể, mặc định sẽ yêu cầu đăng nhập
+    // options.Filters.Add(new AuthorizeFilter(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build()));
+})
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();
 
@@ -65,9 +69,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
         policy.WithOrigins("https://localhost:7250")
-              .AllowAnyMethod()
-              .AllowAnyHeader()
-              .AllowCredentials());
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
 });
 
 // Register repositories
@@ -103,11 +107,28 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+// **Quan trọng: Đảm bảo các Middleware liên quan đến Authentication và Authorization ở đúng vị trí**
 app.UseRouting();
 app.UseCors("CorsPolicy");
 app.UseSession();
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseAuthentication(); // Xác thực người dùng
+app.UseAuthorization(); // Ủy quyền truy cập dựa trên Role/Policy
+
+app.Use(async (context, next) =>
+{
+    if (context.Request.ContentType != null && context.Request.ContentType.Contains("application/json"))
+    {
+        context.Request.EnableBuffering();
+        using var reader = new StreamReader(context.Request.Body, leaveOpen: true);
+        var body = await reader.ReadToEndAsync();
+        context.Request.Body.Position = 0;
+
+        Console.WriteLine($"📦 Request JSON Body: {body}");
+    }
+
+    await next();
+});
 
 // Custom Middlewares
 app.UseMiddleware<CultureMiddleware>();

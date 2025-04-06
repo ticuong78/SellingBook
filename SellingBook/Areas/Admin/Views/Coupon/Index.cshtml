@@ -1,139 +1,192 @@
 ﻿@{
-    ViewData["Title"] = "Quản lý mã giảm giá";
+    ViewData["Title"] = "Coupon Management";
 }
 
-<h2>Quản lý mã giảm giá</h2>
+<h2>Coupon Management</h2>
 
-<!-- Bảng hiển thị danh sách mã giảm giá -->
 <table class="table table-bordered">
     <thead>
         <tr>
             <th>ID</th>
-            <th>Mã giảm giá</th>
-            <th>Giá trị giảm</th>
-            <th>Trạng thái</th>
-            <th>Hành động</th>
+            <th>Coupon Code</th>
+            <th>Discount Value</th>
+            <th>Status</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody id="couponTable">
-        <!-- Dữ liệu sẽ được thêm vào đây bằng JavaScript -->
     </tbody>
 </table>
 
-<!-- Nút mở modal thêm mã giảm giá -->
-<button class="btn btn-primary" onclick="openAddModal()">Thêm mã giảm giá</button>
+<button class="btn btn-primary" onclick="openAddModal()">Add Coupon</button>
 
-<!-- Modal Thêm / Cập nhật mã giảm giá -->
 <div id="couponModal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Thêm / Cập nhật mã giảm giá</h4>
-                <button type="button" class="close" onclick="$('#couponModal').modal('hide')">&times;</button>
-
+                <h4 class="modal-title">Add / Update Coupon</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="couponId">
-                <div class="form-group">
-                    <label>Mã giảm giá:</label>
+                <div class="mb-3">
+                    <label for="couponCode" class="form-label">Coupon Code:</label>
                     <input type="text" id="couponCode" class="form-control">
                 </div>
-                <div class="form-group">
-                    <label>Giá trị giảm:</label>
+                <div class="mb-3">
+                    <label for="discountValue" class="form-label">Discount Value:</label>
                     <input type="number" id="discountValue" class="form-control">
                 </div>
-                <div class="form-group">
-                    <label>Trạng thái:</label>
-                    <select id="isActive" class="form-control">
-                        <option value="true">Kích hoạt</option>
-                        <option value="false">Tắt</option>
+                <div class="mb-3">
+                    <label for="isActive" class="form-label">Status:</label>
+                    <select id="isActive" class="form-select">
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
                     </select>
                 </div>
+                <div id="couponErrorMessage" class="alert alert-danger mt-2" style="display:none;"></div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-success" onclick="saveCoupon()">Lưu</button>
-                <button class="btn btn-secondary" onclick="$('#couponModal').modal('hide')">Đóng</button>
-
+                <button class="btn btn-success" onclick="saveCoupon()">Save</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
 
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 <script>
-    async function loadCoupons() {
-        const response = await fetch('/Admin/Coupon/GetAll');
-        const coupons = await response.json();
+    $(document).ready(function () {
+        loadCoupons();
 
-        let tableHtml = "";
-        coupons.forEach(coupon => {
-            tableHtml += `
-                <tr>
-                    <td>${coupon.couponId}</td>
-                    <td>${coupon.code}</td>
-                    <td>${coupon.discountValue.toLocaleString()} đ</td>
-                    <td>${coupon.isActive ? '✔️ Kích hoạt' : '❌ Tắt'}</td>
-                    <td>
-                        <button class="btn btn-warning btn-sm" onclick="editCoupon(${coupon.couponId}, '${coupon.code}', ${coupon.discountValue}, ${coupon.isActive})">Sửa</button>
-                        <button class="btn btn-danger btn-sm" onclick="deleteCoupon(${coupon.couponId})">Xóa</button>
-                    </td>
-                </tr>
-            `;
+        $('#couponModal').on('hidden.bs.modal', function () {
+            $('#couponErrorMessage').hide();
         });
+    });
 
-        document.getElementById("couponTable").innerHTML = tableHtml;
+    async function loadCoupons() {
+        try {
+            const response = await fetch('/Admin/Coupon/GetAll');
+            if (!response.ok) {
+                console.error(`Error loading coupons: ${response.status}`);
+                showAlert('An error occurred while loading data.', 'danger');
+                return;
+            }
+            const coupons = await response.json();
+
+            let tableHtml = "";
+            coupons.forEach(coupon => {
+                tableHtml += `
+                    <tr>
+                        <td>${coupon.couponId}</td>
+                        <td>${coupon.code}</td>
+                        <td>${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(coupon.discountValue)}</td>
+                        <td>${coupon.isActive ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-danger">Inactive</span>'}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="openEditModal(${coupon.couponId}, '${coupon.code}', ${coupon.discountValue}, ${coupon.isActive})">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteCoupon(${coupon.couponId})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            $("#couponTable").html(tableHtml);
+
+        } catch (error) {
+            console.error("An unexpected error occurred while loading coupons:", error);
+            showAlert('An error occurred while loading data.', 'danger');
+        }
     }
 
     function openAddModal() {
-        document.getElementById("couponId").value = "";
-        document.getElementById("couponCode").value = "";
-        document.getElementById("discountValue").value = "";
-        document.getElementById("isActive").value = "true";
+        $("#couponId").val("");
+        $("#couponCode").val("");
+        $("#discountValue").val("");
+        $("#isActive").val("true");
         $("#couponModal").modal("show");
     }
 
-    function editCoupon(id, code, discountValue, isActive) {
-        document.getElementById("couponId").value = id;
-        document.getElementById("couponCode").value = code;
-        document.getElementById("discountValue").value = discountValue;
-        document.getElementById("isActive").value = isActive;
+    function openEditModal(id, code, discountValue, isActive) {
+        $("#couponId").val(id);
+        $("#couponCode").val(code);
+        $("#discountValue").val(discountValue);
+        $("#isActive").val(isActive);
         $("#couponModal").modal("show");
     }
 
     async function saveCoupon() {
-        const id = document.getElementById("couponId").value;
-        const code = document.getElementById("couponCode").value.trim();
-        const discountValue = document.getElementById("discountValue").value;
-        const isActive = document.getElementById("isActive").value === "true";
+        const id = $("#couponId").val();
+        const code = $("#couponCode").val().trim();
+        const discountValue = $("#discountValue").val();
+        const isActive = $("#isActive").val() === "true";
 
-        if (!code || discountValue <= 0) {
-            alert("❌ Vui lòng nhập đúng dữ liệu!");
+        if (!code) {
+            showAlert("Please enter the coupon code.", 'danger');
+            return;
+        }
+        if (isNaN(discountValue) || parseFloat(discountValue) <= 0) {
+            showAlert("Please enter a valid discount value.", 'danger');
             return;
         }
 
         const method = id ? "PUT" : "POST";
         const url = id ? `/Admin/Coupon/Update/${id}` : "/Admin/Coupon/Create";
 
-        const response = await fetch(url, {
-            method: method,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ Code: code, DiscountValue: discountValue, IsActive: isActive })
-        });
+        try {
+            const response = await fetch(url, {
+                method: method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ Code: code, DiscountValue: parseFloat(discountValue), IsActive: isActive })
+            });
 
-        const data = await response.json();
-        alert(data.message);
-        $("#couponModal").modal("hide");
-        loadCoupons();
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error(`Error saving coupon (${response.status}):`, errorText);
+                showAlert(`Error saving: ${errorText}`, 'danger');
+                return;
+            }
+
+            const data = await response.json();
+            showAlert(data.message, 'success');
+            $("#couponModal").modal("hide");
+            loadCoupons();
+
+        } catch (error) {
+            console.error("An unexpected error occurred while saving the coupon:", error);
+            showAlert('An error occurred while saving the coupon.', 'danger');
+        }
     }
 
     async function deleteCoupon(id) {
-        if (!confirm("Bạn có chắc muốn xóa mã giảm giá này?")) return;
+        if (!confirm("Are you sure you want to delete this coupon?")) return;
 
-        const response = await fetch(`/Admin/Coupon/Delete/${id}`, { method: "DELETE" });
-        const data = await response.json();
-        alert(data.message);
-        loadCoupons();
+        try {
+            const response = await fetch(`/Admin/Coupon/Delete/${id}`, { method: "DELETE" });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error(`Error deleting coupon (${response.status}):`, errorText);
+                showAlert(`Error deleting: ${errorText}`, 'danger');
+                return;
+            }
+
+            const data = await response.json();
+            showAlert(data.message, 'success');
+            loadCoupons();
+
+        } catch (error) {
+            console.error("An unexpected error occurred while deleting the coupon:", error);
+            showAlert('An error occurred while deleting the coupon.', 'danger');
+        }
     }
 
-
-    document.addEventListener("DOMContentLoaded", loadCoupons);
+    function showAlert(message, type = 'info') {
+        const alertDiv = $('#couponErrorMessage');
+        alertDiv.removeClass('alert-success alert-danger alert-info');
+        alertDiv.addClass(`alert-${type}`);
+        alertDiv.text(message);
+        alertDiv.slideDown();
+    }
 </script>
