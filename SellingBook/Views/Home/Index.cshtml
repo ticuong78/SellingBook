@@ -146,7 +146,18 @@
                 </div>
             </div>
         </div>
-
+        <!-- Sắp xếp -->
+        <div class="col-md-4">
+            <div class="form-group d-flex align-items-center">
+                <label for="sortFilter" class="me-2">Sắp xếp theo:</label>
+                <select id="sortFilter" class="form-control">
+                    <option value="name-asc">Tên (A-Z)</option>
+                    <option value="name-desc">Tên (Z-A)</option>
+                    <option value="price-asc">Giá (Thấp-Cao)</option>
+                    <option value="price-desc">Giá (Cao-Thấp)</option>
+                </select>
+            </div>
+        </div>
         <div id="productList" class="row">
             @foreach (var product in Model.Products)
             {
@@ -177,4 +188,5 @@
 
 @section Scripts {
     <script src="~/js/filterProducts.js" asp-append-version="true"></script>
+    <script src="~/js/sortProducts.js" asp-append-version="true"></script>
 }
