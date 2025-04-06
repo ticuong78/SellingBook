@@ -8,7 +8,7 @@ namespace SellingBook.Areas.Admin.Controllers
 {
 
     [Area("Admin")]
-    [Authorize(Roles = $"{SD.Role_Admin},{SD.Role_Employee}")]
+    [Authorize(Roles = $"{SD.Role_Admin}")]
     public class StatisticController : Controller
     {
         private readonly ApplicationDbContext _context;

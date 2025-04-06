@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SellingBook.Models;
 using SellingBook.Models.BasicModels;
+using SellingBook.Models.Roles;
 using SellingBook.Repositories;
 using System.Threading.Tasks;
 
 namespace SellingBook.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Route("Admin/Coupon")]
+    [Authorize(Roles = $"{SD.Role_Admin}")]
     public class CouponController : Controller
-
     {
         private readonly ICouponRepository _couponRepository;
 
@@ -55,11 +56,10 @@ namespace SellingBook.Areas.Admin.Controllers
             var result = await _couponRepository.DeleteCouponAsync(id);
             return result ? Ok(new { message = "Xóa thành công!" }) : NotFound(new { message = "Không tìm thấy mã giảm giá!" });
         }
-        [HttpGet("Index")]
+        
         public IActionResult Index()
         {
             return View();
         }
-
     }
 }
