@@ -137,17 +137,18 @@
             </div>
         </div>
         <!-- Sắp xếp -->
-        <div class="col-md-4">
-            <div class="form-group d-flex align-items-center">
+        <div class="col-md-4 d-flex align-items-center">
+            <div class="form-group me-3">
                 <label for="sortFilter" class="me-2">Sắp xếp theo:</label>
                 <select id="sortFilter" class="form-control">
-                    <option value="name-asc">Tên (A-Z)</option>
-                    <option value="name-desc">Tên (Z-A)</option>
+                    <option value="">-- Chọn sắp xếp --</option>
                     <option value="price-asc">Giá (Thấp-Cao)</option>
                     <option value="price-desc">Giá (Cao-Thấp)</option>
                 </select>
             </div>
+            <button id="resetSortBtn" class="btn btn-outline-secondary d-none">Quay lại</button>
         </div>
+
         <div id="productList" class="row">
             @foreach (var product in Model.Products)
             {
