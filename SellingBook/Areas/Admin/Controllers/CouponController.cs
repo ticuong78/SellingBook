@@ -10,6 +10,7 @@ namespace SellingBook.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize(Roles = $"{SD.Role_Admin}")]
+    [Route("/Admin/Coupon")]
     public class CouponController : Controller
     {
         private readonly ICouponRepository _couponRepository;

@@ -39,7 +39,7 @@ function sortProducts(sort) {
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title">${product.productName}</h5>
                                 <p class="card-text text-muted">Danh mục: ${product.categoryName}</p>
-                                <p class="card-text text-danger fw-bold">${product.productPrice.toLocaleString()} VNĐ</p>
+                                <p class="card-text text-danger fw-bold">${product.productPrice.toLocaleString()} <u>đ</u></p>
                                 <a href="/Customer/Product/Display/${product.productId}" class="btn btn-primary mt-auto">Xem chi tiết</a>
                             </div>
                         </div>

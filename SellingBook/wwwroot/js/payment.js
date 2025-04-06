@@ -59,14 +59,15 @@ async function processPayment(name) {
     let orderDescription = [];
 
     document.querySelectorAll('.cartItemCheckbox:checked').forEach(checkbox => {
-        let row = checkbox.closest('tr');
-        let cartItemId = checkbox.value;
-        let productName = row.cells[1].innerText.trim(); // Lấy tên sản phẩm
-        let price = parseInt(row.cells[2].innerText.replace(/\D/g, ''), 10); // Lấy giá
-        let quantity = row.cells[3].innerText.trim(); // Lấy số lượng
+        const row = checkbox.closest('tr');
+        const cartItemId = checkbox.value;
+        const productName = row.cells[1].innerText.trim(); // Lấy tên sản phẩm
+        const price = parseInt(row.cells[2].innerText.replace(/\D/g, ''), 10); // Lấy giá
+        const quantity = row.cells[3].innerText.trim(); // Lấy số lượng
+        const productId = checkbox.getAttribute('data-id')
         selectedItems.push({
             CartItemId: cartItemId,
-            ProductId: cartItemId,
+            ProductId: productId,
             CartItemQuantity: quantity,
             CartItemPrice: price
         });

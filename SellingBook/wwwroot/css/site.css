@@ -62,3 +62,39 @@ nav {
     padding: 10px 0;
     text-align: right;
 }
+
+html, body {
+    height: 100%; /* Ensure full height */
+    margin: 0; /* Reset default margins */
+    padding: 0; /* Reset default padding */
+}
+
+.row {
+    margin-left: 0; /* Adjust margins if needed */
+    margin-right: 0; /* Adjust margins if needed */
+}
+
+.sidebar {
+    min-height: 100vh; /* Make sidebar full height */
+    /* Add other sidebar styles as needed */
+}
+
+    .sidebar ul {
+        max-width: 220px; /* Set a max width for the sidebar */
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+    }
+
+    .sidebar li {
+        margin: 0;
+    }
+
+.main {
+    min-height: 100vh; /* Make main content full height */
+    padding-left: var(--bs-gutter-x, .75rem); /* Inherit Bootstrap gutter */
+    padding-right: var(--bs-gutter-x, .75rem); /* Inherit Bootstrap gutter */
+    padding-top: 1rem; /* Add some top padding */
+    padding-bottom: 1rem; /* Add some bottom padding */
+}

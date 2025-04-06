@@ -1,37 +1,37 @@
 ﻿@model SellingBook.Models.BasicModels.Product
-@inject IViewLocalizer Localizer
+
 <div class="container mt-4">
-    <h2 class="mb-4">@Localizer["Product Details"]</h2>
+    <h2 class="mb-4">Product Details</h2>
 
     <div class="card shadow-sm">
         <div class="card-body">
-            <h4 class="card-title">@Localizer["Product Information"]</h4>
+            <h4 class="card-title">Product Information</h4>
             <hr />
 
             <dl class="row">
-                <dt class="col-sm-3 fw-bold">@Localizer["Name"]</dt>
+                <dt class="col-sm-3 fw-bold">Name</dt>
                 <dd class="col-sm-9">@Html.DisplayFor(model => model.ProductName)</dd>
 
-                <dt class="col-sm-3 fw-bold">@Localizer["Price"]</dt>
+                <dt class="col-sm-3 fw-bold">Price</dt>
                 <dd class="col-sm-9">@Model.ProductPrice.ToString("C", System.Globalization.CultureInfo.GetCultureInfo("vi-VN"))</dd>
 
-                <dt class="col-sm-3 fw-bold">@Localizer["Description"]</dt>
+                <dt class="col-sm-3 fw-bold">Description</dt>
                 <dd class="col-sm-9">@Html.DisplayFor(model => model.Description)</dd>
 
-                <dt class="col-sm-3 fw-bold">@Localizer["Image"]</dt>
+                <dt class="col-sm-3 fw-bold">Image</dt>
                 <dd class="col-sm-9">
                     <img src="@Url.Content(Model.ImageUrl)" alt="Product Image" class="img-fluid rounded shadow-sm" style="max-width: 300px; height: auto;" />
                 </dd>
 
                 @if (Model.Images != null)
                 {
-                        <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Images)</dt>
-                        <dd class="col-sm-9 d-flex flex-wrap gap-2">
+                    <dt class="col-sm-3 fw-bold">@Html.DisplayNameFor(model => model.Images)</dt>
+                    <dd class="col-sm-9 d-flex flex-wrap gap-2">
                         @foreach (var imageURL in Model.Images)
                         {
-                                    <img src="@imageURL" alt="Product Image" class="img-thumbnail" style="max-width: 150px; height: auto;" />
+                            <img src="@imageURL" alt="Product Image" class="img-thumbnail" style="max-width: 150px; height: auto;" />
                         }
-                        </dd>
+                    </dd>
                 }
             </dl>
         </div>

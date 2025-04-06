@@ -1,29 +1,29 @@
 ﻿@model SellingBook.Models.Statistic.MonthlyStatistic;
 
-<h2>Thống kê theo tháng (@Model.Year)</h2>
+<h2>Monthly Statistics (@Model.Year)</h2>
 
 <form asp-action="MonthlyStats" method="get">
-    <label>Chọn năm:</label>
+    <label>Select Year:</label>
     <input type="number" name="year" value="@Model.Year" min="2000" max="2100" />
-    <button type="submit">Xem</button>
+    <button type="submit">View</button>
 </form>
 
-<h3>Số đơn hàng</h3>
+<h3>Number of Orders</h3>
 <canvas id="monthlyOrdersChart" width="400" height="200"></canvas>
 
-<h3>Doanh thu</h3>
+<h3>Revenue</h3>
 <canvas id="monthlyRevenueChart" width="400" height="200"></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Biểu đồ số đơn hàng
+    // Orders Chart
     var ordersCtx = document.getElementById('monthlyOrdersChart').getContext('2d');
     var monthlyOrdersChart = new Chart(ordersCtx, {
         type: 'bar',
         data: {
-            labels: @Html.Raw(Json.Serialize(Model.Months.Select(m => "Tháng " + m))),
+            labels: @Html.Raw(Json.Serialize(Model.Months.Select(m => "Month " + m))),
             datasets: [{
-                label: 'Số đơn hàng',
+                label: 'Number of Orders',
                 data: @Html.Raw(Json.Serialize(Model.OrderCounts)),
                 backgroundColor: 'rgba(54, 162, 235, 0.5)',
                 borderColor: 'rgba(54, 162, 235, 1)',
@@ -36,7 +36,7 @@
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'Số đơn hàng'
+                        text: 'Number of Orders'
                     }
                 }
             },
@@ -48,21 +48,21 @@
                     label: function(tooltipItem, data) {
                         var label = data.datasets[tooltipItem.datasetIndex].label || '';
                         var value = tooltipItem.yLabel;
-                        return label + ': ' + value + ' đơn';
+                        return label + ': ' + value + ' orders';
                     }
                 }
             }
         }
     });
 
-    // Biểu đồ doanh thu
+    // Revenue Chart
     var revenueCtx = document.getElementById('monthlyRevenueChart').getContext('2d');
     var monthlyRevenueChart = new Chart(revenueCtx, {
         type: 'bar',
         data: {
-            labels: @Html.Raw(Json.Serialize(Model.Months.Select(m => "Tháng " + m))),
+            labels: @Html.Raw(Json.Serialize(Model.Months.Select(m => "Month " + m))),
             datasets: [{
-                label: 'Doanh thu',
+                label: 'Revenue',
                 data: @Html.Raw(Json.Serialize(Model.Revenues)),
                 backgroundColor: 'rgba(75, 192, 192, 0.5)',
                 borderColor: 'rgba(75, 192, 192, 1)',
@@ -75,7 +75,7 @@
                     beginAtZero: true,
                     title: {
                         display: true,
-                        text: 'Doanh thu (VND)'
+                        text: 'Revenue (VND)'
                     }
                 }
             },

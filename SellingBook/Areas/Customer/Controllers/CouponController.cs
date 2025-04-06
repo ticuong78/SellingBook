@@ -5,6 +5,7 @@ using SellingBook.Repositories;
 namespace SellingBook.Areas.Customer.Controllers
 {
     [Area("Customer")]
+    [Route("Customer/Coupon")]
     [Authorize]
     public class CouponController : Controller
     {
@@ -33,6 +34,7 @@ namespace SellingBook.Areas.Customer.Controllers
                 return NotFound(new { message = "Mã giảm giá không hợp lệ!" });
             }
         }
+
         [HttpGet("GetCoupons")]
         public async Task<IActionResult> GetCoupons()
         {
