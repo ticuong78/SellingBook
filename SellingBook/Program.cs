@@ -87,6 +87,7 @@ builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IChangeLanguageService, ChangeLanguageService>();
+builder.Services.AddScoped<GoogleDriveService>();
 builder.Services.AddHttpClient();
 
 var app = builder.Build();

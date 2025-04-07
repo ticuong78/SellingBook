@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using SellingBook.Models.BasicModels;
 using SellingBook.Models.Roles;
 using SellingBook.Repositories;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SellingBook.Areas.Admin.Controllers
 {
@@ -11,11 +12,16 @@ namespace SellingBook.Areas.Admin.Controllers
     [Authorize(Roles = $"{SD.Role_Admin},{SD.Role_Employee}")]
     public class ProductController : Controller
     {
+        private readonly GoogleDriveService _googleDriveService;
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
 
-        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository)
+        public ProductController(
+            IProductRepository productRepository, 
+            ICategoryRepository categoryRepository, 
+            GoogleDriveService googleDriveService)
         {
+            _googleDriveService = googleDriveService;
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
         }
@@ -68,11 +74,26 @@ namespace SellingBook.Areas.Admin.Controllers
         {
             if (image != null)
             {
-                var path = Path.Combine("wwwroot", "images", image.FileName);
-                using var stream = new FileStream(path, FileMode.Create);
-                await image.CopyToAsync(stream);
+                var allowedType = new[] { "image/jpg", "image/jpeg", "image/png", "image/gif" };
+                if (!allowedType.Contains(image.ContentType))
+                {
+                    ModelState.AddModelError("ImageUrl", "Invalid image type. Allowed types: jpg, jpeg, png, gif.");
+                    return null;
+                }
+
+                var savePath = Path.Combine("wwwroot/images", image.FileName);
+
+                using (FileStream stream = new FileStream(savePath, FileMode.Create))
+                {
+                    await image.CopyToAsync(stream);
+                };
+
+                await _googleDriveService.UploadImageToDrive(savePath, image.FileName);
+
+                return "/images/" + image.FileName;
             }
-            return "/images/" + image.FileName;
+
+            return null;
         }
 
         public async Task<IActionResult> Edit(int id)
