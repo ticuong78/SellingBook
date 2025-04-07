@@ -24,11 +24,16 @@
                 <tr>
                     <td>@product.ProductName</td>
                     <td>@product.ProductPrice.ToString("C")</td>
-                    <td>@product.Description</td>
+                    <td>
+                        @product.Description
+                        <div class="mt-2">
+                            <img src="@product.ImageUrl" alt="Product Image" class="img-thumbnail" style="max-height: 100px; width: auto;" />
+                        </div>
+                    </td>
                     <td class="text-center">
-                        <a asp-area="Admin" asp-action="Edit" asp-route-id="@product.ProductId" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-area="Admin" asp-action="Display" asp-route-id="@product.ProductId" class="btn btn-sm btn-info text-white">View</a>
-                        <a asp-area="Admin" asp-action="Delete" asp-route-id="@product.ProductId" class="btn btn-sm btn-danger">Delete</a>
+                        <a asp-area="Admin" asp-action="Edit" asp-route-id="@product.ProductId" class="btn btn-sm btn-warning d-block mb-1">Sửa</a>
+                        <a asp-area="Admin" asp-action="Display" asp-route-id="@product.ProductId" class="btn btn-sm btn-info text-white d-block mb-1">Xem</a>
+                        <a asp-area="Admin" asp-action="Delete" asp-route-id="@product.ProductId" class="btn btn-sm btn-danger d-block">Xóa</a>
                     </td>
                 </tr>
             }

@@ -54,18 +54,12 @@ function fetchAndRenderProducts(sort = "") {
         .then(data => {
             const products = data.products || [];
             renderProducts(products);
-
-            // Hiện nút reset nếu đang sắp xếp
-            if (sort) {
-                resetSortBtn.classList.remove("d-none");
-            } else {
-                resetSortBtn.classList.add("d-none");
-                document.getElementById("sortFilter").value = ""; // reset dropdown
-            }
         })
         .catch(err => {
             console.error('Lỗi khi tải sản phẩm:', err);
             productList.innerHTML = '<p class="text-danger">Có lỗi xảy ra khi tải sản phẩm.</p>';
+        })
+        .finally(() => {
             productList.classList.remove('fade-out');
             productList.classList.add('fade-in');
         });
