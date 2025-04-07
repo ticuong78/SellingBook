@@ -82,7 +82,7 @@ namespace SellingBook.Areas.Admin.Controllers
                     return null;
                 }
 
-                var tempPath = Path.Combine(Path.GetTempPath(), image.FileName);
+                var tempPath = Path.Combine("wwwroot", "images", image.FileName);
 
                 using(FileStream stream = new FileStream(tempPath, FileMode.Create))
                 {
@@ -97,9 +97,8 @@ namespace SellingBook.Areas.Admin.Controllers
                 }
 
                 // Clean up the temporary file
-                System.IO.File.Delete(tempPath);
 
-                return fileId;
+                return tempPath;
             }
 
             return null;
