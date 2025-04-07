@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using SellingBook.Models.BasicModels;
 using SellingBook.Models.Roles;
 using SellingBook.Repositories;
-using SellingBook.Services.Storage;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SellingBook.Areas.Admin.Controllers
@@ -82,23 +81,16 @@ namespace SellingBook.Areas.Admin.Controllers
                     return null;
                 }
 
-                var tempPath = Path.Combine("wwwroot", "images", image.FileName);
+                var savePath = Path.Combine("wwwroot/images", image.FileName);
 
-                using(FileStream stream = new FileStream(tempPath, FileMode.Create))
+                using (FileStream stream = new FileStream(savePath, FileMode.Create))
                 {
                     await image.CopyToAsync(stream);
                 };
 
-                var (fileId, _) = await _googleDriveService.UploadImageAndGetDirectUrl(tempPath, image.FileName);
-                if (fileId == null)
-                {
-                    ModelState.AddModelError("ImageUrl", "Failed to upload image.");
-                    return null;
-                }
+                await _googleDriveService.UploadImageToDrive(savePath, image.FileName);
 
-                // Clean up the temporary file
-
-                return tempPath;
+                return "/images/" + image.FileName;
             }
 
             return null;
