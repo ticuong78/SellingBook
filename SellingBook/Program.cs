@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -9,7 +10,6 @@ using SellingBook.Models.Identity;
 using SellingBook.Repositories;
 using SellingBook.Services;
 using SellingBook.Services.ChangeLanguage;
-using SellingBook.Services.Email;
 using SellingBook.Services.OrderSe;
 using SellingBook.Services.User;
 using SellingBook.Services.VNPay;
@@ -47,11 +47,12 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
 
+builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("Smtp"));
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+
 builder.Services.AddControllersWithViews(options =>
 {
     // Thêm Authorization Policy mặc định để yêu cầu người dùng đã đăng nhập
-    // Nếu không có [Authorize] cụ thể, mặc định sẽ yêu cầu đăng nhập
-    // options.Filters.Add(new AuthorizeFilter(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build()));
 })
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();
@@ -83,12 +84,22 @@ builder.Services.AddScoped<ICouponRepository, EFCouponRepository>();
 
 // Register services
 builder.Services.AddScoped<IVNPayService, VNPayService>();
-builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IChangeLanguageService, ChangeLanguageService>();
 builder.Services.AddScoped<GoogleDriveService>();
 builder.Services.AddHttpClient();
+
+// Configure Google Authentication
+builder.Services.AddAuthentication()
+    .AddGoogle(options =>
+    {
+        options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+        options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+        options.Scope.Add("profile");
+        options.ClaimActions.MapJsonKey("urn:google:given_name", "given_name", "string");
+        options.ClaimActions.MapJsonKey("urn:google:family_name", "family_name", "string");
+    });
 
 var app = builder.Build();
 
@@ -109,13 +120,15 @@ else
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-// **Quan trọng: Đảm bảo các Middleware liên quan đến Authentication và Authorization ở đúng vị trí**
-app.UseRouting();
+// Cấu hình CORS và Session
 app.UseCors("CorsPolicy");
-app.UseSession();
+app.UseSession(); // Cấu hình session
+
+// Authentication and Authorization Middleware
 app.UseAuthentication(); // Xác thực người dùng
 app.UseAuthorization(); // Ủy quyền truy cập dựa trên Role/Policy
 
+// Custom Middleware for handling JSON request bodies
 app.Use(async (context, next) =>
 {
     if (context.Request.ContentType != null && context.Request.ContentType.Contains("application/json"))
@@ -131,7 +144,7 @@ app.Use(async (context, next) =>
     await next();
 });
 
-// Custom Middlewares
+// Custom Middleware for culture settings
 app.UseMiddleware<CultureMiddleware>();
 
 // 3) Map Routes
@@ -151,3 +164,14 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
+
+// SmtpSettings class for email configuration
+public class SmtpSettings
+{
+    public string Host { get; set; }
+    public int Port { get; set; }
+    public string Username { get; set; }
+    public string Password { get; set; }
+    public string FromEmail { get; set; }
+    public string FromName { get; set; }
+}
