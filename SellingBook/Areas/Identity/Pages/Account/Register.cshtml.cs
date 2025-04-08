@@ -160,16 +160,14 @@ namespace SellingBook.Areas.Identity.Pages.Account
                         await _userManager.AddToRoleAsync(user, SD.Role_Customer);
                     }
 
-                    //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                    var callbackUrl = Url.Action(
-                        action: "ConfirmEmail",
-                        controller: "Email",
-                        values: new { area = "", email = Input.Email, returnUrl },
-                        protocol: Request.Scheme);
+                    //var callbackUrl = Url.Action(
+                    //    action: "ConfirmEmail",
+                    //    controller: "Email",
+                    //    values: new { area = "", email = Input.Email, returnUrl },
+                    //    protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{callbackUrl}'>clicking here</a>.");
+                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    //    $"Please confirm your account by <a href='{callbackUrl}'>clicking here</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
