@@ -121,7 +121,7 @@
     <value>Search</value>
   </data>
   <data name="SearchPlaceHolder" xml:space="preserve">
-    <value>Search...</value>
+    <value>Type in your wishes...</value>
   </data>
   <data name="WebName" xml:space="preserve">
     <value>VietNam Book Store</value>
