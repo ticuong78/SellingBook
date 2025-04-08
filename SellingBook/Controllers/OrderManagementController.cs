@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace SellingBook.Controllers
 {
+    [Area("Admin")] // Chỉ định khu vực cho controller này
     [Authorize(Roles = "Admin")] // Chỉ Admin mới có quyền quản lý đơn hàng
     public class OrderManagementController : Controller
     {
