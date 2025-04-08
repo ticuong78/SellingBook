@@ -1,0 +1,42 @@
+﻿@model IEnumerable<SellingBook.Models.BasicModels.Order>
+
+@{
+    ViewData["Title"] = "Order Management";
+}
+
+<h2 class="my-4 text-center">Order Management</h2>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>ID Order</th>
+            <th>Customer</th>
+            <th>Order Date</th>
+            <th>Order Time</th> <!-- Added a new column for order time -->
+            <th>Total Amount</th>
+            <th>Details</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.OrderId</td> <!-- Updated to use OrderId instead of Id -->
+                <td>@order.User.FullName</td> <!-- Updated to User.FullName for customer name -->
+                <td>@order.CreatedAt.ToString("dd/MM/yyyy")</td> <!-- Updated to show only date -->
+                <td>@order.CreatedAt.ToString("HH:mm:ss")</td> <!-- Added to show order time -->
+                <td>@order.TotalAmount.ToString("N0") VND</td> <!-- Updated to TotalAmount and VND currency -->
+                <td>
+                    <a asp-action="Details" asp-route-orderId="@order.OrderId" class="btn btn-info btn-sm OrderId">View</a>
+                </td>
+                <td>
+                    <form asp-action="Delete" method="post" onsubmit="return confirm('Are you sure you want to delete this order?');">
+                        <input type="hidden" name="orderId" value="@order.OrderId" /> <!-- Updated to OrderId -->
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button> <!-- Button text changed to "Delete" -->
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
